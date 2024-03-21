@@ -118,7 +118,7 @@ a.active {
 }
 
 .desktopNav .column .top .logo {
-  background-image: url("../assets/images/FaviconWhite.svg");
+  background-image: url("../assets/images/Favicon.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -596,6 +596,96 @@ a.active {
   gap: 24px;
   padding: 24px;
   padding-left: 80px;
+}
+
+#roadmap .elements {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+#roadmap .elements .border {
+  width: 2px;
+  height: 100%;
+  border-left: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+#roadmap .tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#roadmap .tasks .task {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 16px;
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+}
+
+#roadmap .tasks .task.active {
+  background-color: #cfd9e1;
+}
+
+#roadmap .tasks .task.active .label {
+  background-color: var(--white);
+  color: var(--black);
+}
+
+#roadmap .tasks .task .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 24px;
+}
+
+#roadmap .tasks .task .row div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+#roadmap .tasks .task .label {
+  background-color: #cfd9e1;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+#roadmap .tasks .task .question {
+  color: var(--blue);
+}
+
+#roadmap .tasks .task .answer {
+  display: none;
+}
+
+#roadmap .tasks .task {
+  position: relative; /* Zorgt ervoor dat het pseudo-element relatief gepositioneerd is */
+}
+
+#roadmap .readmore {
+  padding: 8px 16px;
+  background-color: var(--blue);
+  color: var(--white);
+  border-radius: 45px;
+}
+
+#roadmap .tasks .task .row .fa-check-square-o {
+  color: var(--blue);
+}
+#roadmap .tasks .task .row.display {
+  display: none;
+}
+
+#roadmap .tasks .task.active .answer,
+#roadmap .tasks .task.active .row.display {
+  display: flex;
 }
 
 /* ---- subsidies ---- */
