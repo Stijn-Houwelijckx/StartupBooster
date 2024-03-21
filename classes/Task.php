@@ -73,8 +73,8 @@ class Task
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $tasks ?: [];
         } catch (PDOException $e) {
-            error_log('Database error in getSubsidies(): ' . $e->getMessage());
-            throw new Exception('Database error: Unable to retrieve subsidies');
+            error_log('Database error in getTasks(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve tasks');
         }
     }
 }
