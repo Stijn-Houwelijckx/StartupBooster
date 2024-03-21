@@ -1,0 +1,952 @@
+:root {
+  --white: #fff;
+  --offWhite: #f1f1f1;
+  --offBlack: #595959;
+  --black: #1a1a1a;
+  --blue: #0e3f6a;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("../assets/fonts/Outfit-VariableFont_wght.ttf");
+}
+
+body {
+  background-color: var(--offWhite);
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-family: "Outfit", sans-serif;
+  font-size: 24px;
+  color: var(--blue);
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-family: "Outfit", sans-serif;
+  font-size: 20px;
+  color: var(--blue);
+  margin: 0;
+  padding: 0;
+}
+
+h3 {
+  font-family: "Outfit", sans-serif;
+  font-size: 16px;
+  color: var(--blue);
+  margin: 0;
+  padding: 0;
+}
+
+p,
+label,
+span,
+a,
+select,
+option,
+input,
+input::placeholder,
+button {
+  font-family: "Outfit", sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  margin: 0;
+  padding: 0;
+  color: var(--offBlack);
+  text-decoration: none;
+}
+
+input::placeholder {
+  opacity: 0.5;
+}
+
+a.active {
+  color: var(--blue);
+}
+
+/* ---- desktopNav ---- */
+.desktopNav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background-color: #0e3f6a;
+  width: 120px;
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  z-index: 999;
+  margin-left: -60px;
+  transition: margin-left 0.5s ease-in-out; /* Voeg een overgang toe voor de marge om de beweging te verzachten */
+}
+
+.open-desktopNav {
+  animation: slideInDesktopNav 0.5s forwards; /* Start de keyframe-animatie om het menu in te schuiven */
+}
+
+@keyframes slideInDesktopNav {
+  from {
+    margin-left: -80px; /* Beginpositie van het menu */
+  }
+  to {
+    margin-left: 0; /* Eindpositie van het menu */
+  }
+}
+
+.desktopNav .column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: start;
+  gap: 16px;
+  height: 100%;
+  padding: 16px;
+}
+
+.desktopNav .center {
+  padding: 0px;
+}
+
+.desktopNav .column .top {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.desktopNav .column .top .logo {
+  background-image: url("../assets/images/FaviconWhite.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 32px;
+  height: 32px;
+  margin-top: 16px;
+}
+
+.desktopNav .column .top .border {
+  width: 100%;
+  border: 1px solid var(--white);
+}
+
+.desktopNav .column .menu,
+.desktopNav .column .settings {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.desktopNav .column .menu div,
+.desktopNav .column .settings div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.desktopNav .column .menu div p,
+.desktopNav .column .settings div p {
+  display: none;
+  color: var(--white);
+}
+
+.desktopNav .column .menu img,
+.desktopNav .column .settings img {
+  color: white;
+  opacity: 0.6;
+  width: 24px;
+}
+
+.desktopNav .column .menu img.active,
+.desktopNav .column .settings img.active {
+  opacity: 1;
+}
+
+.desktopNav .column i {
+  font-size: 24px;
+  color: #fff;
+}
+
+/* ---- login ---- */
+#login {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#login .text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  width: 100%;
+}
+
+#login .text .partners {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+
+#login .text .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+#login .text .row .border {
+  border-bottom: 1px solid #000;
+  width: 100%;
+}
+
+#login .step2,
+#login .step3 {
+  display: none;
+}
+
+#login .text form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#login .text form .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#login .text form .column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#login .text form .column .password {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+#login .text form .column a {
+  text-align: right;
+  width: 100%;
+  opacity: 0.6;
+}
+
+#login .text form .row div {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#login .text form .row div input,
+#login .text form .column input {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: transparent;
+  width: 90%;
+}
+
+#login .text form .column input {
+  width: 96.6%;
+}
+
+.passwordInput .row {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  gap: 0 !important;
+}
+
+.passwordInput .row input {
+  border: none !important;
+  width: 100% !important;
+}
+
+#login .image {
+  background-image: url("../assets/images/loginImage.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 366px;
+}
+
+/* ---- signUp ---- */
+#signUp {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#signUp .text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+#signUp .text .partners {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+
+.row .number {
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  border-radius: 50%;
+  width: 32px;
+  height: 12.8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.row .number.active {
+  background-color: var(--blue);
+  color: var(--white);
+}
+
+#signUp .text .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+#signUp .text .bar {
+  padding: 0 48px;
+  width: auto !important;
+  gap: 0;
+}
+
+#signUp .text .row .border {
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+  width: 100%;
+}
+
+#signUp .text form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#signUp .text form .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#signUp .text form .column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fa-eye-slash,
+.fa-eye {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: var(--black);
+  padding: 4px 8px;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#signUp .text form .column .password {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+#signUp .text form .column a {
+  text-align: right;
+  width: 100%;
+  opacity: 0.6;
+}
+
+#signUp .text form .row div {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#signUp .text form .row div input,
+#signUp .text form .column input {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: transparent;
+  width: 90%;
+}
+
+#signUp .text form .column input {
+  width: 96.6%;
+}
+
+#signUp .image {
+  background-image: url("../assets/images/signUpImage.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 366px;
+}
+
+.btn {
+  padding: 8px 16px;
+  background-color: var(--blue);
+  color: var(--white);
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+}
+
+.alert {
+  color: red;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 8px 16px;
+}
+
+.alert.success {
+  color: green;
+}
+
+/* ---- account ---- */
+#account {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
+#account .info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+#account .gegevens {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+#account .gegevens h2 {
+  width: 100%;
+  text-align: left;
+}
+
+#account .gegevens .fields {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+#account .gegevens .fields .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #0e3f6a;
+  padding: 8px 16px 8px 4px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+#account .gegevens .fields .field input {
+  background-color: transparent;
+  border: none;
+  color: var(--offBlack);
+}
+
+#account .gegevens .fields .field label,
+#account .gegevens .fields .field select,
+#account .gegevens .fields .field input {
+  padding: 0px 8px;
+  margin-top: 8px;
+}
+
+#account .gegevens .fields .field select {
+  background-color: transparent;
+  border: none;
+  height: 24px;
+}
+
+#account .gegevens .fields .field label {
+  background-color: var(--blue);
+  color: var(--white);
+  margin-top: -20px;
+  margin-left: 8px;
+  border-radius: 4px;
+  position: absolute;
+}
+
+#account .info .image {
+  background-image: url("../assets/images/wallpaper.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 140px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: flex-start;
+}
+
+#account .info .image a {
+  padding: 8px;
+  margin: 16px 16px 0px 0px;
+  border-radius: 8px;
+  color: var(--blue);
+  background-color: var(--white);
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+#account .info .profilePicture {
+  background-image: url("../assets/images/Tom.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: 4px solid var(--white);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  margin-top: -80px;
+}
+
+#account .info .fa-edit {
+  padding: 8px;
+  height: 24px;
+  width: 24px;
+  font-size: 16px;
+  border-radius: 50%;
+  color: var(--white);
+  background-color: var(--blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: -52px;
+  margin-left: 52px;
+}
+
+#account .info .row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+#account .info .row div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+#account .info .row div p {
+  color: var(--blue);
+}
+
+/* ---- subsidies ---- */
+#subsidies,
+#subsidie-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
+#subsidies .subsidies {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+#subsidies .subsidies .subsidie {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  width: 366px;
+}
+
+#subsidies .subsidies .subsidie .image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 200px;
+  border-radius: 16px 16px 0 0;
+}
+
+#subsidies .subsidies .subsidie .text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+#subsidies .subsidies .subsidie p {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+#subsidie-details .text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#subsidie-details .text .description,
+#subsidie-details .text .summary {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 16px;
+}
+
+#subsidie-details .text .summary {
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+}
+
+#subsidie-details .image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 200px;
+  border-radius: 16px;
+}
+
+/* ---- helpdesk ---- */
+#helpdesk {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
+#helpdesk .FAQ,
+#helpdesk .contactUs {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#helpdesk .FAQ .top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#helpdesk .FAQ .top .filter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--blue);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+#helpdesk .FAQ .top .filter select,
+#helpdesk .FAQ .top .filter option {
+  background-color: transparent;
+  border: none;
+  color: var(--black);
+}
+#helpdesk .FAQ .top .filter p,
+#helpdesk .FAQ .top .filter i {
+  color: var(--blue);
+}
+
+#helpdesk .FAQ .questions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#helpdesk .FAQ .questions .question {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  color: var(--blue);
+}
+
+#helpdesk .FAQ .questions .question div {
+  color: var(--blue);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 16px;
+  border-radius: 8px;
+  color: var(--blue);
+}
+
+#helpdesk .FAQ .questions .question .answer {
+  display: none;
+  padding: 16px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out; /* Voeg een overgang toe voor de opacity */
+}
+
+#helpdesk .FAQ .questions .question .answer.show-answer {
+  display: flex;
+  opacity: 1;
+}
+
+@keyframes rotateIcon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-180deg);
+  }
+}
+
+@keyframes rotateIconReverse {
+  from {
+    transform: rotate(-180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+#helpdesk .contactUs .supports {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+#helpdesk .contactUs .support {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 16px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+#helpdesk .contactUs .support a {
+  text-decoration: underline;
+}
+
+#helpdesk .contactUs .support i {
+  background-color: var(--blue);
+  width: 68px;
+  height: 68px;
+  font-size: 24px;
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#helpdesk .contactUs .support .btn {
+  text-decoration: none;
+}
+
+@media (min-width: 800px) {
+  #login {
+    height: 95.9vh;
+  }
+
+  #login .text {
+    width: 100%;
+    height: 50%;
+  }
+
+  #login .text form .row div,
+  #login .text form .row div input {
+    width: 95%;
+  }
+
+  #login .image {
+    height: 649px;
+    height: 50%;
+  }
+
+  /* ---- signUp ---- */
+  #signUp {
+    height: 95.9vh;
+  }
+
+  #signUp .text {
+    width: 100%;
+    height: 50%;
+  }
+
+  #signUp .text form .row div,
+  #signUp .text form .row div input {
+    width: 95%;
+  }
+
+  #signUp .image {
+    height: 649px;
+    height: 50%;
+  }
+
+  /* ---- account ---- */
+  #account .gegevens .fields .field {
+    width: 100%;
+  }
+
+  /* ---- helpdesk ---- */
+  #helpdesk .contactUs .support {
+    width: 44%;
+  }
+
+  /* ---- subsidies ---- */
+  #subsidie-details .text {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #subsidie-details .text div {
+    width: 48%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .desktopNav {
+    margin-left: 0;
+  }
+
+  #login {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #login .text {
+    padding-left: 200px;
+  }
+
+  #login .text,
+  #login .image {
+    width: 42%;
+    justify-content: center;
+    height: 100%;
+  }
+
+  /* ---- signUp ---- */
+  #signUp {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #signUp .text {
+    padding-left: 200px;
+  }
+
+  #signUp .text,
+  #signUp .image {
+    width: 42%;
+    justify-content: center;
+    height: 100%;
+  }
+
+  /* ---- account ---- */
+  #account {
+    padding-left: 144px;
+  }
+
+  #account .info .image {
+    height: 200px;
+  }
+
+  #account .info .profilePicture {
+    width: 200px;
+    height: 200px;
+    margin-top: -120px;
+  }
+
+  #account .gegevens .fields .field {
+    width: 30%;
+  }
+
+  #account .info .fa-edit {
+    margin-top: -60px;
+    margin-left: 100px;
+  }
+
+  /* ---- helpdesk ---- */
+  #helpdesk,
+  #roadmap,
+  #subsidies,
+  #subsidie-details {
+    padding-left: 144px;
+  }
+
+  #helpdesk .FAQ,
+  #helpdesk .contactUs {
+    max-width: 100%;
+  }
+
+  #helpdesk .contactUs .support {
+    width: 272px;
+  }
+
+  /* ---- subsidies ---- */
+  #subsidies .subsidies .subsidie {
+    width: 319px;
+  }
+
+  #subsidie-details .image {
+    height: 320px;
+  }
+}
