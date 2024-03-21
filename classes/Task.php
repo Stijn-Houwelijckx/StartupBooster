@@ -4,6 +4,8 @@ class Task
     private $label;
     private $question;
     private $answer;
+    private $done;
+    private $read;
 
     /**
      * Get the value of label
@@ -61,6 +63,47 @@ class Task
     public function setAnswer($answer)
     {
         $this->answer = $answer;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of done
+     */
+    public function getDone()
+    {
+        return $this->done;
+    }
+
+    /**
+     * Set the value of done
+     *
+     * @return  self
+     */
+    public function setDone($done)
+    {
+        $this->done = $done;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of read
+     */
+    public function getRead()
+    {
+        return $this->read;
+    }
+
+    /**
+     * Set the value of read
+     *
+     * @return  self
+     */
+    public function setRead($read)
+    {
+        $this->read = $read;
 
         return $this;
     }

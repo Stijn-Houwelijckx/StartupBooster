@@ -589,6 +589,15 @@ a.active {
   color: var(--blue);
 }
 
+/* ---- roadmap ---- */
+#roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
 /* ---- subsidies ---- */
 #subsidies,
 #subsidie-details {
