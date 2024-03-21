@@ -5,7 +5,7 @@ class Task
     private $question;
     private $answer;
     private $done;
-    private $read;
+    private $is_read;
 
     /**
      * Get the value of label
@@ -89,21 +89,21 @@ class Task
     }
 
     /**
-     * Get the value of read
+     * Get the value of is_read
      */
-    public function getRead()
+    public function getIs_read()
     {
-        return $this->read;
+        return $this->is_read;
     }
 
     /**
-     * Set the value of read
+     * Set the value of is_read
      *
      * @return  self
      */
-    public function setRead($read)
+    public function setIs_read($is_read)
     {
-        $this->read = $read;
+        $this->is_read = $is_read;
 
         return $this;
     }
@@ -118,6 +118,17 @@ class Task
         } catch (PDOException $e) {
             error_log('Database error in getTasks(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve tasks');
+        }
+    }
+    public static function updateRead(PDO $pdo, $taskId)
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE roadmap SET is_read = 1 WHERE id = :taskId");
+            $stmt->bindParam(':taskId', $taskId, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error in markTaskAsRead(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to mark task as read');
         }
     }
 }

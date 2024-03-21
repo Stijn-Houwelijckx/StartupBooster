@@ -5,8 +5,20 @@ include_once (__DIR__ . "/classes/Db.php");
 try {
     $pdo = Db::getInstance();
     $tasks = Task::getTasks($pdo);
-    // Omkeren van de volgorde van de taken
+    // Reverse the order of tasks
     $tasks = array_reverse($tasks);
+
+    // Check if form is submitted
+    if (isset ($_POST['taskId'])) {
+        // Ensure taskId is properly set and sanitize it
+        $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
+        if ($taskId) {
+            Task::updateRead($pdo, $taskId);
+        } else {
+            // Log error if taskId is invalid
+            error_log('Invalid taskId received.');
+        }
+    }
 } catch (Exception $e) {
     error_log('Database error: ' . $e->getMessage());
     $tasks = [];
@@ -25,6 +37,7 @@ $current_page = 'tasks';
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
+
     <style>
         <?php foreach ($tasks as $task): ?>
             <?php $backgroundColor = ($task["done"] == 1) ? "var(--blue)" : "#DADADA"; ?>
@@ -60,7 +73,7 @@ $current_page = 'tasks';
                         <?php
                         $taskClasses = "task task-" . $task['id'];
                         if ($task["done"] == 1) {
-                            $taskClasses .= " active"; // Voeg de klassen toe voor de eerste blauwe taak
+                            $taskClasses .= " active";
                         }
                         ?>
                         <div class="<?php echo $taskClasses; ?>">
@@ -84,9 +97,21 @@ $current_page = 'tasks';
                                 <a class="readmore">Lees meer</a>
                                 <div>
                                     <p>Gelezen</p>
-                                    <i class="fa fa-square-o"></i>
+                                    <form id="readForm<?php echo $task['id']; ?>" method="POST"
+                                        onsubmit="submitReadForm(event, <?php echo $task['id']; ?>)">
+                                        <?php if ($task["is_read"] == 0): ?>
+                                            <i id="icon<?php echo $task['id']; ?>" class="fa fa-square-o"
+                                                onclick="submitReadForm(event, <?php echo $task['id']; ?>)"></i>
+                                        <?php else: ?>
+                                            <i id="icon<?php echo $task['id']; ?>" class="fa fa-check-square-o"></i>
+                                        <?php endif; ?>
+                                        <input type="hidden" name="taskId" value="<?php echo $task['id']; ?>">
+                                    </form>
+
+
                                 </div>
                             </div>
+
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -95,6 +120,35 @@ $current_page = 'tasks';
             </div>
         </div>
     </div>
+
+    <script>
+        function submitReadForm(event, taskId) {
+            event.preventDefault(); // Voorkomt standaardformulierverzending
+            var form = document.getElementById('readForm' + taskId);
+            var icon = document.getElementById('icon' + taskId); // Haal het icoontje op
+            var formData = new FormData(form); // Verzamel formuliergegevens
+
+            // Voer een AJAX-verzoek uit om het formulier in te dienen
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Wijzig het icoontje op basis van de respons
+                        if (icon.classList.contains('fa-square-o')) {
+                            icon.classList.remove('fa-square-o');
+                            icon.classList.add('fa-check-square-o');
+                        }
+                    } else {
+                        console.error('Form submission failed.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error occurred during form submission:', error);
+                });
+        }
+    </script>
 
 
 
@@ -175,6 +229,7 @@ $current_page = 'tasks';
         });
 
     </script>
+
 </body>
 
 </html>
