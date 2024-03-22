@@ -1,4 +1,5 @@
 <?php
+// session_start();
 
 class User
 {
@@ -29,7 +30,13 @@ class User
      */
     public function setFirstname($firstname)
     {
+        if (empty(trim($firstname))) {
+            throw new Exception("Voornaam is verplicht.");
+        }
+        
+        $_SESSION["firstname"] = $firstname;
         $this->firstname = $firstname;
+
         return $this;
     }
 
@@ -48,7 +55,13 @@ class User
      */
     public function setLastname($lastname)
     {
+        if (empty(trim($lastname))) {
+            throw new Exception("Achternaam is verplicht.");
+        }
+        
+        $_SESSION["lastname"] = $lastname;
         $this->lastname = $lastname;
+
         return $this;
     }
 
@@ -87,8 +100,13 @@ class User
      */
     public function setNationalRegistryNumber($nationalRegistryNumber)
     {
-        $this->nationalRegistryNumber = $nationalRegistryNumber;
+        if (empty(trim($nationalRegistryNumber))) {
+            throw new Exception("Rijksregisternummer is verplicht.");
+        }
 
+        $_SESSION["nationalRegistryNumber"] = $nationalRegistryNumber;
+        $this->nationalRegistryNumber = $nationalRegistryNumber;
+        
         return $this;
     }
 
@@ -107,6 +125,11 @@ class User
      */
     public function setStreet($street)
     {
+        if (empty(trim($street))) {
+            throw new Exception("Straat is verplicht.");
+        }
+
+        $_SESSION["street"] = $street;
         $this->street = $street;
 
         return $this;
@@ -127,6 +150,11 @@ class User
      */
     public function setHouseNumber($houseNumber)
     {
+        if (empty(trim($houseNumber))) {
+            throw new Exception("Huisnummer is verplicht.");
+        }
+
+        $_SESSION["houseNumber"] = $houseNumber;
         $this->houseNumber = $houseNumber;
 
         return $this;
@@ -147,6 +175,11 @@ class User
      */
     public function setZipCode($zipCode)
     {
+        if (empty(trim($zipCode))) {
+            throw new Exception("Postcode is verplicht.");
+        }
+
+        $_SESSION["zipCode"] = $zipCode;
         $this->zipCode = $zipCode;
 
         return $this;
@@ -167,6 +200,11 @@ class User
      */
     public function setCity($city)
     {
+        if (empty(trim($city))) {
+            throw new Exception("Stad is verplicht.");
+        }
+        
+        $_SESSION["city"] = $city;
         $this->city = $city;
 
         return $this;
@@ -188,14 +226,16 @@ class User
     public function setEmail($email)
     {
         if (empty(trim($email))) {
-            throw new Exception("Email is required.");
+            throw new Exception("Email is verplicht.");
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Email is not valid.");
+            throw new Exception("Email is niet geldig.");
         }
 
+        $_SESSION["email"] = $email;
         $this->email = $email;
+        
         return $this;
     }
 
@@ -237,6 +277,10 @@ class User
      */
     public function setPassword($password)
     {
+        if (empty(trim($password))) {
+            throw new Exception("Vul een wachtwoord in");
+        }
+
         $this->password = password_hash($password, PASSWORD_DEFAULT);
         return $this;
     }

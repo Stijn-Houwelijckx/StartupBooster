@@ -1,5 +1,6 @@
 <?php
 session_start();
+session_unset();
 
 include_once (__DIR__ . "/classes/User.php");
 include_once (__DIR__ . "/classes/Db.php");
@@ -84,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
             <div class="row">
                 <p>Nog geen lid?</p>
-                <a href="signUp.php" class="active">Een account aanmaken</a>
+                <a href="signUp.php?step=1" class="active">Een account aanmaken</a>
             </div>
         </div>
         <div class="image"></div>
