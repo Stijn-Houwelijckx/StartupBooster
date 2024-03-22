@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="signUp">
         <div class="text">
             <h1>Registreren</h1>
-            <p>We hebben alleen wat meer informatie nodig om je account aan te maken. </p>
+            <p>We hebben alleen wat meer informatie nodig om je account aan te maken.</p>
             <div class="partners">
                 <img src="assets/images/Itsme.svg" alt="Itsme">
             </div>
@@ -114,11 +114,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form class="form form--login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                     <input type="hidden" name="current_step" value="1">
                     <div class="row bar">
-                        <a class="number active" onclick="goToStep(1)">1</a>
+                        <a class="number active">1</a>
                         <p class="border"></p>
-                        <a class="number" onclick="goToStep(2)">2</a>
+                        <a class="number">2</a>
                         <p class="border"></p>
-                        <a class="number" onclick="goToStep(3)">3</a>
+                        <a class="number">3</a>
                     </div>
                     <div class="row">
                         <div>
@@ -153,11 +153,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form class="form form--login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                     <input type="hidden" name="current_step" value="2">
                     <div class="row bar">
-                        <a class="number" onclick="goToStep(1)">1</a>
+                        <a class="number">1</a>
                         <p class="border"></p>
-                        <a class="number active" onclick="goToStep(2)">2</a>
+                        <a class="number active">2</a>
                         <p class="border"></p>
-                        <a class="number" onclick="goToStep(3)">3</a>
+                        <a class="number">3</a>
                     </div>
                     <div class="row">
                         <div>
@@ -188,11 +188,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form class="form form--login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                     <input type="hidden" name="current_step" value="3">
                     <div class="row bar">
-                        <a class="number" onclick="goToStep(1)">1</a>
+                        <a class="number">1</a>
                         <p class="border"></p>
-                        <a class="number" onclick="goToStep(2)">2</a>
+                        <a class="number">2</a>
                         <p class="border"></p>
-                        <a class="number active" onclick="goToStep(3)">3</a>
+                        <a class="number active">3</a>
                     </div>
                     <div class="column passwordInput">
                         <label for="password">Wachtwoord</label>
@@ -235,20 +235,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             });
         });
-
-        var currentStep = <?php echo $currentStep; ?>;
-        function goToStep() {
-            var previousStep = currentStep - 1;
-            var targetStep = document.querySelector('#step' + previousStep);
-            if (targetStep) {
-                var forms = document.querySelectorAll('.step');
-                forms.forEach(function (form) {
-                    form.style.display = 'none';
-                });
-                targetStep.style.display = 'block';
-                currentStep = previousStep;
-            }
-        }
     </script>
 
 </body>
