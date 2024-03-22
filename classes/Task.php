@@ -123,12 +123,14 @@ class Task
     public static function updateRead(PDO $pdo, $taskId)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE roadmap SET is_read = 1 WHERE id = :taskId");
+            $stmt = $pdo->prepare("UPDATE roadmap SET is_read = 1 - is_read WHERE id = :taskId");
             $stmt->bindParam(':taskId', $taskId, PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
-            error_log('Database error in markTaskAsRead(): ' . $e->getMessage());
-            throw new Exception('Database error: Unable to mark task as read');
+            error_log('Database error in updateRead(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update read status');
         }
     }
+
+
 }
