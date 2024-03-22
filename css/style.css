@@ -207,11 +207,6 @@ a.active {
   width: 100%;
 }
 
-#login .step2,
-#login .step3 {
-  display: none;
-}
-
 #login .text form {
   display: flex;
   flex-direction: column;
