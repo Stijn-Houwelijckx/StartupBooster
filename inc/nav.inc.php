@@ -48,6 +48,9 @@
                 </div>
             </a>
         </div>
+        <div class="logout">
+            <a href="logout.php" style="color: white;">Logout</a>
+        </div>
         <div class="settings">
             <div>
                 <img class="<?php echo ($current_page == 'settings') ? 'settingsItem active' : 'settingsItem'; ?>"
