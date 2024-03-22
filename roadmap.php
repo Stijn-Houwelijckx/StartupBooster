@@ -5,17 +5,13 @@ include_once (__DIR__ . "/classes/Db.php");
 try {
     $pdo = Db::getInstance();
     $tasks = Task::getTasks($pdo);
-    // Reverse the order of tasks
     $tasks = array_reverse($tasks);
 
-    // Check if form is submitted
     if (isset ($_POST['taskId'])) {
-        // Ensure taskId is properly set and sanitize it
         $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
         if ($taskId) {
             Task::updateRead($pdo, $taskId);
         } else {
-            // Log error if taskId is invalid
             error_log('Invalid taskId received.');
         }
     }
@@ -103,7 +99,8 @@ $current_page = 'tasks';
                                             <i id="icon<?php echo $task['id']; ?>" class="fa fa-square-o"
                                                 onclick="submitReadForm(event, <?php echo $task['id']; ?>)"></i>
                                         <?php else: ?>
-                                            <i id="icon<?php echo $task['id']; ?>" class="fa fa-check-square-o"></i>
+                                            <i id="icon<?php echo $task['id']; ?>" class="fa fa-check-square-o"
+                                                onclick="submitReadForm(event, <?php echo $task['id']; ?>)"></i>
                                         <?php endif; ?>
                                         <input type="hidden" name="taskId" value="<?php echo $task['id']; ?>">
                                     </form>
@@ -123,23 +120,18 @@ $current_page = 'tasks';
 
     <script>
         function submitReadForm(event, taskId) {
-            event.preventDefault(); // Voorkomt standaardformulierverzending
+            console.log("lkjh");
+            event.preventDefault();
             var form = document.getElementById('readForm' + taskId);
-            var icon = document.getElementById('icon' + taskId); // Haal het icoontje op
-            var formData = new FormData(form); // Verzamel formuliergegevens
-
-            // Voer een AJAX-verzoek uit om het formulier in te dienen
+            var icon = document.getElementById('icon' + taskId);
+            var formData = new FormData(form);
             fetch(form.action, {
                 method: form.method,
                 body: formData
             })
                 .then(response => {
                     if (response.ok) {
-                        // Wijzig het icoontje op basis van de respons
-                        if (icon.classList.contains('fa-square-o')) {
-                            icon.classList.remove('fa-square-o');
-                            icon.classList.add('fa-check-square-o');
-                        }
+                        console.error('Form submission success.');
                     } else {
                         console.error('Form submission failed.');
                     }
@@ -148,6 +140,7 @@ $current_page = 'tasks';
                     console.error('Error occurred during form submission:', error);
                 });
         }
+
     </script>
 
 
@@ -158,7 +151,7 @@ $current_page = 'tasks';
             if (activeTask) {
                 window.scrollTo({
                     top: activeTask.offsetTop,
-                    behavior: 'smooth' // Optioneel, maakt het scrollen soepel
+                    behavior: 'smooth'
                 });
             }
 
@@ -175,15 +168,15 @@ $current_page = 'tasks';
 
                     const taskId = this.getAttribute('data-task');
                     const answer = document.querySelector('.task.task-' + taskId + ' .answer');
-                    const displayRow = document.querySelector('.task.task-' + taskId + ' .display'); // Selecteer de bijbehorende display-rij
+                    const displayRow = document.querySelector('.task.task-' + taskId + ' .display');
 
                     if (answer.style.display === 'flex') {
                         answer.style.display = 'none';
-                        displayRow.style.display = 'none'; // Verberg ook de bijbehorende display-rij
+                        displayRow.style.display = 'none';
                     } else {
                         answer.style.display = 'flex';
-                        answer.style.transition = "opacity 0.5s ease"; // Aangepaste overgangseffect voor het antwoord
-                        displayRow.style.display = 'flex'; // Toon ook de bijbehorende display-rij
+                        answer.style.transition = "opacity 0.5s ease";
+                        displayRow.style.display = 'flex';
                     }
                 });
             });
@@ -200,15 +193,15 @@ $current_page = 'tasks';
 
                     const taskId = this.getAttribute('data-task');
                     const answer = document.querySelector('.task.task-' + taskId + ' .answer');
-                    const displayRow = document.querySelector('.task.task-' + taskId + ' .display'); // Selecteer de bijbehorende display-rij
+                    const displayRow = document.querySelector('.task.task-' + taskId + ' .display');
 
                     if (answer.style.display === 'none') {
                         answer.style.display = 'flex';
-                        displayRow.style.display = 'flex'; // Verberg ook de bijbehorende display-rij
+                        displayRow.style.display = 'flex';
                     } else {
                         answer.style.display = 'none';
-                        answer.style.transition = "opacity 0.5s ease"; // Aangepaste overgangseffect voor het antwoord
-                        displayRow.style.display = 'none'; // Toon ook de bijbehorende display-rij
+                        answer.style.transition = "opacity 0.5s ease";
+                        displayRow.style.display = 'none';
                     }
                 });
             });
