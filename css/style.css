@@ -331,6 +331,13 @@ a.active {
   gap: 16px;
 }
 
+#signUp .text .row select {
+  padding: 4px 8px;
+  background-color: transparent;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
 #signUp .text .bar {
   padding: 0 48px;
   width: auto !important;
