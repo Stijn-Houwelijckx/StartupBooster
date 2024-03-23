@@ -22,7 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
         try {
             $user->setFirstname($_POST["firstname"]);
             $user->setLastname($_POST["lastname"]);
-            $user->setEmail($_POST["email"]);
+            if(User::getUserByEmail((Db::getInstance()), $_POST["email"])) {
+                throw new Exception("Dit e-mailadres is al in gebruik.");
+            } else {
+                $user->setEmail($_POST["email"]);
+            }
             $user->setNationalRegistryNumber($_POST["nationalRegistryNumber"]);
 
             $currentStep = 2;
