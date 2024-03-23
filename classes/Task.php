@@ -5,7 +5,6 @@ class Task
     private $question;
     private $answer;
     private $done;
-    private $is_read;
 
     /**
      * Get the value of label
@@ -88,26 +87,6 @@ class Task
         return $this;
     }
 
-    /**
-     * Get the value of is_read
-     */
-    public function getIs_read()
-    {
-        return $this->is_read;
-    }
-
-    /**
-     * Set the value of is_read
-     *
-     * @return  self
-     */
-    public function setIs_read($is_read)
-    {
-        $this->is_read = $is_read;
-
-        return $this;
-    }
-
     public static function getTasks(PDO $pdo)
     {
         try {
@@ -120,10 +99,24 @@ class Task
             throw new Exception('Database error: Unable to retrieve tasks');
         }
     }
+
+    public static function getActiveTask(PDO $pdo)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT id FROM roadmap WHERE done = 0 ORDER BY id ASC LIMIT 1");
+            $stmt->execute();
+            $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $tasks;
+        } catch (PDOException $e) {
+            error_log('Database error in getTasks(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve tasks');
+        }
+    }
+
     public static function updateRead(PDO $pdo, $taskId)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE roadmap SET is_read = 1 - is_read WHERE id = :taskId");
+            $stmt = $pdo->prepare("UPDATE roadmap SET done = 1 - done WHERE id = :taskId");
             $stmt->bindParam(':taskId', $taskId, PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
@@ -131,6 +124,7 @@ class Task
             throw new Exception('Database error: Unable to update read status');
         }
     }
+
 
 
 }
