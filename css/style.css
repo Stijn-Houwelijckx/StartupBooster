@@ -348,11 +348,18 @@ a.active {
   gap: 24px;
 }
 
-#signUp .text form .row {
+#signUp .text form .text {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
+}
+
+#signUp .text form .row div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   width: 100%;
 }
 
@@ -387,19 +394,18 @@ a.active {
   opacity: 0.6;
 }
 
-#signUp .text form .row div {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 #signUp .text form .row div input,
 #signUp .text form .column input {
+  padding: 4px 0px;
   border: 1px solid rgba(0, 0, 0, 0.4);
-  padding: 4px 8px;
   border-radius: 8px;
   background-color: transparent;
-  width: 90%;
+  width: 100%;
+}
+
+#signUp .text form .row div input::placeholder,
+#signUp .text form .column input::placeholder {
+  padding: 8px;
 }
 
 #signUp .text form .column input {
@@ -1095,11 +1101,6 @@ a.active {
     height: 50%;
   }
 
-  #login .text form .row div,
-  #login .text form .row div input {
-    width: 95%;
-  }
-
   #login .image {
     height: 649px;
     height: 50%;
@@ -1113,16 +1114,6 @@ a.active {
   #signUp .text {
     width: 100%;
     height: 50%;
-  }
-
-  #signUp .text form .row div,
-  #signUp .text form .row div input {
-    width: 95%;
-  }
-
-  #signUp .text form .row .email,
-  #signUp .text form .row .email input {
-    width: 98.6%;
   }
 
   #signUp .image {
