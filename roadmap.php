@@ -37,7 +37,6 @@ $current_page = 'tasks';
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
-
 </head>
 
 <body>
@@ -50,7 +49,7 @@ $current_page = 'tasks';
             </div>
             <div class="tasks mobile">
                 <?php if (!empty ($tasks)): ?>
-                    <?php foreach ($tasks as $key => $task): ?>
+                    <?php foreach ($tasks as $task): ?>
                         <?php
                         if ($task["id"] == $activeTaskString) {
                             $taskClasses = "task active";

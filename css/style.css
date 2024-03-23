@@ -612,6 +612,23 @@ a.active {
   gap: 24px;
 }
 
+#roadmap .tasks .task:before {
+  content: "";
+  position: absolute;
+  left: -38px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  z-index: 999;
+  background-color: #dadada;
+}
+
+#roadmap .tasks .task.active:before {
+  background-color: var(--blue);
+}
+
 #roadmap .tasks .task {
   display: flex;
   flex-direction: column;
