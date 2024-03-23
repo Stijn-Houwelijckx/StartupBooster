@@ -11,10 +11,11 @@ $current_page = 'home';
     <title>StartupBooster</title>
     <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
 </head>
 
 <body>
-    <?php include_once('inc/nav.inc.php'); ?>
+    <?php include_once ('inc/nav.inc.php'); ?>
     <div id="dekstop"></div>
 </body>
 
