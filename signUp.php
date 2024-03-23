@@ -8,16 +8,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('error_log', 'error.log');
 
-$currentStep = -1;
+$currentStep = 1;
 $error;
 
 if(isset($_GET['step'])) {
-
     $currentStep = intval($_GET['step']);
-
-    if($currentStep < $_GET['step']) {
-        header("Location: signUp.php?step=" . $currentStep);
-    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
@@ -56,14 +51,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
         $password2 = $_POST["password2"];
         if ($password === $password2) {
             try {
-                $user->setFirstname($_SESSION['firstname']);
-                $user->setLastname($_SESSION['lastname']);
-                $user->setEmail($_SESSION['email']);
-                $user->setNationalRegistryNumber($_SESSION['nationalRegistryNumber']);
-                $user->setStreet($_SESSION['street']);
-                $user->setHouseNumber($_SESSION['houseNumber']);
-                $user->setZipCode($_SESSION['zipCode']);
-                $user->setCity($_SESSION['city']);
+                try {
+                    $user->setFirstname($_SESSION['firstname']);
+                    $user->setLastname($_SESSION['lastname']);
+                    $user->setEmail($_SESSION['email']);
+                    $user->setNationalRegistryNumber($_SESSION['nationalRegistryNumber']);
+                } catch (Exception $e) {
+                    $error = $e->getMessage();
+                    header("Location: signUp.php?step=1");
+                    exit();
+                }
+
+                try {
+                    $user->setStreet($_SESSION['street']);
+                    $user->setHouseNumber($_SESSION['houseNumber']);
+                    $user->setZipCode($_SESSION['zipCode']);
+                    $user->setCity($_SESSION['city']);
+                } catch (Exception $e) {
+                    $error = $e->getMessage();
+                    header("Location: signUp.php?step=2");
+                    exit();
+                }
+
                 
                 $user->setPassword($password);
 
@@ -132,11 +141,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
             <div class="step" id="step1">
                 <form class="form form--login" method="post" action="">
                     <div class="row bar">
-                        <a class="number <?php if($currentStep === 1){echo "active";} ?>">1</a>
+                        <a class="number <?php if($currentStep == 1){echo "active";} ?>" <?php if($currentStep != 1){echo "href='signUp.php?step=1'";} ?>>1</a>
                         <p class="border"></p>
-                        <a class="number" <?php if($currentStep === 2){echo "active";} ?>>2</a>
+                        <a class="number <?php if($currentStep == 2){echo "active";} ?>" <?php if($currentStep != 2){echo "href='signUp.php?step=2'";} ?>>2</a>
                         <p class="border"></p>
-                        <a class="number" <?php if($currentStep === 3){echo "active";} ?>>3</a>
+                        <a class="number <?php if($currentStep == 3){echo "active";} ?>" <?php if($currentStep != 3){echo "href='signUp.php?step=3'";} ?>>3</a>
                     </div>
                     
                     <!-- Step 1 -->
