@@ -72,14 +72,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
                     $user = User::getUserByEmail($pdo, $_SESSION["email"]);
                     $_SESSION['user_id'] = $user["id"];
 
-                    session_unset("firstname");
-                    session_unset("lastname");
-                    session_unset("email");
-                    session_unset("nationalRegistryNumber");
-                    session_unset("street");
-                    session_unset("houseNumber");
-                    session_unset("zipCode");
-                    session_unset("city");
+                    unset($_SESSION["firstname"]);
+                    unset($_SESSION["lastname"]);
+                    unset($_SESSION["email"]);
+                    unset($_SESSION["nationalRegistryNumber"]);
+                    unset($_SESSION["street"]);
+                    unset($_SESSION["houseNumber"]);
+                    unset($_SESSION["zipCode"]);
+                    unset($_SESSION["city"]);
 
                     header("Location: dashboard.php");
                 } else {
