@@ -4,6 +4,14 @@ include_once (__DIR__ . "/classes/User.php");
 
 session_start();
 $current_page = 'account';
+
+$currentStep = "persoonlijkeGegevens";
+$error;
+
+if (isset ($_GET['page'])) {
+    $currentStep = $_GET['page'];
+}
+
 $success = false; // Initialize $success variable
 
 if (isset ($_SESSION["user_id"])) {
@@ -64,91 +72,93 @@ if (isset ($_SESSION["user_id"])) {
         <h1>Instellingen</h1>
         <div class="elements">
             <div class="navigation">
-                <a href="#" class="active">Persoonlijke gegevens</a>
-                <a href="#">Veiligheid</a>
-                <a href="#">Meldingen</a>
-                <a href="#">Account</a>
+                <a href='settings.php?page=persoonlijkeGegevens' class="active">Persoonlijke gegevens</a>
+                <a href='settings.php?page=veiligheid'>Veiligheid</a>
+                <a href='settings.php?page=meldingen'>Meldingen</a>
+                <a href='settings.php?page=account'>Account</a>
             </div>
-            <div class="option">
-                <h2>Persoonlijke gegevens</h2>
-                <p class="border"></p>
-                <div class="info">
-                    <div class="profilePicture"></div>
-                    <div class="text">
-                        <h3>
-                            <?php echo htmlspecialchars($user["firstname"]) . " " . htmlspecialchars($user["lastname"]); ?>
-                        </h3>
-                        <p>
-                            <?php echo htmlspecialchars($user["function"]); ?>
-                        </p>
-                        <p>
-                            <?php echo htmlspecialchars($user["city"]); ?>
-                        </p>
+            <?php if ($currentStep == "persoonlijkeGegevens"): ?>
+                <div class="option">
+                    <h2>Persoonlijke gegevens</h2>
+                    <p class="border"></p>
+                    <div class="info">
+                        <div class="profilePicture"></div>
+                        <div class="text">
+                            <h3>
+                                <?php echo htmlspecialchars($user["firstname"]) . " " . htmlspecialchars($user["lastname"]); ?>
+                            </h3>
+                            <p>
+                                <?php echo htmlspecialchars($user["function"]); ?>
+                            </p>
+                            <p>
+                                <?php echo htmlspecialchars($user["city"]); ?>
+                            </p>
+                        </div>
                     </div>
+                    <form action="settings.php" method="post">
+                        <div class="extraInfo">
+                            <h3>Persoonlijke gegevens</h3>
+                            <div class="fields">
+                                <div class="field">
+                                    <label for="firstname">Voornaam</label>
+                                    <input type="text" name="firstname" id="firstname" placeholder="Tom"
+                                        value="<?php echo htmlspecialchars($user["firstname"]); ?>">
+                                </div>
+                                <div class="field">
+                                    <label for="lastname">Achternaam</label>
+                                    <input type="text" name="lastname" id="lastname" placeholder="Jansen"
+                                        value="<?php echo htmlspecialchars($user["lastname"]); ?>">
+                                </div>
+                                <div class="field">
+                                    <label for="phone">Telefoonnummer</label>
+                                    <input type="text" name="phone" id="phone" placeholder="+32476 75 67 36"
+                                        value="<?php echo htmlspecialchars($user["phoneNumber"]); ?>">
+                                </div>
+                                <div class="field">
+                                    <label for="function">Functie</label>
+                                    <select name="function" id="function">
+                                        <option value="Student-zelfstandige" <?php if ($user["function"] == "Student-zelfstandige")
+                                            echo "selected"; ?>>Student-zelfstandige
+                                        </option>
+                                        <option value="Zelfstandige" <?php if ($user["function"] == "Zelfstandige")
+                                            echo "selected"; ?>>
+                                            Zelfstandige</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="extraInfo">
+                            <h3>Adres</h3>
+                            <div class="fields">
+                                <div class="field">
+                                    <label for="street">Straat</label>
+                                    <input type="text" name="street" id="street" placeholder="Grote markt"
+                                        value="<?php echo htmlspecialchars($user["street"]); ?>">
+                                </div>
+                                <div class="field">
+                                    <label for="houseNumber">Huisnr.</label>
+                                    <input type="text" name="houseNumber" id="houseNumber" placeholder="1"
+                                        value="<?php echo htmlspecialchars($user["houseNumber"]); ?>">
+                                </div>
+                                <div class="field">
+                                    <label for="zipCode">Postcode.</label>
+                                    <input type="text" name="zipCode" id="zipCode" placeholder="2800"
+                                        value="<?php echo htmlspecialchars($user["zipCode"]); ?>">
+                                </div>
+                                <div class="field">
+                                    <label for="city">Stad</label>
+                                    <input type="text" name="city" id="city" placeholder="Mechelen"
+                                        value="<?php echo htmlspecialchars($user["city"]); ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <?php if ($success): ?>
+                            <p class="success">Uw gegevens zijn succesvol aangepast.</p>
+                        <?php endif ?>
+                        <button type="submit" class="btn" id="btnSave">Bewaren</button>
+                    </form>
                 </div>
-                <form action="settings.php" method="post">
-                    <div class="extraInfo">
-                        <h3>Persoonlijke gegevens</h3>
-                        <div class="fields">
-                            <div class="field">
-                                <label for="firstname">Voornaam</label>
-                                <input type="text" name="firstname" id="firstname" placeholder="Tom"
-                                    value="<?php echo htmlspecialchars($user["firstname"]); ?>">
-                            </div>
-                            <div class="field">
-                                <label for="lastname">Achternaam</label>
-                                <input type="text" name="lastname" id="lastname" placeholder="Jansen"
-                                    value="<?php echo htmlspecialchars($user["lastname"]); ?>">
-                            </div>
-                            <div class="field">
-                                <label for="phone">Telefoonnummer</label>
-                                <input type="text" name="phone" id="phone" placeholder="+32476 75 67 36"
-                                    value="<?php echo htmlspecialchars($user["phoneNumber"]); ?>">
-                            </div>
-                            <div class="field">
-                                <label for="function">Functie</label>
-                                <select name="function" id="function">
-                                    <option value="Student-zelfstandige" <?php if ($user["function"] == "Student-zelfstandige")
-                                        echo "selected"; ?>>Student-zelfstandige
-                                    </option>
-                                    <option value="Zelfstandige" <?php if ($user["function"] == "Zelfstandige")
-                                        echo "selected"; ?>>
-                                        Zelfstandige</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="extraInfo">
-                        <h3>Adres</h3>
-                        <div class="fields">
-                            <div class="field">
-                                <label for="street">Straat</label>
-                                <input type="text" name="street" id="street" placeholder="Grote markt"
-                                    value="<?php echo htmlspecialchars($user["street"]); ?>">
-                            </div>
-                            <div class="field">
-                                <label for="houseNumber">Huisnr.</label>
-                                <input type="text" name="houseNumber" id="houseNumber" placeholder="1"
-                                    value="<?php echo htmlspecialchars($user["houseNumber"]); ?>">
-                            </div>
-                            <div class="field">
-                                <label for="zipCode">Postcode.</label>
-                                <input type="text" name="zipCode" id="zipCode" placeholder="2800"
-                                    value="<?php echo htmlspecialchars($user["zipCode"]); ?>">
-                            </div>
-                            <div class="field">
-                                <label for="city">Stad</label>
-                                <input type="text" name="city" id="city" placeholder="Mechelen"
-                                    value="<?php echo htmlspecialchars($user["city"]); ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <?php if ($success): ?>
-                        <p class="success">Uw gegevens zijn succesvol aangepast.</p>
-                    <?php endif ?>
-                    <button type="submit" class="btn" id="btnSave">Bewaren</button>
-                </form>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 </body>
