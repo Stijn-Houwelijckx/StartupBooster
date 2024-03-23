@@ -33,6 +33,13 @@ class User
         if (empty(trim($firstname))) {
             throw new Exception("Voornaam is verplicht.");
         }
+
+        // $reValid = '/^(?!.*\s\s)[A-Za-z\'-]+( [A-Za-z\'-]+)*$/';
+        $reValid = '/^(?!.*\s\s)[A-Za-z]+([-\' ][A-Za-z]+)*$/';
+
+        if (!preg_match($reValid, $firstname)) {
+            throw new Exception("Voornaam is niet geldig.");
+        }
         
         $_SESSION["firstname"] = $firstname;
         $this->firstname = $firstname;
@@ -57,6 +64,12 @@ class User
     {
         if (empty(trim($lastname))) {
             throw new Exception("Achternaam is verplicht.");
+        }
+        
+        $reValid = '/^(?!.*\s\s)[A-Za-z]+([-\' ][A-Za-z]+)*$/';
+
+        if (!preg_match($reValid, $lastname)) {
+            throw new Exception("Achternaam is niet geldig.");
         }
         
         $_SESSION["lastname"] = $lastname;
@@ -129,6 +142,12 @@ class User
             throw new Exception("Straat is verplicht.");
         }
 
+        $reValid = '/^(?!.*\s\s)[A-Za-z]+([-\' ][A-Za-z]+)*$/';
+        
+        if (!preg_match($reValid, $street)) {
+            throw new Exception("Straat is niet geldig.");
+        }
+
         $_SESSION["street"] = $street;
         $this->street = $street;
 
@@ -152,6 +171,11 @@ class User
     {
         if (empty(trim($houseNumber))) {
             throw new Exception("Huisnummer is verplicht.");
+        }
+
+        $reValid = '/^[0-9]+[a-zA-Z]*$/';
+        if (!preg_match($reValid, $houseNumber)) {
+            throw new Exception("Huisnummer is niet geldig.");
         }
 
         $_SESSION["houseNumber"] = $houseNumber;
@@ -179,6 +203,11 @@ class User
             throw new Exception("Postcode is verplicht.");
         }
 
+        $reValid = '/^[1-9][0-9]{3}$/';
+        if (!preg_match($reValid, $zipCode)) {
+            throw new Exception("Postcode is niet geldig.");
+        }
+
         $_SESSION["zipCode"] = $zipCode;
         $this->zipCode = $zipCode;
 
@@ -201,9 +230,14 @@ class User
     public function setCity($city)
     {
         if (empty(trim($city))) {
-            throw new Exception("Stad is verplicht.");
+            throw new Exception("Gemeente is verplicht.");
         }
-        
+
+        $reValid = '/^(?!.*\s\s)[A-Za-z]+([- ][A-Za-z]+)*$/';
+        if (!preg_match($reValid, $city)) {
+            throw new Exception("Gemeente is niet geldig.");
+        }
+
         $_SESSION["city"] = $city;
         $this->city = $city;
 
@@ -279,6 +313,15 @@ class User
     {
         if (empty(trim($password))) {
             throw new Exception("Vul een wachtwoord in");
+        }
+
+        if (strlen($password) < 8) {
+            throw new Exception("Wachtwoord moet minstens 8 karakters lang zijn.");
+        }
+
+        $reValid = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/';
+        if (!preg_match($reValid, $password)) {
+            throw new Exception("Wachtwoord moet minstens 1 hoofdletter, 1 kleine letter, 1 cijfer en 1 speciaal karakter (!@#$%^&*) bevatten.");
         }
 
         $this->password = password_hash($password, PASSWORD_DEFAULT);
