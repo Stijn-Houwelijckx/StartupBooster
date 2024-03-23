@@ -18,8 +18,6 @@ if(isset($_GET['step'])) {
     if($currentStep < $_GET['step']) {
         header("Location: signUp.php?step=" . $currentStep);
     }
-
-    var_dump("currentStep = " . $currentStep);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
