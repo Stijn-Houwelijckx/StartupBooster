@@ -126,5 +126,27 @@ class Task
     }
 
 
+    public static function getProgress(PDO $pdo)
+    {
+        try {
+            $query = "SELECT (
+                        SELECT COUNT(id)
+                        FROM roadmap
+                        WHERE done = 1
+                    ) AS finished_steps,
+                    (
+                        SELECT COUNT(id)
+                        FROM roadmap
+                    ) AS total_steps;";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $tasks;
+        } catch (PDOException $e) {
+            error_log('Database error in getTasks(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve tasks');
+        }
+    }
+
 
 }

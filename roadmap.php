@@ -4,11 +4,13 @@ include_once (__DIR__ . "/classes/Db.php");
 
 try {
     $pdo = Db::getInstance();
+    $finished_steps = Task::getProgress($pdo);
     $tasks = Task::getTasks($pdo);
     $activeTask = Task::getActiveTask($pdo);
     $activeTaskString = implode(', ', $activeTask); // Convert array to string
 
-
+    $progress = ($finished_steps["finished_steps"] / $finished_steps["total_steps"]) * 100;
+    $progressRounded = number_format($progress, 0);
     $tasks = array_reverse($tasks);
 
     if (isset ($_POST['taskId'])) {
@@ -104,6 +106,19 @@ $current_page = 'tasks';
                     <p>No tasks found.</p>
                 <?php endif; ?>
             </div>
+
+        </div>
+        <div class="progress">
+            <div class="row">
+                <p>Voortgangsbalk</p>
+                <p>
+                    <?php echo $progressRounded . "%" ?>
+                </p>
+            </div>
+            <div class="bars">
+                <p class="bar1"></p>
+                <p class="bar2" style="width: <?php echo $progressRounded ?>%"></p>
+            </div>
         </div>
     </div>
 
@@ -154,13 +169,10 @@ $current_page = 'tasks';
                             // Toggle de display-stijl van de rij en het antwoord
                             row.style.display = 'none';
                             answer.style.display = 'none';
-                            icon.classList.remove("fa-angle-up");
-                            icon.classList.add("fa-angle-down");
+                            icon.classList.remove(" fa-angle-up"); icon.classList.add("fa-angle-down");
                         }
                     });
                 }
-
-                // Voeg event listener toe aan de hele taak voor het openen
                 task.addEventListener('click', function (e) {
                     const row = task.querySelector('.row.display');
                     const answer = task.querySelector('.answer');
@@ -179,10 +191,7 @@ $current_page = 'tasks';
                         }
                     }
                 });
-            });
-
-
-            document.querySelectorAll(".task .display i").forEach(icon => {
+            }); document.querySelectorAll(".task .display i").forEach(icon => {
                 icon.addEventListener('click', function () {
                     if (icon.classList.contains("fa-square-o")) {
                         icon.classList.remove("fa-square-o");
@@ -195,27 +204,6 @@ $current_page = 'tasks';
             });
 
         });
-
-        function activateTask(taskId) {
-            fetch('activate_task.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ taskId: taskId }),
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // Voer hier acties uit nadat de taak is geactiveerd
-                        console.log('Task activated successfully.');
-                    } else {
-                        console.error('Failed to activate task.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error occurred during task activation:', error);
-                });
-        }
 
     </script>
 
