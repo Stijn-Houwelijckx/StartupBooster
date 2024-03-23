@@ -39,7 +39,7 @@ class User
         if (!preg_match($reValid, $firstname)) {
             throw new Exception("Voornaam is niet geldig.");
         }
-        
+
         $_SESSION["firstname"] = $firstname;
         $this->firstname = $firstname;
 
@@ -64,13 +64,13 @@ class User
         if (empty (trim($lastname))) {
             throw new Exception("Achternaam is verplicht.");
         }
-        
+
         $reValid = '/^(?!.*\s\s)[A-Za-z]+([-\' ][A-Za-z]+)*$/';
 
         if (!preg_match($reValid, $lastname)) {
             throw new Exception("Achternaam is niet geldig.");
         }
-        
+
         $_SESSION["lastname"] = $lastname;
         $this->lastname = $lastname;
 
@@ -108,9 +108,18 @@ class User
 
     /**
      * Get the value of statute
-     */ 
+     */
     public function getStatute()
     {
+        // error_log("test");
+
+        // $statuteTitle = Statute::getStatuteByUser(Db::getInstance(), $user_id, $this->statute);
+
+        // error_log("title" . $statuteTitle);
+        // return $statuteTitle;
+
+        // $this->statute = $statute;
+
         return $this->statute;
     }
 
@@ -118,7 +127,7 @@ class User
      * Set the value of statute
      *
      * @return  self
-     */ 
+     */
     public function setStatute($statute)
     {
         if (empty (trim($statute))) {
@@ -133,7 +142,7 @@ class User
 
     /**
      * Get the value of sector
-     */ 
+     */
     public function getSector()
     {
         return $this->sector;
@@ -143,7 +152,7 @@ class User
      * Set the value of sector
      *
      * @return  self
-     */ 
+     */
     public function setSector($sector)
     {
         if (empty (trim($sector))) {
@@ -176,7 +185,7 @@ class User
         }
 
         $reValid = '/^(?!.*\s\s)[A-Za-z]+([-\' ][A-Za-z]+)*$/';
-        
+
         if (!preg_match($reValid, $street)) {
             throw new Exception("Straat is niet geldig.");
         }
@@ -262,7 +271,7 @@ class User
      */
     public function setCity($city)
     {
-        if (empty(trim($city))) {
+        if (empty (trim($city))) {
             throw new Exception("Gemeente is verplicht.");
         }
 

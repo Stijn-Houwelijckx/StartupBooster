@@ -1,6 +1,12 @@
 <?php
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
+include_once (__DIR__ . "/classes/Statute.php");
+include_once (__DIR__ . "/classes/Sector.php");
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
 
 session_start();
 $current_page = 'account';
@@ -12,18 +18,30 @@ if (isset ($_GET['page'])) {
     $currentStep = $_GET['page'];
 }
 
+
+
 $success = false; // Initialize $success variable
 
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
+    // var_dump(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2));
+
+    try {
+        $pdo = Db::getInstance();
+        $statutes = Statute::getAll($pdo);
+        $sectors = Sector::getAll($pdo);
+    } catch (Exception $e) {
+        error_log('Database error: ' . $e->getMessage());
+    }
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = new User();
 
         $firstName = filter_input(INPUT_POST, 'firstname');
         $lastName = filter_input(INPUT_POST, 'lastname');
-        $function = filter_input(INPUT_POST, 'function');
+        $statute = filter_input(INPUT_POST, 'statute');
+        $sector = filter_input(INPUT_POST, 'sector');
         $phone = filter_input(INPUT_POST, 'phone');
         $street = filter_input(INPUT_POST, 'street');
         $houseNumber = filter_input(INPUT_POST, 'houseNumber');
@@ -32,7 +50,8 @@ if (isset ($_SESSION["user_id"])) {
 
         $user->setFirstname($firstName);
         $user->setLastname($lastName);
-        $user->setFunction($function);
+        $user->setStatute($statute);
+        $user->setStatute($sector);
         $user->setPhoneNumber($phone);
         $user->setStreet($street);
         $user->setHouseNumber($houseNumber);
@@ -88,7 +107,14 @@ if (isset ($_SESSION["user_id"])) {
                                 <?php echo htmlspecialchars($user["firstname"]) . " " . htmlspecialchars($user["lastname"]); ?>
                             </h3>
                             <p>
-                                <?php echo htmlspecialchars($user["function"]); ?>
+                                <?php
+                                // var_dump($user->getStatute($_SESSION["user_id"]));
+                                // var_dump(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2));
+                                echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2)["title"];
+                                // echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user->getStatute())["title"];
+                            
+                                ?>
+
                             </p>
                             <p>
                                 <?php echo htmlspecialchars($user["city"]); ?>
@@ -115,14 +141,23 @@ if (isset ($_SESSION["user_id"])) {
                                         value="<?php echo htmlspecialchars($user["phoneNumber"]); ?>">
                                 </div>
                                 <div class="field">
-                                    <label for="function">Functie</label>
-                                    <select name="function" id="function">
-                                        <option value="Student-zelfstandige" <?php if ($user["function"] == "Student-zelfstandige")
-                                            echo "selected"; ?>>Student-zelfstandige
-                                        </option>
-                                        <option value="Zelfstandige" <?php if ($user["function"] == "Zelfstandige")
-                                            echo "selected"; ?>>
-                                            Zelfstandige</option>
+                                    <label for="statute">Statuut</label>
+                                    <select name="statute" id="statute">
+                                        <?php foreach ($statutes as $statute): ?>
+                                            <option value="<?php echo $statute["id"] ?>">
+                                                <?php echo $statute["title"] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="sector">Sector</label>
+                                    <select name="sector" id="sector">
+                                        <?php foreach ($sectors as $sector): ?>
+                                            <option value="<?php echo $sector["id"] ?>">
+                                                <?php echo $sector["title"] ?>
+                                            </option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
@@ -158,6 +193,15 @@ if (isset ($_SESSION["user_id"])) {
                         <button type="submit" class="btn" id="btnSave">Bewaren</button>
                     </form>
                 </div>
+            <?php endif; ?>
+            <?php if ($currentStep == "veiligheid"): ?>
+
+            <?php endif; ?>
+
+            <?php if ($currentStep == "meldingen"): ?>
+            <?php endif; ?>
+
+            <?php if ($currentStep == "account"): ?>
             <?php endif; ?>
         </div>
     </div>
