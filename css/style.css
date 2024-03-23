@@ -1035,13 +1035,13 @@ a.active {
 }
 
 #settings .elements .option .info .profilePicture {
-  width: 92px;
-  height: 92px;
+  width: 78.28px;
+  height: 78.28px;
   background-image: url(../assets/images/Tom.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  border-radius: 50%;
+  border-radius: 100%;
 }
 
 #settings .elements .option .info .text {
@@ -1082,7 +1082,13 @@ a.active {
   border: 1px solid var(--black);
   border-radius: 8px;
   color: var(--offBlack);
+  opacity: 0.8;
   padding: 8px;
+}
+
+#settings .option .extraInfo .fields .field input::placeholder {
+  color: var(--offBlack);
+  opacity: 0.8;
 }
 
 #settings .option .extraInfo .fields .field select {
@@ -1092,10 +1098,22 @@ a.active {
   border-radius: 8px;
   color: var(--offBlack);
   padding: 8px;
+  opacity: 0.8;
 }
 
 #settings .option .extraInfo .fields .field label {
   color: var(--offBlack);
+}
+
+#settings .option form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+#settings .option .success {
+  color: green;
 }
 
 @media (min-width: 800px) {
@@ -1213,6 +1231,11 @@ a.active {
 
   #roadmap .tasks .task:nth-child(odd) {
     transform: translateX(calc(-100% + (-57px)));
+  }
+
+  #settings .elements .option .info .profilePicture {
+    width: 92px;
+    height: 92px;
   }
 }
 
