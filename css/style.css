@@ -4,6 +4,7 @@
   --offBlack: #595959;
   --black: #1a1a1a;
   --blue: #0e3f6a;
+  --gray: #dadada;
 }
 
 @font-face {
@@ -621,6 +622,10 @@ a.active {
   border-radius: 16px;
 }
 
+#roadmap .tasks .task.inactive {
+  background-color: var(--gray);
+}
+
 #roadmap .tasks .task.active {
   background-color: #cfd9e1;
 }
@@ -650,6 +655,14 @@ a.active {
   background-color: #cfd9e1;
   padding: 8px 16px;
   border-radius: 8px;
+}
+
+#roadmap .tasks .task.inactive .label {
+  background-color: #9d9d9c;
+}
+#roadmap .tasks .task.inactive .question,
+#roadmap .tasks .task.inactive i {
+  color: #666664;
 }
 
 #roadmap .tasks .task .question {

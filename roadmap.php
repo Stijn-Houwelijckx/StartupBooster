@@ -5,6 +5,10 @@ include_once (__DIR__ . "/classes/Db.php");
 try {
     $pdo = Db::getInstance();
     $tasks = Task::getTasks($pdo);
+    $activeTask = Task::getActiveTask($pdo);
+    $activeTaskString = implode(', ', $activeTask); // Convert array to string
+
+
     $tasks = array_reverse($tasks);
 
     if (isset ($_POST['taskId'])) {
@@ -34,25 +38,6 @@ $current_page = 'tasks';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
 
-    <style>
-        <?php foreach ($tasks as $task): ?>
-            <?php $backgroundColor = ($task["done"] == 1) ? "var(--blue)" : "#DADADA"; ?>
-            #roadmap .tasks .task-<?php echo $task['id']; ?>:before {
-                content: '';
-                position: absolute;
-                left: -38px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-                background-color:
-                    <?php echo $backgroundColor; ?>
-                ;
-            }
-
-        <?php endforeach; ?>
-    </style>
 </head>
 
 <body>
@@ -65,11 +50,14 @@ $current_page = 'tasks';
             </div>
             <div class="tasks mobile">
                 <?php if (!empty ($tasks)): ?>
-                    <?php foreach ($tasks as $task): ?>
+                    <?php foreach ($tasks as $key => $task): ?>
                         <?php
-                        $taskClasses = "task task-" . $task['id'];
-                        if ($task["done"] == 1) {
-                            $taskClasses .= " active";
+                        if ($task["id"] == $activeTaskString) {
+                            $taskClasses = "task active";
+                        } else if ($task["done"] == 1) {
+                            $taskClasses = "task inactive";
+                        } else {
+                            $taskClasses = "task";
                         }
                         ?>
                         <div class="<?php echo $taskClasses; ?>">
@@ -92,22 +80,24 @@ $current_page = 'tasks';
                             <div class="row display">
                                 <a class="readmore">Lees meer</a>
                                 <div>
-                                    <p>Gelezen</p>
-                                    <form id="readForm<?php echo $task['id']; ?>" method="POST"
-                                        onsubmit="submitReadForm(event, <?php echo $task['id']; ?>)">
-                                        <?php if ($task["is_read"] == 0): ?>
-                                            <i id="icon<?php echo $task['id']; ?>" class="fa fa-square-o"
-                                                onclick="submitReadForm(event, <?php echo $task['id']; ?>)"></i>
-                                        <?php else: ?>
-                                            <i id="icon<?php echo $task['id']; ?>" class="fa fa-check-square-o"
-                                                onclick="submitReadForm(event, <?php echo $task['id']; ?>)"></i>
-                                        <?php endif; ?>
-                                        <input type="hidden" name="taskId" value="<?php echo $task['id']; ?>">
-                                    </form>
-
-
+                                    <?php
+                                    if ($task["id"] == $activeTaskString) {
+                                        echo '<p>Gelezen</p>';
+                                        echo '<form id="readForm' . $task['id'] . '" method="POST" onsubmit="submitReadForm(event, ' . $task['id'] . ')">';
+                                        if ($task["done"] == 0) {
+                                            // If task is active and not done
+                                            echo '<i id="icon' . $task['id'] . '" class="fa fa-square-o" onclick="submitReadForm(event, ' . $task['id'] . ')"></i>';
+                                        } else {
+                                            // If task is active and done
+                                            echo '<i id="icon' . $task['id'] . '" class="fa fa-check-square-o" onclick="submitReadForm(event, ' . $task['id'] . ')"></i>';
+                                        }
+                                        echo '<input type="hidden" name="taskId" value="' . $task['id'] . '">';
+                                        echo '</form>';
+                                    }
+                                    ?>
                                 </div>
                             </div>
+
 
                         </div>
                     <?php endforeach; ?>
@@ -120,7 +110,6 @@ $current_page = 'tasks';
 
     <script>
         function submitReadForm(event, taskId) {
-            console.log("lkjh");
             event.preventDefault();
             var form = document.getElementById('readForm' + taskId);
             var icon = document.getElementById('icon' + taskId);
@@ -129,21 +118,18 @@ $current_page = 'tasks';
                 method: form.method,
                 body: formData
             })
-                .then(response => {
-                    if (response.ok) {
-                        console.error('Form submission success.');
-                    } else {
-                        console.error('Form submission failed.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error occurred during form submission:', error);
-                });
+            // .then(response => {
+            //     if (response.ok) {
+            //         console.error('Form submission success.');
+            //     } else {
+            //         console.error('Form submission failed.');
+            //     }
+            // })
+            // .catch(error => {
+            //     console.error('Error occurred during form submission:', error);
+            // });
         }
-
     </script>
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -157,85 +143,44 @@ $current_page = 'tasks';
 
 
             document.querySelectorAll('.task').forEach(task => {
+                const icon = task.querySelector('.fa');
+                if (icon) {
+                    icon.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Voorkom dat het klikken op het icoontje de klik op de hele taak activeert
+
+                        const row = task.querySelector('.row.display');
+                        const answer = task.querySelector('.answer');
+
+                        if (row && answer) {
+                            // Toggle de display-stijl van de rij en het antwoord
+                            row.style.display = 'none';
+                            answer.style.display = 'none';
+                            icon.classList.remove("fa-angle-up");
+                            icon.classList.add("fa-angle-down");
+                        }
+                    });
+                }
+
+                // Voeg event listener toe aan de hele taak voor het openen
                 task.addEventListener('click', function (e) {
-                    const row = this.querySelector('.row.display'); // Zoek de rij binnen de huidige taak
-                    const answer = this.querySelector('.answer'); // Zoek het antwoord binnen de huidige taak
+                    const row = task.querySelector('.row.display');
+                    const answer = task.querySelector('.answer');
+                    const icon = task.querySelector('.fa');
 
-                    // Toggle de display-stijl van de rij en het antwoord
-                    if (row.style.display === 'none' || row.style.display === '') {
-                        row.style.display = 'flex';
-                        answer.style.display = 'flex';
-                    } else {
-                        row.style.display = 'none';
-                        answer.style.display = 'none';
-                    }
+                    if (row && answer && icon) {
+                        // Als het klikken niet op het icoontje was, open de taak
+                        if (!e.target.classList.contains('fa')) {
+                            // Toggle de display-stijl van de rij en het antwoord
+                            row.style.display = row.style.display === 'flex' ? 'none' : 'flex';
+                            answer.style.display = answer.style.display === 'flex' ? 'none' : 'flex';
 
-                    // Toggle tussen de klassen van het icoon
-                    const icon = this.querySelector('.fa');
-                    if (icon.classList.contains("fa-angle-down")) {
-                        icon.classList.remove("fa-angle-down");
-                        icon.classList.add("fa-angle-up");
-                    } else {
-                        icon.classList.remove("fa-angle-up");
-                        icon.classList.add("fa-angle-down");
+                            // Toggle tussen de klassen van het icoontje
+                            icon.classList.toggle("fa-angle-down");
+                            icon.classList.toggle("fa-angle-up");
+                        }
                     }
                 });
             });
-            task.addEventListener('click', function (e) {
-                const row = this.querySelector('.row.display'); // Zoek de rij binnen de huidige taak
-                const answer = this.querySelector('.answer'); // Zoek het antwoord binnen de huidige taak
-
-                // Controleer of de elementen bestaan voordat eigenschappen worden gebruikt
-                if (row && answer) {
-                    // Toggle de display-stijl van de rij en het antwoord
-                    if (row.style.display === 'flex') {
-                        row.style.display = 'none';
-                        answer.style.display = 'none';
-                    } else {
-                        row.style.display = 'flex';
-                        answer.style.display = 'flex';
-                    }
-                }
-
-                const icon = this.querySelector('.fa');
-                if (icon) {
-                    // Toggle tussen de klassen van het icoon
-                    icon.classList.toggle("fa-angle-down");
-                    icon.classList.toggle("fa-angle-up");
-                }
-            });
-
-
-
-
-
-
-
-
-            // document.querySelectorAll('.fa.fa-angle-up').forEach(icon => {
-            //     icon.addEventListener('click', function () {
-            //         if (icon.classList.contains("fa-angle-up")) {
-            //             icon.classList.remove("fa-angle-up");
-            //             icon.classList.add("fa-angle-down");
-            //         } else {
-            //             icon.classList.remove("fa-angle-down");
-            //             icon.classList.add("fa-angle-up");
-            //         }
-
-            //         const taskId = this.getAttribute('data-task');
-            //         const answer = document.querySelector('.task.task-' + taskId + ' .answer');
-            //         const displayRow = document.querySelector('.task.task-' + taskId + ' .display');
-
-            //         if (answer.style.display === 'none') {
-            //             answer.style.display = 'flex';
-            //             displayRow.style.display = 'flex';
-            //         } else {
-            //             answer.style.display = 'none';
-            //             answer.style.transition = "opacity 0.5s ease";
-            //             displayRow.style.display = 'none';
-            //         }
-            //     });
-            // });
 
 
             document.querySelectorAll(".task .display i").forEach(icon => {
