@@ -1082,7 +1082,13 @@ a.active {
   border: 1px solid var(--black);
   border-radius: 8px;
   color: var(--offBlack);
+  opacity: 0.8;
   padding: 8px;
+}
+
+#settings .option .extraInfo .fields .field input::placeholder {
+  color: var(--offBlack);
+  opacity: 0.8;
 }
 
 #settings .option .extraInfo .fields .field select {
@@ -1092,6 +1098,7 @@ a.active {
   border-radius: 8px;
   color: var(--offBlack);
   padding: 8px;
+  opacity: 0.8;
 }
 
 #settings .option .extraInfo .fields .field label {
