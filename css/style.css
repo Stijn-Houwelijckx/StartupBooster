@@ -1120,6 +1120,11 @@ a.active {
     width: 95%;
   }
 
+  #signUp .text form .row .email,
+  #signUp .text form .row .email input {
+    width: 98.6%;
+  }
+
   #signUp .image {
     height: 649px;
     height: 50%;
