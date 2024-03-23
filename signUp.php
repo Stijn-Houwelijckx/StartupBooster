@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
             } else {
                 $user->setEmail($_POST["email"]);
             }
-            $user->setNationalRegistryNumber($_POST["nationalRegistryNumber"]);
+            // $user->setNationalRegistryNumber($_POST["nationalRegistryNumber"]);
 
             $currentStep = 2;
 
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                     $user->setFirstname($_SESSION['firstname']);
                     $user->setLastname($_SESSION['lastname']);
                     $user->setEmail($_SESSION['email']);
-                    $user->setNationalRegistryNumber($_SESSION['nationalRegistryNumber']);
+                    // $user->setNationalRegistryNumber($_SESSION['nationalRegistryNumber']);
                 } catch (Exception $e) {
                     $error = $e->getMessage();
                     header("Location: signUp.php?step=1");
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                     unset($_SESSION["firstname"]);
                     unset($_SESSION["lastname"]);
                     unset($_SESSION["email"]);
-                    unset($_SESSION["nationalRegistryNumber"]);
+                    // unset($_SESSION["nationalRegistryNumber"]);
                     unset($_SESSION["street"]);
                     unset($_SESSION["houseNumber"]);
                     unset($_SESSION["zipCode"]);
