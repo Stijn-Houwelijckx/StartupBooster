@@ -1081,9 +1081,6 @@ a.active {
   #roadmap .tasks .task:nth-child(odd) {
     transform: translateX(calc(-100% + (-57px)));
   }
-
-  #roadmap .tasks .task:nth-child(even) {
-  }
 }
 
 @media (min-width: 1200px) {
