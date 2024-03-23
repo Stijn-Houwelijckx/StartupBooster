@@ -126,26 +126,25 @@ $current_page = 'tasks';
         function submitReadForm(event, taskId) {
             event.preventDefault();
             var form = document.getElementById('readForm' + taskId);
-            var icon = document.getElementById('icon' + taskId);
             var formData = new FormData(form);
             fetch(form.action, {
                 method: form.method,
                 body: formData
             })
-            // .then(response => {
-            //     if (response.ok) {
-            //         console.error('Form submission success.');
-            //     } else {
-            //         console.error('Form submission failed.');
-            //     }
-            // })
-            // .catch(error => {
-            //     console.error('Error occurred during form submission:', error);
-            // });
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Form submission success.');
+                        // Herlaad de pagina nadat het formulier met succes is verzonden
+                        location.reload();
+                    } else {
+                        console.error('Form submission failed.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error occurred during form submission:', error);
+                });
         }
-    </script>
 
-    <script>
         document.addEventListener('DOMContentLoaded', function () {
             const activeTask = document.querySelector('.tasks .active');
             if (activeTask) {
