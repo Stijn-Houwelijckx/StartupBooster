@@ -30,10 +30,10 @@ class User
      */
     public function setFirstname($firstname)
     {
-        if (empty(trim($firstname))) {
+        if (empty (trim($firstname))) {
             throw new Exception("Voornaam is verplicht.");
         }
-        
+
         $_SESSION["firstname"] = $firstname;
         $this->firstname = $firstname;
 
@@ -55,10 +55,10 @@ class User
      */
     public function setLastname($lastname)
     {
-        if (empty(trim($lastname))) {
+        if (empty (trim($lastname))) {
             throw new Exception("Achternaam is verplicht.");
         }
-        
+
         $_SESSION["lastname"] = $lastname;
         $this->lastname = $lastname;
 
@@ -100,13 +100,13 @@ class User
      */
     public function setNationalRegistryNumber($nationalRegistryNumber)
     {
-        if (empty(trim($nationalRegistryNumber))) {
+        if (empty (trim($nationalRegistryNumber))) {
             throw new Exception("Rijksregisternummer is verplicht.");
         }
 
         $_SESSION["nationalRegistryNumber"] = $nationalRegistryNumber;
         $this->nationalRegistryNumber = $nationalRegistryNumber;
-        
+
         return $this;
     }
 
@@ -125,7 +125,7 @@ class User
      */
     public function setStreet($street)
     {
-        if (empty(trim($street))) {
+        if (empty (trim($street))) {
             throw new Exception("Straat is verplicht.");
         }
 
@@ -150,7 +150,7 @@ class User
      */
     public function setHouseNumber($houseNumber)
     {
-        if (empty(trim($houseNumber))) {
+        if (empty (trim($houseNumber))) {
             throw new Exception("Huisnummer is verplicht.");
         }
 
@@ -175,7 +175,7 @@ class User
      */
     public function setZipCode($zipCode)
     {
-        if (empty(trim($zipCode))) {
+        if (empty (trim($zipCode))) {
             throw new Exception("Postcode is verplicht.");
         }
 
@@ -200,10 +200,10 @@ class User
      */
     public function setCity($city)
     {
-        if (empty(trim($city))) {
+        if (empty (trim($city))) {
             throw new Exception("Stad is verplicht.");
         }
-        
+
         $_SESSION["city"] = $city;
         $this->city = $city;
 
@@ -225,7 +225,7 @@ class User
      */
     public function setEmail($email)
     {
-        if (empty(trim($email))) {
+        if (empty (trim($email))) {
             throw new Exception("Email is verplicht.");
         }
 
@@ -235,7 +235,7 @@ class User
 
         $_SESSION["email"] = $email;
         $this->email = $email;
-        
+
         return $this;
     }
 
@@ -254,7 +254,7 @@ class User
      */
     public function setPhoneNumber($phoneNumber)
     {
-        if (empty(trim($phoneNumber))) {
+        if (empty (trim($phoneNumber))) {
             $phoneNumber = NULL;
         }
 
@@ -277,7 +277,7 @@ class User
      */
     public function setPassword($password)
     {
-        if (empty(trim($password))) {
+        if (empty (trim($password))) {
             throw new Exception("Vul een wachtwoord in");
         }
 
@@ -367,20 +367,5 @@ class User
             error_log('Database error: ' . $e->getMessage());
             return null;
         }
-    }
-
-    private function bindParameters(PDOStatement $stmt): void
-    {
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
-        $stmt->bindParam(':function', $this->function);
-        $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':phoneNumber', $this->phoneNumber);
-        $stmt->bindParam(':nationalRegistryNumber', $this->nationalRegistryNumber);
-        $stmt->bindParam(':street', $this->street);
-        $stmt->bindParam(':houseNumber', $this->houseNumber);
-        $stmt->bindParam(':zipCode', $this->zipCode);
-        $stmt->bindParam(':city', $this->city);
-        $stmt->bindParam(':password', $this->password);
     }
 }

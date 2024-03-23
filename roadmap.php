@@ -156,8 +156,22 @@ $current_page = 'tasks';
             }
 
 
-            document.querySelectorAll('.fa.fa-angle-down').forEach(icon => {
-                icon.addEventListener('click', function () {
+            document.querySelectorAll('.task').forEach(task => {
+                task.addEventListener('click', function (e) {
+                    const row = this.querySelector('.row.display'); // Zoek de rij binnen de huidige taak
+                    const answer = this.querySelector('.answer'); // Zoek het antwoord binnen de huidige taak
+
+                    // Toggle de display-stijl van de rij en het antwoord
+                    if (row.style.display === 'none' || row.style.display === '') {
+                        row.style.display = 'flex';
+                        answer.style.display = 'flex';
+                    } else {
+                        row.style.display = 'none';
+                        answer.style.display = 'none';
+                    }
+
+                    // Toggle tussen de klassen van het icoon
+                    const icon = this.querySelector('.fa');
                     if (icon.classList.contains("fa-angle-down")) {
                         icon.classList.remove("fa-angle-down");
                         icon.classList.add("fa-angle-up");
@@ -165,46 +179,63 @@ $current_page = 'tasks';
                         icon.classList.remove("fa-angle-up");
                         icon.classList.add("fa-angle-down");
                     }
-
-                    const taskId = this.getAttribute('data-task');
-                    const answer = document.querySelector('.task.task-' + taskId + ' .answer');
-                    const displayRow = document.querySelector('.task.task-' + taskId + ' .display');
-
-                    if (answer.style.display === 'flex') {
-                        answer.style.display = 'none';
-                        displayRow.style.display = 'none';
-                    } else {
-                        answer.style.display = 'flex';
-                        answer.style.transition = "opacity 0.5s ease";
-                        displayRow.style.display = 'flex';
-                    }
                 });
             });
+            task.addEventListener('click', function (e) {
+                const row = this.querySelector('.row.display'); // Zoek de rij binnen de huidige taak
+                const answer = this.querySelector('.answer'); // Zoek het antwoord binnen de huidige taak
 
-            document.querySelectorAll('.fa.fa-angle-up').forEach(icon => {
-                icon.addEventListener('click', function () {
-                    if (icon.classList.contains("fa-angle-up")) {
-                        icon.classList.remove("fa-angle-up");
-                        icon.classList.add("fa-angle-down");
-                    } else {
-                        icon.classList.remove("fa-angle-down");
-                        icon.classList.add("fa-angle-up");
-                    }
-
-                    const taskId = this.getAttribute('data-task');
-                    const answer = document.querySelector('.task.task-' + taskId + ' .answer');
-                    const displayRow = document.querySelector('.task.task-' + taskId + ' .display');
-
-                    if (answer.style.display === 'none') {
-                        answer.style.display = 'flex';
-                        displayRow.style.display = 'flex';
-                    } else {
+                // Controleer of de elementen bestaan voordat eigenschappen worden gebruikt
+                if (row && answer) {
+                    // Toggle de display-stijl van de rij en het antwoord
+                    if (row.style.display === 'flex') {
+                        row.style.display = 'none';
                         answer.style.display = 'none';
-                        answer.style.transition = "opacity 0.5s ease";
-                        displayRow.style.display = 'none';
+                    } else {
+                        row.style.display = 'flex';
+                        answer.style.display = 'flex';
                     }
-                });
+                }
+
+                const icon = this.querySelector('.fa');
+                if (icon) {
+                    // Toggle tussen de klassen van het icoon
+                    icon.classList.toggle("fa-angle-down");
+                    icon.classList.toggle("fa-angle-up");
+                }
             });
+
+
+
+
+
+
+
+
+            // document.querySelectorAll('.fa.fa-angle-up').forEach(icon => {
+            //     icon.addEventListener('click', function () {
+            //         if (icon.classList.contains("fa-angle-up")) {
+            //             icon.classList.remove("fa-angle-up");
+            //             icon.classList.add("fa-angle-down");
+            //         } else {
+            //             icon.classList.remove("fa-angle-down");
+            //             icon.classList.add("fa-angle-up");
+            //         }
+
+            //         const taskId = this.getAttribute('data-task');
+            //         const answer = document.querySelector('.task.task-' + taskId + ' .answer');
+            //         const displayRow = document.querySelector('.task.task-' + taskId + ' .display');
+
+            //         if (answer.style.display === 'none') {
+            //             answer.style.display = 'flex';
+            //             displayRow.style.display = 'flex';
+            //         } else {
+            //             answer.style.display = 'none';
+            //             answer.style.transition = "opacity 0.5s ease";
+            //             displayRow.style.display = 'none';
+            //         }
+            //     });
+            // });
 
 
             document.querySelectorAll(".task .display i").forEach(icon => {
