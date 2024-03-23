@@ -47,7 +47,7 @@ $current_page = 'tasks';
             <div class="bar">
                 <p class="border"></p>
             </div>
-            <div class="tasks mobile">
+            <div class="tasks">
                 <?php if (!empty ($tasks)): ?>
                     <?php foreach ($tasks as $task): ?>
                         <?php
@@ -195,6 +195,27 @@ $current_page = 'tasks';
             });
 
         });
+
+        function activateTask(taskId) {
+            fetch('activate_task.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ taskId: taskId }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Voer hier acties uit nadat de taak is geactiveerd
+                        console.log('Task activated successfully.');
+                    } else {
+                        console.error('Failed to activate task.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error occurred during task activation:', error);
+                });
+        }
 
     </script>
 

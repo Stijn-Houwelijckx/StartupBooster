@@ -984,6 +984,76 @@ a.active {
   #subsidie-details .text div {
     width: 48%;
   }
+
+  #roadmap {
+    /* width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+    overflow: hidden;
+  }
+
+  #roadmap .elements {
+    width: 100%;
+    display: flex;
+    gap: 24px;
+    transform: translateX(50%);
+  }
+
+  #roadmap .elements .bar {
+    border-color: red;
+    height: auto;
+  }
+
+  #roadmap .tasks {
+    width: 40%;
+  }
+
+  #roadmap .tasks .task {
+    width: 100%;
+  }
+
+  #roadmap .tasks .task:nth-child(odd):before {
+    display: none;
+  }
+
+  #roadmap .tasks .task:nth-child(odd):after {
+    content: "";
+    position: absolute;
+    right: -42px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    z-index: 999;
+    background-color: #dadada;
+  }
+
+  #roadmap .tasks .task.active:nth-child(odd):after {
+    background-color: var(--blue);
+  }
+
+  /* #roadmap .tasks .task:before {
+    content: "";
+    position: absolute;
+    left: -38px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    z-index: 999;
+    background-color: #dadada;
+  } */
+
+  #roadmap .tasks .task:nth-child(odd) {
+    transform: translateX(calc(-100% + (-57px)));
+  }
+
+  #roadmap .tasks .task:nth-child(even) {
+  }
 }
 
 @media (min-width: 1200px) {
