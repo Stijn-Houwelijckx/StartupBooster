@@ -2,6 +2,8 @@
 session_start();
 
 include_once (__DIR__ . "/classes/User.php");
+include_once (__DIR__ . "/classes/Statute.php");
+include_once (__DIR__ . "/classes/Sector.php");
 include_once (__DIR__ . "/classes/Db.php");
 
 error_reporting(E_ALL);
@@ -11,8 +13,20 @@ ini_set('error_log', 'error.log');
 $currentStep = 1;
 $error;
 
+try {
+    $pdo = Db::getInstance();
+    $statutes = Statute::getAll($pdo);
+    $sectors = Sector::getAll($pdo);
+} catch (Exception $e) {
+    error_log('Database error: ' . $e->getMessage());
+}
+
 if (isset ($_GET['step'])) {
-    $currentStep = intval($_GET['step']);
+    if ($_GET["step"] !== "1" && $_GET["step"] !== "2" && $_GET["step"] !== "3") {
+        header("Location: signUp.php?step=1");
+    } else {
+        $currentStep = intval($_GET['step']);
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
@@ -27,7 +41,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
             } else {
                 $user->setEmail($_POST["email"]);
             }
-            // $user->setNationalRegistryNumber($_POST["nationalRegistryNumber"]);
+
+            if(!isset($_POST["statute"])) {
+                throw new Exception("Selecteer een statuut.");
+            } else {
+                $user->setStatute($_POST["statute"]);
+            }
+
+            if(!isset($_POST["sector"])) {
+                throw new Exception("Selecteer een sector.");
+            } else {
+                $user->setSector($_POST["sector"]);
+            }
 
             $currentStep = 2;
 
@@ -57,7 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                     $user->setFirstname($_SESSION['firstname']);
                     $user->setLastname($_SESSION['lastname']);
                     $user->setEmail($_SESSION['email']);
-                    // $user->setNationalRegistryNumber($_SESSION['nationalRegistryNumber']);
+                    $user->setStatute($_SESSION['statute']);
+                    $user->setSector($_SESSION['sector']);
                 } catch (Exception $e) {
                     $error = $e->getMessage();
                     header("Location: signUp.php?step=1");
@@ -86,7 +112,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                     unset($_SESSION["firstname"]);
                     unset($_SESSION["lastname"]);
                     unset($_SESSION["email"]);
-                    // unset($_SESSION["nationalRegistryNumber"]);
                     unset($_SESSION["street"]);
                     unset($_SESSION["houseNumber"]);
                     unset($_SESSION["zipCode"]);
@@ -190,17 +215,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                         </div>
                         <div class="row">
                             <div>
-                                <label for="function">Functie</label>
-                                <select name="function" id="function">
-                                    <option value="BE">BE</option>
-                                    <option value="NL">NL</option>
+                                <label for="statute">Statuut</label>
+                                <select name="statute" id="statute">
+                                    <option value="" selected disabled>Selecteer een statuut</option>
+                                    <?php foreach($statutes as $statute): ?>
+                                        <option value="<?php echo $statute["id"]?>"><?php echo $statute["title"]?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div>
                                 <label for="sector">Sector</label>
                                 <select name="sector" id="sector">
-                                    <option value="BE">BE</option>
-                                    <option value="NL">NL</option>
+                                    <option value="" selected disabled>Selecteer een sector</option>
+                                    <?php foreach($sectors as $sector): ?>
+                                        <option value="<?php echo $sector["id"]?>"><?php echo $sector["title"]?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -283,6 +312,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                     this.classList.add('fa-eye-slash');
                 }
             });
+        });
+
+            // Set the default option as selected on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('#statute option[value=""]').selected = true;
+            document.querySelector('#sector option[value=""]').selected = true;
         });
     </script>
 

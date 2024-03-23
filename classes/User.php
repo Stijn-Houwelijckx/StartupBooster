@@ -5,14 +5,14 @@ class User
 {
     private $firstname;
     private $lastname;
-    private $function;
+    private $email;
+    private $statute;
+    private $sector;
     private $street;
     private $houseNumber;
     private $zipCode;
     private $city;
-    private $email;
     private $phoneNumber;
-    private $nationalRegistryNumber;
     private string $password;
 
     /**
@@ -34,7 +34,6 @@ class User
             throw new Exception("Voornaam is verplicht.");
         }
 
-        // $reValid = '/^(?!.*\s\s)[A-Za-z\'-]+( [A-Za-z\'-]+)*$/';
         $reValid = '/^(?!.*\s\s)[A-Za-z]+([-\' ][A-Za-z]+)*$/';
 
         if (!preg_match($reValid, $firstname)) {
@@ -79,46 +78,80 @@ class User
     }
 
     /**
-     * Get the value of function
+     * Get the value of email
      */
-    public function getFunction()
+    public function getEmail()
     {
-        return $this->function;
+        return $this->email;
     }
 
     /**
-     * Set the value of function
+     * Set the value of email
      *
      * @return  self
      */
-    public function setFunction($function)
+    public function setEmail($email)
     {
-        $this->function = $function;
+        if (empty (trim($email))) {
+            throw new Exception("Email is verplicht.");
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception("Email is niet geldig.");
+        }
+
+        $_SESSION["email"] = $email;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Get the value of nationalRegistryNumber
-     */
-    public function getNationalRegistryNumber()
+     * Get the value of statute
+     */ 
+    public function getStatute()
     {
-        return $this->nationalRegistryNumber;
+        return $this->statute;
     }
 
     /**
-     * Set the value of nationalRegistryNumber
+     * Set the value of statute
      *
      * @return  self
-     */
-    public function setNationalRegistryNumber($nationalRegistryNumber)
+     */ 
+    public function setStatute($statute)
     {
-        if (empty (trim($nationalRegistryNumber))) {
-            throw new Exception("Rijksregisternummer is verplicht.");
+        if (empty (trim($statute))) {
+            throw new Exception("Statuut kan niet leeg zijn.");
         }
 
-        $_SESSION["nationalRegistryNumber"] = $nationalRegistryNumber;
-        $this->nationalRegistryNumber = $nationalRegistryNumber;
+        $_SESSION["statute"] = $statute;
+        $this->statute = $statute;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of sector
+     */ 
+    public function getSector()
+    {
+        return $this->sector;
+    }
+
+    /**
+     * Set the value of sector
+     *
+     * @return  self
+     */ 
+    public function setSector($sector)
+    {
+        if (empty (trim($sector))) {
+            throw new Exception("Sector kan niet leeg zijn.");
+        }
+
+        $_SESSION["sector"] = $sector;
+        $this->sector = $sector;
 
         return $this;
     }
@@ -245,35 +278,6 @@ class User
     }
 
     /**
-     * Get the value of email
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set the value of email
-     *
-     * @return  self
-     */
-    public function setEmail($email)
-    {
-        if (empty (trim($email))) {
-            throw new Exception("Email is verplicht.");
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Email is niet geldig.");
-        }
-
-        $_SESSION["email"] = $email;
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
      * Get the value of phoneNumber
      */
     public function getPhoneNumber()
@@ -331,12 +335,12 @@ class User
     public function addUser(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("INSERT INTO users (firstname, lastname, function, street, houseNumber, zipCode, city, email, nationalRegistryNumber, password) VALUES (:firstname, :lastname, :function, :street, :houseNumber, :zipCode, :city, :email, :nationalRegistryNumber, :password)");
+            $stmt = $pdo->prepare("INSERT INTO users (firstname, lastname, email, statute_id, sector_id, street, houseNumber, zipCode, city, password) VALUES (:firstname, :lastname, :email, :statute, :sector, :street, :houseNumber, :zipCode, :city, :password)");
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
-            $stmt->bindParam(':function', $this->function);
             $stmt->bindParam(':email', $this->email);
-            $stmt->bindParam(':nationalRegistryNumber', $this->nationalRegistryNumber);
+            $stmt->bindParam(':statute', $this->statute);
+            $stmt->bindParam(':sector', $this->sector);
             $stmt->bindParam(':street', $this->street);
             $stmt->bindParam(':houseNumber', $this->houseNumber);
             $stmt->bindParam(':zipCode', $this->zipCode);
@@ -361,10 +365,9 @@ class User
     public function updateUser(PDO $pdo, $user_id): bool
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, function = :function, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, email = :email, phoneNumber = :phoneNumber WHERE id = :user_id");
+            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, email = :email, phoneNumber = :phoneNumber WHERE id = :user_id");
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
-            $stmt->bindParam(':function', $this->function);
             $stmt->bindParam(':email', $this->email);
             $stmt->bindParam(':phoneNumber', $this->phoneNumber);
             $stmt->bindParam(':street', $this->street);
