@@ -52,11 +52,13 @@
             <a href="logout.php" style="color: white;">Logout</a>
         </div>
         <div class="settings">
-            <div>
-                <img class="<?php echo ($current_page == 'settings') ? 'settingsItem active' : 'settingsItem'; ?>"
-                    src="assets/images/Settings.svg" alt="settingsIcon">
-                <p>Settings</p>
-            </div>
+            <a href="./settings.php">
+                <div>
+                    <img class="<?php echo ($current_page == 'settings') ? 'settingsItem active' : 'settingsItem'; ?>"
+                        src="assets/images/Settings.svg" alt="settingsIcon">
+                    <p>Settings</p>
+                </div>
+            </a>
             <img src="assets/images/Be.png" alt=".be">
         </div>
     </div>
