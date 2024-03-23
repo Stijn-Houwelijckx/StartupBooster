@@ -3,6 +3,7 @@
   --offWhite: #f1f1f1;
   --offBlack: #595959;
   --black: #1a1a1a;
+  --lightBlue: #cfd9e1;
   --blue: #0e3f6a;
   --gray: #dadada;
 }
@@ -433,6 +434,15 @@ a.active {
   color: green;
 }
 
+/* ---- dashboard ---- */
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
 /* ---- account ---- */
 #account {
   display: flex;
@@ -471,6 +481,7 @@ a.active {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 24px;
 }
 
@@ -743,6 +754,15 @@ a.active {
   transform: translateY(-3.2px);
 }
 
+/* ---- stats ---- */
+#stats {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
 /* ---- subsidies ---- */
 #subsidies,
 #subsidie-details {
@@ -955,6 +975,116 @@ a.active {
   text-decoration: none;
 }
 
+/* ---- settings ---- */
+#settings {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
+#settings .elements {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+#settings .elements .navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#settings .elements .navigation a.active {
+  padding: 8px 16px;
+  background-color: var(--lightBlue);
+  color: var(--blue);
+  border-radius: 8px;
+}
+
+#settings .elements .option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+#settings .elements .option .border {
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+  width: 100%;
+}
+
+#settings .elements .option .info {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+#settings .elements .option .info .profilePicture {
+  width: 92px;
+  height: 92px;
+  background-image: url(../assets/images/Tom.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+#settings .elements .option .info .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 92px;
+}
+
+#settings .elements .option .btn {
+  padding: 8px 16px;
+  background-color: var(--blue);
+  color: var(--white);
+  border-radius: 8px;
+}
+
+#settings .option .extraInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#settings .option .extraInfo .fields {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+#settings .option .extraInfo .fields .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#settings .option .extraInfo .fields .field input {
+  background-color: transparent;
+  border: 1px solid var(--black);
+  border-radius: 8px;
+  color: var(--offBlack);
+  padding: 8px;
+}
+
+#settings .option .extraInfo .fields .field select {
+  background-color: transparent;
+  height: 42px;
+  border: 1px solid var(--black);
+  border-radius: 8px;
+  color: var(--offBlack);
+  padding: 8px;
+}
+
+#settings .option .extraInfo .fields .field label {
+  color: var(--offBlack);
+}
+
 @media (min-width: 800px) {
   #login {
     height: 95.9vh;
@@ -1146,10 +1276,13 @@ a.active {
   }
 
   /* ---- helpdesk ---- */
-  #helpdesk,
+  #dashboard,
   #roadmap,
+  #stats,
   #subsidies,
-  #subsidie-details {
+  #subsidie-details,
+  #helpdesk,
+  #settings {
     padding-left: 144px;
   }
 
