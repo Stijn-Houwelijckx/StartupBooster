@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
             } else {
                 $user->setEmail($_POST["email"]);
             }
-            $user->setNationalRegistryNumber($_POST["nationalRegistryNumber"]);
+            // $user->setNationalRegistryNumber($_POST["nationalRegistryNumber"]);
 
             $currentStep = 2;
             
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
                     $user->setFirstname($_SESSION['firstname']);
                     $user->setLastname($_SESSION['lastname']);
                     $user->setEmail($_SESSION['email']);
-                    $user->setNationalRegistryNumber($_SESSION['nationalRegistryNumber']);
+                    // $user->setNationalRegistryNumber($_SESSION['nationalRegistryNumber']);
                 } catch (Exception $e) {
                     $error = $e->getMessage();
                     header("Location: signUp.php?step=1");
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
                     unset($_SESSION["firstname"]);
                     unset($_SESSION["lastname"]);
                     unset($_SESSION["email"]);
-                    unset($_SESSION["nationalRegistryNumber"]);
+                    // unset($_SESSION["nationalRegistryNumber"]);
                     unset($_SESSION["street"]);
                     unset($_SESSION["houseNumber"]);
                     unset($_SESSION["zipCode"]);
@@ -173,10 +173,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
                                 <input type="text" id="email" name="email" placeholder="JohnDoe@gmail.com" value="<?php if(isset($_SESSION["email"])){echo $_SESSION["email"];} ?>">
                             </div>
 
-                            <div>
+                            <!-- <div>
                                 <label for="nationalRegistryNumber">Rijksregisternummer</label>
                                 <input type="text" id="nationalRegistryNumber" name="nationalRegistryNumber" placeholder="00.00.00-000.00" value="<?php if(isset($_SESSION["nationalRegistryNumber"])){echo $_SESSION["nationalRegistryNumber"];} ?>">
-                            </div>
+                            </div> -->
                         </div>
                     <?php endif; ?>
 
