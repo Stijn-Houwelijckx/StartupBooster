@@ -188,6 +188,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                                 } ?>">
                             </div>
                         </div>
+                        <div class="row">
+                            <div>
+                                <label for="function">Functie</label>
+                                <select name="function" id="function">
+                                    <option value="BE">BE</option>
+                                    <option value="NL">NL</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="sector">Sector</label>
+                                <select name="sector" id="sector">
+                                    <option value="BE">BE</option>
+                                    <option value="NL">NL</option>
+                                </select>
+                            </div>
+                        </div>
                     <?php endif; ?>
 
                     <!-- Step 2 -->
