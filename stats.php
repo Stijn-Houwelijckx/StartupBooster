@@ -23,6 +23,11 @@ $current_page = 'statistieken';
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
 </head>
 
-<body></body>
+<body>
+    <?php include_once ('inc/nav.inc.php'); ?>
+    <div id="stats">
+        <h1>Statistieken</h1>
+    </div>
+</body>
 
 </html>

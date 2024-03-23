@@ -16,7 +16,9 @@ $current_page = 'home';
 
 <body>
     <?php include_once ('inc/nav.inc.php'); ?>
-    <div id="dekstop"></div>
+    <div id="dashboard">
+        <h1>Mijn dashboard</h1>
+    </div>
 </body>
 
 </html>
