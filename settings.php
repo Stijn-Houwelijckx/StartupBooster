@@ -138,7 +138,7 @@ if (isset ($_SESSION["user_id"])) {
                             </h3>
                             <p>
                                 <?php
-                                    echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user["statute_id"])["title"];
+                                    echo htmlspecialchars(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user["statute_id"])["title"]);
                                 ?>
 
                             </p>
@@ -172,7 +172,7 @@ if (isset ($_SESSION["user_id"])) {
                                     <select name="statute" id="statute">
                                         <?php foreach ($statutes as $statute): ?>
                                             <option value="<?php echo $statute["id"] ?>" <?php echo ($user["statute_id"] == $statute["id"]) ? 'selected' : '' ?>>
-                                                <?php echo $statute["title"] ?>
+                                                <?php echo htmlspecialchars($statute["title"]) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -182,7 +182,7 @@ if (isset ($_SESSION["user_id"])) {
                                     <select name="sector" id="sector">
                                         <?php foreach ($sectors as $sector): ?>
                                             <option value="<?php echo $sector["id"] ?>" <?php echo ($user["sector_id"] == $sector["id"]) ? 'selected' : '' ?>>
-                                                <?php echo $sector["title"] ?>
+                                                <?php echo htmlspecialchars($sector["title"]) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>

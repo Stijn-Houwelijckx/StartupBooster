@@ -6,8 +6,8 @@ class User
     private $firstname;
     private $lastname;
     private $email;
-    private $statute;
-    private $sector;
+    private int $statute;
+    private int $sector;
     private $street;
     private $houseNumber;
     private $zipCode;
