@@ -1021,6 +1021,7 @@ a.active {
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
+  width: 100%;
 }
 
 #settings .elements .option .border {
@@ -1114,6 +1115,38 @@ a.active {
 
 #settings .option .success {
   color: green;
+}
+
+#settings .option .verification,
+#settings .option .notifications,
+#settings .option .account {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+#settings .option .verification .row,
+#settings .option .notifications .row,
+#settings .option .account .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#settings .option .account .row .btn {
+  padding: 8px 16px;
+  border-radius: 45px;
+  color: var(--blue);
+  background-color: var(--lightBlue);
+}
+
+#settings .option .account .row .btn.red {
+  color: #d34848;
+  border: 1px solid #d34848;
+  background-color: rgba(211, 72, 72, 0.2);
 }
 
 @media (min-width: 800px) {
