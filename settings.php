@@ -86,6 +86,22 @@ if (isset ($_SESSION["user_id"])) {
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
+
+        if (isset ($_POST["two_step_verification"])) {
+            $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
+            $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
+
+            if ($two_step_verification || $sms_set) {
+                if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
+                    $success = true;
+                    header("Location: settings.php?profileUpdate=success");
+                    exit();
+                } else {
+                    header("Location: settings.php?profileUpdate=error");
+                    exit();
+                }
+            }
+        }
     }
 
     // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
@@ -254,7 +270,7 @@ if (isset ($_SESSION["user_id"])) {
                         <form action="" method="POST">
                             <!-- Other form fields -->
                             <div class="row">
-                                <p>Tweestapsverificatie</p>
+                                <p>Tweefactorauthenticatie</p>
                                 <label for="two_step_verification">
                                     <div class="toggle <?php if (is_array($user) && isset ($user['two_step_verification']) && $user['two_step_verification'] == 1) {
                                         echo "active";
@@ -268,7 +284,7 @@ if (isset ($_SESSION["user_id"])) {
                                     } ?>>
                             </div>
                             <div class="row">
-                                <p>SMS instellen</p>
+                                <p>Sms authenticatie</p>
                                 <label for="sms_set">
                                     <div class="toggle <?php if (is_array($user) && isset ($user['sms_set']) && $user['sms_set'] == 1) {
                                         echo "active";

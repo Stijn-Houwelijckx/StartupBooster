@@ -14,8 +14,8 @@ class User
     private $city;
     private $phoneNumber;
     private string $password;
-    private bool $two_step_verification;
-    private bool $sms_set;
+    private bool $twoStepAuthentication;
+    private bool $smsAuthentication;
     private bool $security_alerts;
     private bool $email_notifications;
     private bool $sms_notification;
@@ -340,41 +340,41 @@ class User
     }
 
     /**
-     * Get the value of two_step_verification
+     * Get the value of twoStepAuthentication
      */
-    public function getTwo_step_verification()
+    public function getTwoStepAuthentication()
     {
-        return $this->two_step_verification;
+        return $this->twoStepAuthentication;
     }
 
     /**
-     * Set the value of two_step_verification
+     * Set the value of twoStepAuthentication
      *
      * @return  self
      */
-    public function setTwo_step_verification($two_step_verification)
+    public function setTwoStepAuthentication($twoStepAuthentication)
     {
-        $this->two_step_verification = $two_step_verification;
+        $this->twoStepAuthentication = $twoStepAuthentication;
 
         return $this;
     }
 
     /**
-     * Get the value of sms_set
+     * Get the value of smsAuthentication
      */
-    public function getSms_set()
+    public function getSmsAuthentication()
     {
-        return $this->sms_set;
+        return $this->smsAuthentication;
     }
 
     /**
-     * Set the value of sms_set
+     * Set the value of smsAuthentication
      *
      * @return  self
      */
-    public function setSms_set($sms_set)
+    public function setSmsAuthentication($smsAuthentication)
     {
-        $this->sms_set = $sms_set;
+        $this->smsAuthentication = $smsAuthentication;
 
         return $this;
     }
@@ -515,12 +515,13 @@ class User
             return false;
         }
     }
-    public function updateSecurity(PDO $pdo, $user_id, $two_step_verification, $sms_set): bool
+    
+    public function updateSecurity(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET two_step_verification = :two_step_verification, sms_set = :sms_set WHERE id = :user_id");
-            $stmt->bindParam(':two_step_verification', $two_step_verification);
-            $stmt->bindParam(':sms_set', $sms_set);
+            $stmt = $pdo->prepare("UPDATE users SET twoStepAuthentication = :twoStepAuthentication, smsAuthentication = :smsAuthentication WHERE id = :user_id");
+            $stmt->bindParam(':twoStepAuthentication', $this->twoStepAuthentication);
+            $stmt->bindParam(':smsAuthentication', $this->smsAuthentication);
             $stmt->bindParam(':user_id', $user_id);
 
             // Controleer of de SQL-instructie met succes is uitgevoerd
