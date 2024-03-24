@@ -144,17 +144,10 @@ if (isset ($_SESSION["user_id"])) {
         <h1>Instellingen</h1>
         <div class="elements">
             <div class="navigation">
-                <?php
-                foreach ($pages as $page => $text) {
-                    if ($currentStep == $page) {
-                        echo "<a href='settings.php?page=$page' class='active'>$text</a>";
-                    } else if ($current_page == "EmailWijzigen") {
-                        echo "<a href='settings.php?page=Account' class='active'>$text</a>";
-                    } else {
-                        echo "<a href='settings.php?page=$page'>$text</a>";
-                    }
-
-                } ?>
+                <a href='settings.php?page=persoonlijkeGegevens' class='<?php if($currentStep === "persoonlijkeGegevens") {echo "active";} ?>'>Persoonlijke Gegevens</a>
+                <a href='settings.php?page=veiligheid' class='<?php if($currentStep === "veiligheid") {echo "active";} ?>'>Veiligheid</a>
+                <a href='settings.php?page=meldingen' class='<?php if($currentStep === "meldingen") {echo "active";} ?>'>Meldingen</a>
+                <a href='settings.php?page=account' class='<?php if($currentStep === "account" || $currentStep === "EmailWijzigen") {echo "active";} ?>'>Account</a>
             </div>
             <p class="border"></p>
             <?php if ($currentStep == "persoonlijkeGegevens"): ?>
