@@ -266,6 +266,9 @@ a.active {
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 8px;
   gap: 0 !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .passwordInput .row input {
@@ -1171,7 +1174,7 @@ a.active {
   width: 100%;
 }
 
-.toggle {
+#settings .option .field .toggle {
   width: 52px;
   height: 32px;
   background-color: #dadada;

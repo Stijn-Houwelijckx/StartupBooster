@@ -21,12 +21,10 @@ $pages = array(
 );
 
 $error;
-
+$success;
 if (isset ($_GET['page'])) {
     $currentStep = $_GET['page'];
 }
-
-$success = false;
 
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
@@ -81,10 +79,36 @@ if (isset ($_SESSION["user_id"])) {
                 } else {
                     $user->setEmail($_POST["email"]);
                     $user->updateEmail($pdo, $_SESSION["user_id"]);
+                    $success = "Uw emailadres is succesvol veranderd.";
                 }
             }
         } catch (Exception $e) {
             $error = $e->getMessage();
+        }
+
+
+        if (isset ($_POST["old-password"])) {
+            $oldPassword = $_POST["old-password"];
+            $user = User::getUserById($pdo, $_SESSION["user_id"]);
+            $hashedPassword = $user["password"];
+            if (password_verify($oldPassword, $hashedPassword)) {
+                $newPassword = $_POST["new-password"];
+                $confirmNewPassword = $_POST["confirm-new-password"];
+                if ($newPassword === $confirmNewPassword) {
+                    try {
+                        $user = new User();
+                        $user->setPassword($newPassword);
+                        $user->updatePassword($pdo, $_SESSION["user_id"]);
+                        $success = "Uw wachtwoord is successvol veranderd.";
+                    } catch (Exception $e) {
+                        $error = $e->getMessage();
+                    }
+                } else {
+                    $error = "Wachtwoorden komen niet overeen.";
+                }
+            } else {
+                $error = "Oud wachtwoord is onjuist.";
+            }
         }
     }
 
@@ -144,10 +168,19 @@ if (isset ($_SESSION["user_id"])) {
         <h1>Instellingen</h1>
         <div class="elements">
             <div class="navigation">
-                <a href='settings.php?page=persoonlijkeGegevens' class='<?php if($currentStep === "persoonlijkeGegevens") {echo "active";} ?>'>Persoonlijke Gegevens</a>
-                <a href='settings.php?page=veiligheid' class='<?php if($currentStep === "veiligheid") {echo "active";} ?>'>Veiligheid</a>
-                <a href='settings.php?page=meldingen' class='<?php if($currentStep === "meldingen") {echo "active";} ?>'>Meldingen</a>
-                <a href='settings.php?page=account' class='<?php if($currentStep === "account" || $currentStep === "EmailWijzigen") {echo "active";} ?>'>Account</a>
+                <a href='settings.php?page=persoonlijkeGegevens' class='<?php if ($currentStep === "persoonlijkeGegevens") {
+                    echo "active";
+                } ?>'>Persoonlijke
+                    Gegevens</a>
+                <a href='settings.php?page=veiligheid' class='<?php if ($currentStep === "veiligheid") {
+                    echo "active";
+                } ?>'>Veiligheid</a>
+                <a href='settings.php?page=meldingen' class='<?php if ($currentStep === "meldingen") {
+                    echo "active";
+                } ?>'>Meldingen</a>
+                <a href='settings.php?page=account' class='<?php if ($currentStep === "account" || $currentStep === "EmailWijzigen" || $currentStep === "WachtwoordWijzigen" || $currentStep === "AccountVerwijderen") {
+                    echo "active";
+                } ?>'>Account</a>
             </div>
             <p class="border"></p>
             <?php if ($currentStep == "persoonlijkeGegevens"): ?>
@@ -239,7 +272,7 @@ if (isset ($_SESSION["user_id"])) {
                             </div>
                         </div>
                         <?php if ($success): ?>
-                            <p class="success">Uw gegevens zijn succesvol aangepast.</p>
+                            <p class="success">Uw gegevens zijn successvol aangepast.</p>
                         <?php endif ?>
                         <button type="submit" class="btn" id="btnSave">Bewaren</button>
                     </form>
@@ -330,17 +363,17 @@ if (isset ($_SESSION["user_id"])) {
                         <h3>Email wijzigen</h3>
                         <div class="row">
                             <p>Email wijzigen</p>
-                            <a href="settings.php?page=EmailWijzigen" class="btn email">Email wijzigen</a>
+                            <a href="settings.php?page=EmailWijzigen" class="btn">Email wijzigen</a>
                         </div>
                         <h3>Wachtwoord wijzigen</h3>
                         <div class="row">
                             <p>Wachtwoord wijzigen</p>
-                            <a href="#" class="btn">Wachtwoord wijzigen</a>
+                            <a href="settings.php?page=WachtwoordWijzigen" class="btn">Wachtwoord wijzigen</a>
                         </div>
                         <h3>Account verwijderen</h3>
                         <div class="row">
                             <p>Account verwijderen</p>
-                            <a href="#" class="btn red">Account verwijderen</a>
+                            <a href="settings.php?page=AccountVerwijderen" class="btn red">Account verwijderen</a>
                         </div>
                     </div>
                 </div>
@@ -349,6 +382,11 @@ if (isset ($_SESSION["user_id"])) {
                 <div class="option">
                     <h2>E-mailadres wijzigen</h2>
                     <p class="border"></p>
+                    <?php if (isset ($success)): ?>
+                        <p class="alert success">
+                            <?php echo $success ?>
+                        </p>
+                    <?php endif; ?>
                     <form action="" method="POST">
                         <div class="field">
                             <label for="email">Uw nieuwe e-mailadres</label>
@@ -366,8 +404,57 @@ if (isset ($_SESSION["user_id"])) {
                 </div>
             <?php endif; ?>
 
-
-        </div>
+            <?php if ($currentStep == "WachtwoordWijzigen"): ?>
+                <div class="option">
+                    <h2>Wachtwoord wijzigen</h2>
+                    <p class="border"></p>
+                    <?php if (isset ($success)): ?>
+                        <p class="alert success">
+                            <?php echo $success ?>
+                        </p>
+                    <?php endif; ?>
+                    <form action="" method="POST">
+                        <div class="field">
+                            <label for="old_password">Uw oud wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="old-password" name="old-password" placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-old-password"
+                                        onclick="togglePasswordVisibility('old-password', 'toggle-old-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="old_password">Nieuw wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="new-password" name="new-password" placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-new-password"
+                                        onclick="togglePasswordVisibility('new-password', 'toggle-new-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="old_password">Herhaal nieuw wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="confirm-new-password" name="confirm-new-password"
+                                        placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-confirm-new-password"
+                                        onclick="togglePasswordVisibility('confirm-new-password', 'toggle-confirm-new-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Bewaren</button>
+                    </form>
+                    <?php if (isset ($error)): ?>
+                        <p class="alert">
+                            <?php echo $error ?>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 
     <script>
@@ -380,6 +467,22 @@ if (isset ($_SESSION["user_id"])) {
                 });
             });
         });
+
+        function togglePasswordVisibility(inputId, iconId) {
+            var input = document.getElementById(inputId);
+            var icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            }
+        }
+
+
     </script>
 </body>
 
