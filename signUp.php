@@ -42,13 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                 $user->setEmail($_POST["email"]);
             }
 
-            if(!isset($_POST["statute"])) {
+            if (!isset ($_POST["statute"])) {
                 throw new Exception("Selecteer een statuut.");
             } else {
                 $user->setStatute($_POST["statute"]);
             }
 
-            if(!isset($_POST["sector"])) {
+            if (!isset ($_POST["sector"])) {
                 throw new Exception("Selecteer een sector.");
             } else {
                 $user->setSector($_POST["sector"]);
@@ -218,8 +218,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                                 <label for="statute">Statuut</label>
                                 <select name="statute" id="statute">
                                     <option value="" selected disabled>Selecteer een statuut</option>
-                                    <?php foreach($statutes as $statute): ?>
-                                        <option value="<?php echo $statute["id"]?>"><?php echo $statute["title"]?></option>
+                                    <?php foreach ($statutes as $statute): ?>
+                                        <option value="<?php echo $statute["id"] ?>">
+                                            <?php echo $statute["title"] ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -227,8 +229,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                                 <label for="sector">Sector</label>
                                 <select name="sector" id="sector">
                                     <option value="" selected disabled>Selecteer een sector</option>
-                                    <?php foreach($sectors as $sector): ?>
-                                        <option value="<?php echo $sector["id"]?>"><?php echo $sector["title"]?></option>
+                                    <?php foreach ($sectors as $sector): ?>
+                                        <option value="<?php echo $sector["id"] ?>">
+                                            <?php echo $sector["title"] ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -314,8 +318,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
             });
         });
 
-            // Set the default option as selected on page load
-        window.addEventListener('DOMContentLoaded', function() {
+        // Set the default option as selected on page load
+        window.addEventListener('DOMContentLoaded', function () {
             document.querySelector('#statute option[value=""]').selected = true;
             document.querySelector('#sector option[value=""]').selected = true;
         });

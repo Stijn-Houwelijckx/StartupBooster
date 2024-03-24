@@ -157,7 +157,7 @@ nav .links {
 }
 
 .logo {
-  background-image: url("assets/images/logo.svg");
+  background-image: url("../assets/images/logo.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -201,7 +201,7 @@ nav .fa-bars {
 }
 
 #home .imageBorder .image {
-  background-image: url("assets/images/Dashboard-Home.jpg");
+  background-image: url("../assets/images/Dashboard-Home.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -246,7 +246,7 @@ nav .fa-bars {
 }
 
 #howToUse .step .image {
-  background-image: url("assets/images/Dashboard-Registreren.jpg");
+  background-image: url("../assets/images/Dashboard-Registreren.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -265,15 +265,15 @@ nav .fa-bars {
 }
 
 #features .feature.one .image {
-  background-image: url("assets/images/Dashboard-Agenda.jpg");
+  background-image: url("../assets/images/Dashboard-Agenda.jpg");
 }
 
 #features .feature.two .image {
-  background-image: url("assets/images/Dashboard-Chat.jpg");
+  background-image: url("../assets/images/Dashboard-Chat.jpg");
 }
 
 #features .feature.three .image {
-  background-image: url("assets/images/Dashboard-Documents.jpg");
+  background-image: url("../assets/images/Dashboard-Documents.jpg");
 }
 
 /* ---- testimonial ---- */
@@ -328,7 +328,7 @@ nav .fa-bars {
 }
 
 #testimonial .reviews .review .image {
-  background-image: url("assets/images/Tom.jpg");
+  background-image: url("../assets/images/Tom.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -488,7 +488,7 @@ form .btn .fa {
 }
 
 #pricing .image {
-  background-image: url("assets/images/freeTrial.png");
+  background-image: url("../assets/images/freeTrial.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
