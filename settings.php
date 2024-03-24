@@ -91,10 +91,11 @@ if (isset ($_SESSION["user_id"])) {
         <h1>Instellingen</h1>
         <div class="elements">
             <div class="navigation">
-                <a href='settings.php?page=persoonlijkeGegevens' class="active">Persoonlijke gegevens</a>
-                <a href='settings.php?page=veiligheid'>Veiligheid</a>
-                <a href='settings.php?page=meldingen'>Meldingen</a>
-                <a href='settings.php?page=account'>Account</a>
+                <a href='settings.php?page=persoonlijkeGegevens' class="active step-link"
+                    onclick="setActiveLink(event)">Persoonlijke gegevens</a>
+                <a href='settings.php?page=veiligheid' class="step-link" onclick="setActiveLink(event)">Veiligheid</a>
+                <a href='settings.php?page=meldingen' class="step-link" onclick="setActiveLink(event)">Meldingen</a>
+                <a href='settings.php?page=account' class="step-link" onclick="setActiveLink(event)">Account</a>
             </div>
             <?php if ($currentStep == "persoonlijkeGegevens"): ?>
                 <div class="option">
@@ -448,6 +449,17 @@ if (isset ($_SESSION["user_id"])) {
             <?php endif; ?>
         </div>
     </div>
+
+    <script>
+        function setActiveLink(event) {
+            event.preventDefault();
+            var links = document.querySelectorAll('.step-link');
+            links.forEach(function (link) {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 
 </html>
