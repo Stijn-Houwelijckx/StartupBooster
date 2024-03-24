@@ -1153,6 +1153,26 @@ a.active {
   background-color: rgba(211, 72, 72, 0.2);
 }
 
+#settings .option .field {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#settings .option .field input {
+  background-color: transparent;
+  border: 1px solid var(--black);
+  border-radius: 8px;
+  color: var(--offBlack);
+  opacity: 0.8;
+  padding: 8px;
+}
+
+#settings .option .field input::placeholder {
+  opacity: 0.8;
+  padding: 4px 8px;
+}
+
 .toggle {
   width: 52px;
   height: 32px;

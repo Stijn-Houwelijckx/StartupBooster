@@ -76,10 +76,11 @@ if (isset ($_SESSION["user_id"])) {
         }
     }
 
+    // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($currentStep == "veiligheid") {
-            $two_step_verification = isset ($_POST["two_step_verification"]);
-            $sms_set = isset ($_POST["sms_set"]);
+            $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
+            $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
 
             if ($two_step_verification || $sms_set) {
                 if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
@@ -93,6 +94,8 @@ if (isset ($_SESSION["user_id"])) {
             }
         }
     }
+
+
 } else {
     header("Location: login.php?error=notLoggedIn");
     exit();
@@ -233,6 +236,7 @@ if (isset ($_SESSION["user_id"])) {
                     <div class="verification">
                         <h3>Verificatie</h3>
                         <form action="" method="POST">
+                            <!-- Other form fields -->
                             <div class="row">
                                 <p>Tweestapsverificatie</p>
                                 <label for="two_step_verification">
@@ -262,6 +266,7 @@ if (isset ($_SESSION["user_id"])) {
                             </div>
                             <button type="submit" class="btn" id="btnSave">Bewaren</button>
                         </form>
+
                     </div>
                 </div>
             <?php endif; ?>
@@ -309,7 +314,7 @@ if (isset ($_SESSION["user_id"])) {
                         <h3>Email wijzigen</h3>
                         <div class="row">
                             <p>Email wijzigen</p>
-                            <a href="#" class="btn">Email wijzigen</a>
+                            <a href="settings.php?page=EmailWijzigen" class="btn email">Email wijzigen</a>
                         </div>
                         <h3>Wachtwoord wijzigen</h3>
                         <div class="row">
@@ -324,6 +329,21 @@ if (isset ($_SESSION["user_id"])) {
                     </div>
                 </div>
             <?php endif; ?>
+            <?php if ($currentStep == "EmailWijzigen"): ?>
+                <div class="option">
+                    <h2>E-mailadres wijzigen</h2>
+                    <p class="border"></p>
+                    <form action="" method="POST">
+                        <div class="field">
+                            <label for="email">Uw e-mailadres</label>
+                            <input type="text" id="email" name="email"
+                                placeholder="<?php echo htmlspecialchars($user["email"]); ?>">
+                        </div>
+                    </form>
+                    <a href="" class="btn">Bewaren</a>
+                </div>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -337,8 +357,6 @@ if (isset ($_SESSION["user_id"])) {
                 });
             });
         });
-
-
     </script>
 </body>
 
