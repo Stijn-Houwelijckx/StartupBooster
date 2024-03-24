@@ -378,6 +378,7 @@ if (isset ($_SESSION["user_id"])) {
                     </div>
                 </div>
             <?php endif; ?>
+
             <?php if ($currentStep == "EmailWijzigen"): ?>
                 <div class="option">
                     <h2>E-mailadres wijzigen</h2>
@@ -453,10 +454,9 @@ if (isset ($_SESSION["user_id"])) {
                         </p>
                     <?php endif; ?>
                 </div>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const toggles = document.querySelectorAll('.toggle');
