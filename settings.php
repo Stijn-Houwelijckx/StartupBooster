@@ -31,7 +31,6 @@ $success = false;
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
-    // var_dump(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2));
 
     try {
         $pdo = Db::getInstance();
@@ -58,7 +57,7 @@ if (isset ($_SESSION["user_id"])) {
             $user->setFirstname($firstName);
             $user->setLastname($lastName);
             $user->setStatute($statute);
-            $user->setStatute($sector);
+            $user->setSector($sector);
             $user->setPhoneNumber($phone);
             $user->setStreet($street);
             $user->setHouseNumber($houseNumber);
@@ -142,11 +141,7 @@ if (isset ($_SESSION["user_id"])) {
                             </h3>
                             <p>
                                 <?php
-                                // var_dump($user->getStatute($_SESSION["user_id"]));
-                                // var_dump(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2));
-                                echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2)["title"];
-                                // echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user->getStatute())["title"];
-                            
+                                    echo htmlspecialchars(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user["statute_id"])["title"]);
                                 ?>
 
                             </p>
@@ -179,8 +174,8 @@ if (isset ($_SESSION["user_id"])) {
                                     <label for="statute">Statuut</label>
                                     <select name="statute" id="statute">
                                         <?php foreach ($statutes as $statute): ?>
-                                            <option value="<?php echo $statute["id"] ?>">
-                                                <?php echo $statute["title"] ?>
+                                            <option value="<?php echo $statute["id"] ?>" <?php echo ($user["statute_id"] == $statute["id"]) ? 'selected' : '' ?>>
+                                                <?php echo htmlspecialchars($statute["title"]) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -189,8 +184,8 @@ if (isset ($_SESSION["user_id"])) {
                                     <label for="sector">Sector</label>
                                     <select name="sector" id="sector">
                                         <?php foreach ($sectors as $sector): ?>
-                                            <option value="<?php echo $sector["id"] ?>">
-                                                <?php echo $sector["title"] ?>
+                                            <option value="<?php echo $sector["id"] ?>" <?php echo ($user["sector_id"] == $sector["id"]) ? 'selected' : '' ?>>
+                                                <?php echo htmlspecialchars($sector["title"]) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>

@@ -27,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,12 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if (isset ($error)): ?>
                 <p class="alert">
                     <?php echo $error ?>
-                </p>
-            <?php endif; ?>
-
-            <?php if (isset ($worked)): ?>
-                <p class="alert">
-                    <?php echo $worked ?>
                 </p>
             <?php endif; ?>
 
