@@ -1151,7 +1151,8 @@ a.active {
   background-color: var(--lightBlue);
 }
 
-#settings .option .account .row .btn.red {
+#settings .option .account .row .btn.red,
+#settings .elements .option .btn.red {
   color: #d34848;
   border: 1px solid #d34848;
   background-color: rgba(211, 72, 72, 0.2);

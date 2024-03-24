@@ -110,6 +110,30 @@ if (isset ($_SESSION["user_id"])) {
                 $error = "Oud wachtwoord is onjuist.";
             }
         }
+
+        if (isset ($_POST["password"])) {
+            $password = $_POST["password"];
+            $user = User::getUserById($pdo, $_SESSION["user_id"]);
+            $hashedPassword = $user["password"];
+            if (password_verify($password, $hashedPassword)) {
+
+                if ($newPassword === $confirmNewPassword) {
+                    try {
+                        User::deleteUser($pdo, $_SESSION["user_id"]);
+                        session_unset();
+                        session_destroy();
+                        header("Location: login.php?delete=success");
+                        exit();
+                    } catch (Exception $e) {
+                        $error = $e->getMessage();
+                    }
+                } else {
+                    $error = "Error";
+                }
+            } else {
+                $error = "Wachtwoord is onjuist.";
+            }
+        }
     }
 
     // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
@@ -416,7 +440,7 @@ if (isset ($_SESSION["user_id"])) {
                     <?php endif; ?>
                     <form action="" method="POST">
                         <div class="field">
-                            <label for="old_password">Uw oud wachtwoord</label>
+                            <label for="old-password">Uw oud wachtwoord</label>
                             <div class="passwordInput">
                                 <div class="row">
                                     <input type="password" id="old-password" name="old-password" placeholder="••••••••">
@@ -426,7 +450,7 @@ if (isset ($_SESSION["user_id"])) {
                             </div>
                         </div>
                         <div class="field">
-                            <label for="old_password">Nieuw wachtwoord</label>
+                            <label for="new-password">Nieuw wachtwoord</label>
                             <div class="passwordInput">
                                 <div class="row">
                                     <input type="password" id="new-password" name="new-password" placeholder="••••••••">
@@ -436,7 +460,7 @@ if (isset ($_SESSION["user_id"])) {
                             </div>
                         </div>
                         <div class="field">
-                            <label for="old_password">Herhaal nieuw wachtwoord</label>
+                            <label for="confirm-new-password">Herhaal nieuw wachtwoord</label>
                             <div class="passwordInput">
                                 <div class="row">
                                     <input type="password" id="confirm-new-password" name="confirm-new-password"
@@ -447,6 +471,36 @@ if (isset ($_SESSION["user_id"])) {
                             </div>
                         </div>
                         <button type="submit" class="btn">Bewaren</button>
+                    </form>
+                    <?php if (isset ($error)): ?>
+                        <p class="alert">
+                            <?php echo $error ?>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($currentStep == "AccountVerwijderen"): ?>
+                <div class="option">
+                    <h2>Account verwijderen</h2>
+                    <p class="border"></p>
+                    <?php if (isset ($success)): ?>
+                        <p class="alert success">
+                            <?php echo $success ?>
+                        </p>
+                    <?php endif; ?>
+                    <form action="" method="POST">
+                        <div class="field">
+                            <label for="password">Uw wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="password" name="password" placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-password"
+                                        onclick="togglePasswordVisibility('password', 'toggle-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn red">Verwijderen</button>
                     </form>
                     <?php if (isset ($error)): ?>
                         <p class="alert">
