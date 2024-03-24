@@ -75,16 +75,30 @@ if (isset ($_SESSION["user_id"])) {
             }
         }
 
+        // if (isset ($_POST["two_step_verification"]) || isset ($_POST["sms_set"])) {
+        //     // $two_step_verification = filter_input(FILTER_VALIDATE_BOOLEAN, 'two_step_verification');
+        //     // $sms_set = filter_input(FILTER_VALIDATE_BOOLEAN, 'sms_set');
+        //     $two_step_verification = $_POST["two_step_verification"];
+        //     $sms_set = $_POST["sms_set"];
+
+
+        //     $user->setTwo_step_verification($two_step_verification);
+        //     $user->setSms_set($sms_set);
+        // }
+
         if (isset ($_POST["two_step_verification"])) {
-            $two_step_verification = filter_input(FILTER_VALIDATE_BOOLEAN, 'two_step_verification');
-            $sms_set = filter_input(FILTER_VALIDATE_BOOLEAN, 'sms_set');
-
+            $two_step_verification = $_POST["two_step_verification"];
             $user->setTwo_step_verification($two_step_verification);
-            $user->setSms_set($sms_set);
-
         }
 
-        if (isset ($_POST["security_alerts"])) {
+
+        if (isset ($_POST["sms_set"])) {
+            $sms_set = $_POST["sms_set"];
+            $user->setSms_set($sms_set);
+        }
+
+
+        if (isset ($_POST["security_alerts"]) || isset ($_POST["email_notifications"]) || isset ($_POST["sms_notification"]) || isset ($_POST["device_notification_alerts"])) {
             $security_alerts = filter_input(FILTER_VALIDATE_BOOLEAN, 'security_alerts');
             $email_notifications = filter_input(FILTER_VALIDATE_BOOLEAN, 'email_notifications');
             $sms_notification = filter_input(FILTER_VALIDATE_BOOLEAN, 'sms_notification');
@@ -236,18 +250,32 @@ if (isset ($_SESSION["user_id"])) {
                     <p class="border"></p>
                     <div class="verification">
                         <h3>Verificaie</h3>
-                        <div class="row">
-                            <p>Tweestapsverificatie</p>
-                            <div class="toggle" id="toggle">
-                                <div class="toggle-handle"></div>
+                        <form action="" method="post">
+                            <div class="row">
+                                <p>Tweestapsverificatie</p>
+                                <label for="two_step_verification">
+                                    <div class="toggle <?php if (is_object($user) && $user->getTwo_step_verification() == true) {
+                                        echo "active";
+                                    } ?>" id="toggle1">
+                                        <div class="toggle-handle"></div>
+                                    </div>
+                                </label>
+                                <input hidden class="input_security" type="checkbox" name="two_step_verification"
+                                    id="two_step_verification">
                             </div>
-                        </div>
-                        <div class="row">
-                            <p>SMS instellen</p>
-                            <div class="toggle" id="toggle">
-                                <div class="toggle-handle"></div>
+                            <div class="row">
+                                <p>SMS instellen</p>
+                                <label for="sms_set">
+                                    <div class="toggle <?php if (is_object($user) && $user->getSms_set() == true) {
+                                        echo "active";
+                                    } ?>" id="toggle2">
+                                        <div class="toggle-handle"></div>
+                                    </div>
+                                </label>
+                                <input hidden class="input_security" type="checkbox" name="sms_set" id="sms_set">
                             </div>
-                        </div>
+                            <input hidden class="btnSubmit_security" type="submit">
+                        </form>
                     </div>
                 </div>
             <?php endif; ?>
@@ -259,25 +287,25 @@ if (isset ($_SESSION["user_id"])) {
                     <div class="notifications">
                         <div class="row">
                             <p>Beveiligingswaarschuwingen</p>
-                            <div class="toggle" id="toggle">
+                            <div class="toggle" id="toggle3">
                                 <div class="toggle-handle"></div>
                             </div>
                         </div>
                         <div class="row">
                             <p>Email meldingen</p>
-                            <div class="toggle" id="toggle">
+                            <div class="toggle" id="toggle4">
                                 <div class="toggle-handle"></div>
                             </div>
                         </div>
                         <div class="row">
                             <p>SMS-melding</p>
-                            <div class="toggle" id="toggle">
+                            <div class="toggle" id="toggle5">
                                 <div class="toggle-handle"></div>
                             </div>
                         </div>
                         <div class="row">
                             <p>Waarschuwingen apparaat aanmelden</p>
-                            <div class="toggle" id="toggle">
+                            <div class="toggle" id="toggle6">
                                 <div class="toggle-handle"></div>
                             </div>
                         </div>
@@ -313,10 +341,19 @@ if (isset ($_SESSION["user_id"])) {
 
     <script>
         const toggles = document.querySelectorAll('.toggle');
+        let btnSubmit_security = document.querySelector("form .btnSubmit_security");
 
         toggles.forEach(function (toggle) {
             toggle.addEventListener("click", function (e) {
                 this.classList.toggle('active');
+            });
+        });
+
+        let input_securityCheckboxen = document.querySelectorAll(".input_security");
+
+        input_securityCheckboxen.forEach(function (input_securityCheckboxen) {
+            input_securityCheckboxen.addEventListener("click", function (e) {
+                btnSubmit_security.click();
             });
         });
 

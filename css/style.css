@@ -1177,6 +1177,10 @@ a.active {
   transform: translateX(80%);
 }
 
+.toggle.active {
+  background-color: var(--lightBlue);
+}
+
 @media (min-width: 800px) {
   #login {
     height: 95.9vh;

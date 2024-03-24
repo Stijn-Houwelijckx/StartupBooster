@@ -14,8 +14,8 @@ class User
     private $city;
     private $phoneNumber;
     private string $password;
-    private bool $two_step_verification;
-    private bool $sms_set;
+    private bool $two_step_verification = true;
+    private bool $sms_set = true;
     private bool $security_alerts;
     private bool $email_notifications;
     private bool $sms_notification;
