@@ -74,43 +74,30 @@ if (isset ($_SESSION["user_id"])) {
                 exit();
             }
         }
-
-        // if (isset ($_POST["two_step_verification"]) || isset ($_POST["sms_set"])) {
-        //     // $two_step_verification = filter_input(FILTER_VALIDATE_BOOLEAN, 'two_step_verification');
-        //     // $sms_set = filter_input(FILTER_VALIDATE_BOOLEAN, 'sms_set');
-        //     $two_step_verification = $_POST["two_step_verification"];
-        //     $sms_set = $_POST["sms_set"];
-
-
-        //     $user->setTwo_step_verification($two_step_verification);
-        //     $user->setSms_set($sms_set);
-        // }
-
-        if (isset ($_POST["two_step_verification"])) {
-            $two_step_verification = $_POST["two_step_verification"];
-            $user->setTwo_step_verification($two_step_verification);
-        }
-
-
-        if (isset ($_POST["sms_set"])) {
-            $sms_set = $_POST["sms_set"];
-            $user->setSms_set($sms_set);
-        }
-
-
-        if (isset ($_POST["security_alerts"]) || isset ($_POST["email_notifications"]) || isset ($_POST["sms_notification"]) || isset ($_POST["device_notification_alerts"])) {
-            $security_alerts = filter_input(FILTER_VALIDATE_BOOLEAN, 'security_alerts');
-            $email_notifications = filter_input(FILTER_VALIDATE_BOOLEAN, 'email_notifications');
-            $sms_notification = filter_input(FILTER_VALIDATE_BOOLEAN, 'sms_notification');
-            $device_notification_alerts = filter_input(FILTER_VALIDATE_BOOLEAN, 'device_notification_alerts');
-
-            $user->setSecurity_alerts($security_alerts);
-            $user->setEmail_notifications($email_notifications);
-            $user->setSms_notification($sms_notification);
-            $user->setDevice_notification_alerts($device_notification_alerts);
-        }
-
     }
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $two_step_verification = isset ($_POST["two_step_verification"]);
+        $sms_set = isset ($_POST["sms_set"]);
+
+        if ($two_step_verification || $sms_set) {
+            if ($user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
+                $success = true;
+                header("Location: settings.php?profileUpdate=success");
+                exit();
+            } else {
+                header("Location: settings.php?profileUpdate=error");
+                exit();
+            }
+        }
+    }
+
+
+
+
+
+
+
 } else {
     header("Location: login.php?error=notLoggedIn");
     exit();
@@ -170,7 +157,7 @@ if (isset ($_SESSION["user_id"])) {
                             </p>
                         </div>
                     </div>
-                    <form action="settings.php" method="post">
+                    <form action="" method="post">
                         <div class="extraInfo">
                             <h3>Persoonlijke gegevens</h3>
                             <div class="fields">
@@ -249,32 +236,36 @@ if (isset ($_SESSION["user_id"])) {
                     <h2>Veiligheid</h2>
                     <p class="border"></p>
                     <div class="verification">
-                        <h3>Verificaie</h3>
-                        <form action="" method="post">
+                        <h3>Verificatie</h3>
+                        <form action="" method="POST">
                             <div class="row">
                                 <p>Tweestapsverificatie</p>
                                 <label for="two_step_verification">
-                                    <div class="toggle <?php if (is_object($user) && $user->getTwo_step_verification() == true) {
+                                    <div class="toggle <?php if (is_object($user) && $user->getTwo_step_verification() === true) {
                                         echo "active";
                                     } ?>" id="toggle1">
                                         <div class="toggle-handle"></div>
                                     </div>
                                 </label>
-                                <input hidden class="input_security" type="checkbox" name="two_step_verification"
-                                    id="two_step_verification">
+                                <input hidden class="input_security_two_step" type="checkbox" name="two_step_verification"
+                                    id="two_step_verification" <?php if (is_object($user) && $user->getTwo_step_verification() === true) {
+                                        echo "checked";
+                                    } ?>>
                             </div>
                             <div class="row">
                                 <p>SMS instellen</p>
                                 <label for="sms_set">
-                                    <div class="toggle <?php if (is_object($user) && $user->getSms_set() == true) {
+                                    <div class="toggle <?php if (is_object($user) && $user->getSms_set() === true) {
                                         echo "active";
                                     } ?>" id="toggle2">
                                         <div class="toggle-handle"></div>
                                     </div>
                                 </label>
-                                <input hidden class="input_security" type="checkbox" name="sms_set" id="sms_set">
+                                <input hidden class="input_security_sms" type="checkbox" name="sms_set" id="sms_set" <?php if (is_object($user) && $user->getSms_set() === true) {
+                                    echo "checked";
+                                } ?>>
                             </div>
-                            <input hidden class="btnSubmit_security" type="submit">
+                            <button type="submit" class="btn" id="btnSave">Bewaren</button>
                         </form>
                     </div>
                 </div>
@@ -285,6 +276,7 @@ if (isset ($_SESSION["user_id"])) {
                     <h2>Meldingen</h2>
                     <p class="border"></p>
                     <div class="notifications">
+                        <!-- <form action="" method="POST"> -->
                         <div class="row">
                             <p>Beveiligingswaarschuwingen</p>
                             <div class="toggle" id="toggle3">
@@ -309,6 +301,7 @@ if (isset ($_SESSION["user_id"])) {
                                 <div class="toggle-handle"></div>
                             </div>
                         </div>
+                        <!-- </form> -->
                     </div>
                 </div>
             <?php endif; ?>
@@ -340,22 +333,21 @@ if (isset ($_SESSION["user_id"])) {
     </div>
 
     <script>
-        const toggles = document.querySelectorAll('.toggle');
-        let btnSubmit_security = document.querySelector("form .btnSubmit_security");
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggles = document.querySelectorAll('.toggle');
 
-        toggles.forEach(function (toggle) {
-            toggle.addEventListener("click", function (e) {
-                this.classList.toggle('active');
+            toggles.forEach(function (toggle) {
+                toggle.addEventListener("click", function (e) {
+                    this.classList.toggle('active');
+                    const checkbox = this.nextElementSibling;
+                    checkbox.checked = !checkbox.checked; // Toggle the hidden checkbox
+                    if (checkbox.checked) {
+                        checkbox.dispatchEvent(new Event('change')); // Dispatch change event
+                    }
+                });
             });
         });
 
-        let input_securityCheckboxen = document.querySelectorAll(".input_security");
-
-        input_securityCheckboxen.forEach(function (input_securityCheckboxen) {
-            input_securityCheckboxen.addEventListener("click", function (e) {
-                btnSubmit_security.click();
-            });
-        });
 
     </script>
 </body>

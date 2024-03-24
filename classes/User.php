@@ -14,8 +14,8 @@ class User
     private $city;
     private $phoneNumber;
     private string $password;
-    private bool $two_step_verification = true;
-    private bool $sms_set = true;
+    private bool $two_step_verification;
+    private bool $sms_set;
     private bool $security_alerts;
     private bool $email_notifications;
     private bool $sms_notification;
@@ -117,15 +117,6 @@ class User
      */
     public function getStatute()
     {
-        // error_log("test");
-
-        // $statuteTitle = Statute::getStatuteByUser(Db::getInstance(), $user_id, $this->statute);
-
-        // error_log("title" . $statuteTitle);
-        // return $statuteTitle;
-
-        // $this->statute = $statute;
-
         return $this->statute;
     }
 
@@ -522,7 +513,7 @@ class User
             return false;
         }
     }
-    public function updateSecurity(PDO $pdo, $user_id): bool
+    public function updateSecurity(PDO $pdo, $user_id, $two_step_verification, $sms_set): bool
     {
         try {
             $stmt = $pdo->prepare("UPDATE users SET two_step_verification = :two_step_verification, sms_set = :sms_set WHERE id = :user_id");
@@ -541,6 +532,7 @@ class User
             return false;
         }
     }
+
 
     public function updateNotifications(PDO $pdo, $user_id): bool
     {
