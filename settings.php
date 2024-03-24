@@ -57,7 +57,7 @@ if (isset ($_SESSION["user_id"])) {
             $user->setFirstname($firstName);
             $user->setLastname($lastName);
             $user->setStatute($statute);
-            $user->setStatute($sector);
+            $user->setSector($sector);
             $user->setPhoneNumber($phone);
             $user->setStreet($street);
             $user->setHouseNumber($houseNumber);
