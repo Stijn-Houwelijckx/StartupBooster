@@ -31,7 +31,6 @@ $success = false;
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
-    // var_dump(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2));
 
     try {
         $pdo = Db::getInstance();
@@ -139,11 +138,8 @@ if (isset ($_SESSION["user_id"])) {
                             </h3>
                             <p>
                                 <?php
-                                // var_dump($user->getStatute($_SESSION["user_id"]));
-                                // var_dump(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2));
-                                echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], 2)["title"];
-                                // echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user->getStatute())["title"];
-                            
+                                    // var_dump(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user["statute_id"])["title"]);
+                                    echo Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user["statute_id"])["title"];
                                 ?>
 
                             </p>
