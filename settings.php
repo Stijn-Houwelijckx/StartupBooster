@@ -241,7 +241,7 @@ if (isset ($_SESSION["user_id"])) {
                             <div class="row">
                                 <p>Tweestapsverificatie</p>
                                 <label for="two_step_verification">
-                                    <div class="toggle <?php if (is_object($user) && $user->getTwo_step_verification() === true) {
+                                    <div class="toggle <?php if (isset ($user['two_step_verification']) && $user['two_step_verification'] == 1) {
                                         echo "active";
                                     } ?>" id="toggle1">
                                         <div class="toggle-handle"></div>
@@ -251,11 +251,11 @@ if (isset ($_SESSION["user_id"])) {
                                     id="two_step_verification" <?php if (is_object($user) && $user->getTwo_step_verification() === true) {
                                         echo "checked";
                                     } ?>>
-                            </div>
+        </div>
                             <div class="row">
                                 <p>SMS instellen</p>
                                 <label for="sms_set">
-                                    <div class="toggle <?php if (is_object($user) && $user->getSms_set() === true) {
+                                    <div class="toggle <?php if (isset ($user['sms_set']) && $user['sms_set'] == 1) {
                                         echo "active";
                                     } ?>" id="toggle2">
                                         <div class="toggle-handle"></div>
@@ -264,9 +264,10 @@ if (isset ($_SESSION["user_id"])) {
                                 <input hidden class="input_security_sms" type="checkbox" name="sms_set" id="sms_set" <?php if (is_object($user) && $user->getSms_set() === true) {
                                     echo "checked";
                                 } ?>>
-                            </div>
+          </div>
                             <button type="submit" class="btn" id="btnSave">Bewaren</button>
                         </form>
+
                     </div>
                 </div>
             <?php endif; ?>
