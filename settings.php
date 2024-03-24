@@ -334,11 +334,6 @@ if (isset ($_SESSION["user_id"])) {
             toggles.forEach(function (toggle) {
                 toggle.addEventListener("click", function (e) {
                     this.classList.toggle('active');
-                    const checkbox = this.nextElementSibling;
-                    checkbox.checked = !checkbox.checked; // Toggle the hidden checkbox
-                    if (checkbox.checked) {
-                        checkbox.dispatchEvent(new Event('change')); // Dispatch change event
-                    }
                 });
             });
         });
