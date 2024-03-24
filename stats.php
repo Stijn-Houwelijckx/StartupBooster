@@ -1,14 +1,22 @@
 <?php
 include_once (__DIR__ . "/classes/Db.php");
-
-try {
-    $pdo = Db::getInstance();
-
-} catch (Exception $e) {
-    error_log('Database error: ' . $e->getMessage());
-}
-
 $current_page = 'stats';
+
+if (isset ($_SESSION["user_id"])) {
+    $pdo = Db::getInstance();
+    $user = User::getUserById($pdo, $_SESSION["user_id"]);
+
+    try {
+        $pdo = Db::getInstance();
+        $statutes = Statute::getAll($pdo);
+        $sectors = Sector::getAll($pdo);
+    } catch (Exception $e) {
+        error_log('Database error: ' . $e->getMessage());
+    }
+} else {
+    header("Location: login.php?error=notLoggedIn");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

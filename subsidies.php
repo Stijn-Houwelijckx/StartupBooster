@@ -2,12 +2,19 @@
 include_once (__DIR__ . "/classes/Subsidie.php");
 include_once (__DIR__ . "/classes/Db.php");
 
-try {
+if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
-    $subsidies = Subsidie::getSubsidies($pdo);
-} catch (Exception $e) {
-    error_log('Database error: ' . $e->getMessage());
-    $subsidies = [];
+    $user = User::getUserById($pdo, $_SESSION["user_id"]);
+
+    try {
+        $pdo = Db::getInstance();
+        $subsidies = Subsidie::getSubsidies($pdo);
+    } catch (Exception $e) {
+        error_log('Database error: ' . $e->getMessage());
+    }
+} else {
+    header("Location: login.php?error=notLoggedIn");
+    exit();
 }
 
 $current_page = 'subsidies';

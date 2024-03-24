@@ -2,31 +2,45 @@
 include_once (__DIR__ . "/classes/Task.php");
 include_once (__DIR__ . "/classes/Db.php");
 
-try {
+if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
-    $finished_steps = Task::getProgress($pdo);
-    $tasks = Task::getTasks($pdo);
-    $activeTask = Task::getActiveTask($pdo);
-    $activeTaskString = implode(', ', $activeTask); // Convert array to string
+    $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
-    $progress = ($finished_steps["finished_steps"] / $finished_steps["total_steps"]) * 100;
-    $progressRounded = number_format($progress, 0);
-    $tasks = array_reverse($tasks);
+    try {
+        $pdo = Db::getInstance();
+        $finished_steps = Task::getProgress($pdo);
+        $tasks = Task::getTasks($pdo);
+        $activeTask = Task::getActiveTask($pdo);
+        $activeTaskString = implode(', ', $activeTask); // Convert array to string
 
-    if (isset ($_POST['taskId'])) {
-        $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
-        if ($taskId) {
-            Task::updateRead($pdo, $taskId);
-        } else {
-            error_log('Invalid taskId received.');
+        $progress = ($finished_steps["finished_steps"] / $finished_steps["total_steps"]) * 100;
+        $progressRounded = number_format($progress, 0);
+        $tasks = array_reverse($tasks);
+
+        if (isset ($_POST['taskId'])) {
+            $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
+            if ($taskId) {
+                Task::updateRead($pdo, $taskId);
+            } else {
+                error_log('Invalid taskId received.');
+            }
         }
+    } catch (Exception $e) {
+        error_log('Database error: ' . $e->getMessage());
     }
-} catch (Exception $e) {
-    error_log('Database error: ' . $e->getMessage());
-    $tasks = [];
+} else {
+    header("Location: login.php?error=notLoggedIn");
+    exit();
 }
 
 $current_page = 'roadmap';
+?>
+
+<?php
+include_once (__DIR__ . "/classes/Db.php");
+$current_page = 'dashboard';
+
+
 ?>
 
 <!DOCTYPE html>

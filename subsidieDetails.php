@@ -2,6 +2,19 @@
 include_once (__DIR__ . "/classes/Subsidie.php");
 include_once (__DIR__ . "/classes/Db.php");
 
+if (isset ($_SESSION["user_id"])) {
+    $pdo = Db::getInstance();
+    $subsidie = Subsidie::getSubsidieByName($pdo, $subsidie_name);
+
+    if (!$subsidie) {
+        echo "Subsidie niet gevonden";
+        exit;
+    }
+} else {
+    header("Location: login.php?error=notLoggedIn");
+    exit();
+}
+
 $subsidie_name = isset ($_GET['name']) ? $_GET['name'] : '';
 
 if (empty ($subsidie_name)) {
@@ -9,23 +22,6 @@ if (empty ($subsidie_name)) {
     exit;
 }
 
-try {
-    // Verbinding maken met de database
-    $pdo = Db::getInstance();
-
-    // Subsidiegegevens ophalen op basis van de naam uit de URL
-    $subsidie = Subsidie::getSubsidieByName($pdo, $subsidie_name);
-
-    if (!$subsidie) {
-        echo "Subsidie niet gevonden";
-        exit;
-    }
-} catch (Exception $e) {
-    // Foutmelding weergeven en loggen als er een databasefout optreedt
-    error_log('Database error: ' . $e->getMessage());
-    echo "Er is een probleem opgetreden bij het ophalen van de subsidiegegevens. Probeer het later opnieuw.";
-    exit;
-}
 
 $current_page = 'subsidie_details';
 ?>
