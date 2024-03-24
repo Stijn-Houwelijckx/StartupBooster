@@ -501,10 +501,9 @@ class User
     public function updateUser(PDO $pdo, $user_id): bool
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, email = :email, phoneNumber = :phoneNumber WHERE id = :user_id");
+            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, phoneNumber = :phoneNumber WHERE id = :user_id");
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
-            $stmt->bindParam(':email', $this->email);
             $stmt->bindParam(':phoneNumber', $this->phoneNumber);
             $stmt->bindParam(':street', $this->street);
             $stmt->bindParam(':houseNumber', $this->houseNumber);
