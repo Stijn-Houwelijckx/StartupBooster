@@ -1115,6 +1115,7 @@ a.active {
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
+  width: 100%;
 }
 
 #settings .option .success {
@@ -1157,6 +1158,7 @@ a.active {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 50%;
 }
 
 #settings .option .field input {
@@ -1166,11 +1168,7 @@ a.active {
   color: var(--offBlack);
   opacity: 0.8;
   padding: 8px;
-}
-
-#settings .option .field input::placeholder {
-  opacity: 0.8;
-  padding: 4px 8px;
+  width: 100%;
 }
 
 .toggle {

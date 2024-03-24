@@ -558,6 +558,18 @@ class User
         }
     }
 
+    public function updateEmail(PDO $pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET email = :email WHERE id = :user_id");
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':user_id', $user_id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
 
     public static function getUserByEmail(PDO $pdo, string $email)
     {

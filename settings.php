@@ -73,27 +73,52 @@ if (isset ($_SESSION["user_id"])) {
                 exit();
             }
         }
-    }
 
-    // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        if ($currentStep == "veiligheid") {
-            $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
-            $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
-
-            if ($two_step_verification || $sms_set) {
-                if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
-                    $success = true;
-                    header("Location: settings.php?profileUpdate=success");
-                    exit();
+        try {
+            if (isset ($_POST["email"])) {
+                if (User::getUserByEmail((Db::getInstance()), $_POST["email"])) {
+                    throw new Exception("Dit e-mailadres is al in gebruik.");
                 } else {
-                    header("Location: settings.php?profileUpdate=error");
-                    exit();
+                    $user->setEmail($_POST["email"]);
+                    $user->updateEmail($pdo, $_SESSION["user_id"]);
                 }
             }
+        } catch (Exception $e) {
+            $error = $e->getMessage();
         }
     }
 
+    // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
+    // if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    //     if ($currentStep == "veiligheid") {
+    //         $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
+    //         $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
+
+    //         if ($two_step_verification || $sms_set) {
+    //             if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
+    //                 $success = true;
+    //                 header("Location: settings.php?profileUpdate=success");
+    //                 exit();
+    //             } else {
+    //                 header("Location: settings.php?profileUpdate=error");
+    //                 exit();
+    //             }
+    //         }
+    //     }
+
+
+    // }
+
+    // if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    //     if ($currentStep == "EmailWijzigen") {
+    //         if (User::getUserByEmail((Db::getInstance()), $_POST["email"])) {
+    //             throw new Exception("Dit e-mailadres is al in gebruik.");
+    //         } else {
+    //             $user->setEmail($_POST["email"]);
+    //             var_dump($user->getEmail());
+    //         }
+    //     }
+    // }
 
 } else {
     header("Location: login.php?error=notLoggedIn");
@@ -123,9 +148,12 @@ if (isset ($_SESSION["user_id"])) {
                 foreach ($pages as $page => $text) {
                     if ($currentStep == $page) {
                         echo "<a href='settings.php?page=$page' class='active'>$text</a>";
+                    } else if ($current_page == "EmailWijzigen") {
+                        echo "<a href='settings.php?page=Account' class='active'>$text</a>";
                     } else {
                         echo "<a href='settings.php?page=$page'>$text</a>";
                     }
+
                 } ?>
             </div>
             <p class="border"></p>
@@ -141,7 +169,7 @@ if (isset ($_SESSION["user_id"])) {
                             </h3>
                             <p>
                                 <?php
-                                    echo htmlspecialchars(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user["statute_id"])["title"]);
+                                echo htmlspecialchars(Statute::getStatuteByUser($pdo, $_SESSION["user_id"], $user["statute_id"])["title"]);
                                 ?>
 
                             </p>
@@ -330,14 +358,21 @@ if (isset ($_SESSION["user_id"])) {
                     <p class="border"></p>
                     <form action="" method="POST">
                         <div class="field">
-                            <label for="email">Uw e-mailadres</label>
-                            <input type="text" id="email" name="email"
-                                placeholder="<?php echo htmlspecialchars($user["email"]); ?>">
+                            <label for="email">Uw nieuwe e-mailadres</label>
+                            <input type="text" id="email" name="email" placeholder="your@email.com" value="<?php $user = User::getUserById($pdo, $_SESSION["user_id"]);
+                            ;
+                            echo htmlspecialchars($user["email"]); ?>">
                         </div>
+                        <button type="submit" class="btn">Bewaren</button>
                     </form>
-                    <a href="" class="btn">Bewaren</a>
+                    <?php if (isset ($error)): ?>
+                        <p class="alert">
+                            <?php echo $error ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
+
 
         </div>
     </div>

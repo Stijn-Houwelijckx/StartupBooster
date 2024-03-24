@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
         try {
             $user->setFirstname($_POST["firstname"]);
             $user->setLastname($_POST["lastname"]);
+
             if (User::getUserByEmail((Db::getInstance()), $_POST["email"])) {
                 throw new Exception("Dit e-mailadres is al in gebruik.");
             } else {
