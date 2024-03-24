@@ -406,16 +406,10 @@ a.active {
 
 #signUp .text form .row div input,
 #signUp .text form .column input {
-  padding: 4px 0px;
+  padding: 4px 8px;
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 8px;
   background-color: transparent;
-  width: 100%;
-}
-
-#signUp .text form .row div input::placeholder,
-#signUp .text form .column input::placeholder {
-  padding: 8px;
 }
 
 #signUp .text form .column input {
