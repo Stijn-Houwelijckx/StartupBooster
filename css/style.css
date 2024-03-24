@@ -1153,6 +1153,30 @@ a.active {
   background-color: rgba(211, 72, 72, 0.2);
 }
 
+.toggle {
+  width: 52px;
+  height: 32px;
+  background-color: #dadada;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-handle {
+  width: 26px;
+  height: 26px;
+  background-color: var(--blue);
+  border-radius: 50%;
+  position: absolute;
+  top: 3px; /* Aangepaste waarde om de handle verticaal in het midden te positioneren */
+  left: 3px;
+  transition: transform 0.3s ease;
+}
+
+.toggle.active .toggle-handle {
+  transform: translateX(80%);
+}
+
 @media (min-width: 800px) {
   #login {
     height: 95.9vh;

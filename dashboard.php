@@ -1,5 +1,9 @@
 <?php
 include_once (__DIR__ . "/classes/Db.php");
+include_once (__DIR__ . "/classes/User.php");
+include_once (__DIR__ . "/classes/Statute.php");
+include_once (__DIR__ . "/classes/Sector.php");
+session_start();
 $current_page = 'dashboard';
 
 if (isset ($_SESSION["user_id"])) {
@@ -7,7 +11,7 @@ if (isset ($_SESSION["user_id"])) {
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
     try {
-        $pdo = Db::getInstance();
+        // $pdo = Db::getInstance();
         $statutes = Statute::getAll($pdo);
         $sectors = Sector::getAll($pdo);
     } catch (Exception $e) {

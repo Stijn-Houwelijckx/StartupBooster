@@ -1,6 +1,7 @@
 <?php
 include_once (__DIR__ . "/classes/Subsidie.php");
 include_once (__DIR__ . "/classes/Db.php");
+session_start();
 
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();

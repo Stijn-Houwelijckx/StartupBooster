@@ -14,6 +14,12 @@ class User
     private $city;
     private $phoneNumber;
     private string $password;
+    private bool $two_step_verification;
+    private bool $sms_set;
+    private bool $security_alerts;
+    private bool $email_notifications;
+    private bool $sms_notification;
+    private bool $device_notification_alerts;
 
     /**
      * Get the value of firstname
@@ -322,6 +328,7 @@ class User
      *
      * @return  self
      */
+
     public function setPassword($password)
     {
         if (empty (trim($password))) {
@@ -338,6 +345,126 @@ class User
         }
 
         $this->password = password_hash($password, PASSWORD_DEFAULT);
+        return $this;
+    }
+
+    /**
+     * Get the value of two_step_verification
+     */
+    public function getTwo_step_verification()
+    {
+        return $this->two_step_verification;
+    }
+
+    /**
+     * Set the value of two_step_verification
+     *
+     * @return  self
+     */
+    public function setTwo_step_verification($two_step_verification)
+    {
+        $this->two_step_verification = $two_step_verification;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of sms_set
+     */
+    public function getSms_set()
+    {
+        return $this->sms_set;
+    }
+
+    /**
+     * Set the value of sms_set
+     *
+     * @return  self
+     */
+    public function setSms_set($sms_set)
+    {
+        $this->sms_set = $sms_set;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of security_alerts
+     */
+    public function getSecurity_alerts()
+    {
+        return $this->security_alerts;
+    }
+
+    /**
+     * Set the value of security_alerts
+     *
+     * @return  self
+     */
+    public function setSecurity_alerts($security_alerts)
+    {
+        $this->security_alerts = $security_alerts;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of email_notifications
+     */
+    public function getEmail_notifications()
+    {
+        return $this->email_notifications;
+    }
+
+    /**
+     * Set the value of email_notifications
+     *
+     * @return  self
+     */
+    public function setEmail_notifications($email_notifications)
+    {
+        $this->email_notifications = $email_notifications;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of sms_notification
+     */
+    public function getSms_notification()
+    {
+        return $this->sms_notification;
+    }
+
+    /**
+     * Set the value of sms_notification
+     *
+     * @return  self
+     */
+    public function setSms_notification($sms_notification)
+    {
+        $this->sms_notification = $sms_notification;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of device_notification_alerts
+     */
+    public function getDevice_notification_alerts()
+    {
+        return $this->device_notification_alerts;
+    }
+
+    /**
+     * Set the value of device_notification_alerts
+     *
+     * @return  self
+     */
+    public function setDevice_notification_alerts($device_notification_alerts)
+    {
+        $this->device_notification_alerts = $device_notification_alerts;
+
         return $this;
     }
 
@@ -374,7 +501,7 @@ class User
     public function updateUser(PDO $pdo, $user_id): bool
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, email = :email, phoneNumber = :phoneNumber WHERE id = :user_id");
+            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, email = :email, phoneNumber = :phoneNumber, two_step_verification = :two_step_verification, sms_set = :sms_set, security_alerts = :security_alerts, email_notifications = :email_notifications, sms_notification = :sms_notification, device_notification_alerts = :device_notification_alerts WHERE id = :user_id");
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
             $stmt->bindParam(':email', $this->email);
@@ -383,6 +510,47 @@ class User
             $stmt->bindParam(':houseNumber', $this->houseNumber);
             $stmt->bindParam(':zipCode', $this->zipCode);
             $stmt->bindParam(':city', $this->city);
+            $stmt->bindParam(':user_id', $user_id);
+
+            // Controleer of de SQL-instructie met succes is uitgevoerd
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+    public function updateSecurity(PDO $pdo, $user_id): bool
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET two_step_verification = :two_step_verification, sms_set = :sms_set WHERE id = :user_id");
+            $stmt->bindParam(':two_step_verification', $two_step_verification);
+            $stmt->bindParam(':sms_set', $sms_set);
+            $stmt->bindParam(':user_id', $user_id);
+
+            // Controleer of de SQL-instructie met succes is uitgevoerd
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updateNotifications(PDO $pdo, $user_id): bool
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET security_alerts = :security_alerts, email_notifications = :email_notifications, sms_notification = :sms_notification, device_notification_alerts = :device_notification_alerts WHERE id = :user_id");
+            $stmt->bindParam(':security_alerts', $security_alerts);
+            $stmt->bindParam(':email_notifications', $email_notifications);
+            $stmt->bindParam(':sms_notification', $sms_notification);
+            $stmt->bindParam(':device_notification_alerts', $device_notification_alerts);
             $stmt->bindParam(':user_id', $user_id);
 
             // Controleer of de SQL-instructie met succes is uitgevoerd

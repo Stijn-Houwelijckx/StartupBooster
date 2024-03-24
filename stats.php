@@ -1,5 +1,8 @@
 <?php
 include_once (__DIR__ . "/classes/Db.php");
+include_once (__DIR__ . "/classes/User.php");
+
+session_start();
 $current_page = 'stats';
 
 if (isset ($_SESSION["user_id"])) {
@@ -8,8 +11,6 @@ if (isset ($_SESSION["user_id"])) {
 
     try {
         $pdo = Db::getInstance();
-        $statutes = Statute::getAll($pdo);
-        $sectors = Sector::getAll($pdo);
     } catch (Exception $e) {
         error_log('Database error: ' . $e->getMessage());
     }

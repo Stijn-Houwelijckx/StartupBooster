@@ -213,73 +213,15 @@ if (isset ($_SESSION["user_id"])) {
                         <h3>Verificaie</h3>
                         <div class="row">
                             <p>Tweestapsverificatie</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="57" height="43" viewBox="0 0 57 43" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M41.143 33.9078C39.403 34.0078 37.665 33.9998 35.925 33.9998C35.913 33.9998 27.108 33.9998 27.108 33.9998C25.334 33.9998 23.596 34.0078 21.857 33.9078C20.276 33.8178 18.736 33.6258 17.203 33.1968C13.976 32.2948 11.158 30.4108 9.121 27.7398C7.096 25.0858 6 21.8368 6 18.5008C6 15.1608 7.096 11.9138 9.121 9.25985C11.158 6.58985 13.976 4.70485 17.203 3.80285C18.736 3.37385 20.276 3.18285 21.857 3.09185C23.596 2.99185 25.334 3.00085 27.074 3.00085C27.086 3.00085 35.893 2.99985 35.893 2.99985C37.665 3.00085 39.403 2.99185 41.143 3.09185C42.723 3.18285 44.263 3.37385 45.796 3.80285C49.023 4.70485 51.841 6.58985 53.878 9.25985C55.903 11.9138 57 15.1608 57 18.4998C57 21.8368 55.903 25.0858 53.878 27.7398C51.841 30.4108 49.023 32.2948 45.796 33.1968C44.263 33.6258 42.723 33.8178 41.143 33.9078Z"
-                                    fill="#F6F6F6" />
-                                <g filter="url(#filter0_dd_597_1525)">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M21.5 5C14.0442 5 8 11.0442 8 18.5C8 25.9558 14.0442 32 21.5 32C28.9558 32 35 25.9558 35 18.5C35 11.0442 28.9558 5 21.5 5Z"
-                                        fill="white" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_dd_597_1525" x="0" y="0" width="43" height="43"
-                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="0.5" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix"
-                                            result="effect1_dropShadow_597_1525" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="4" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
-                                        <feBlend mode="normal" in2="effect1_dropShadow_597_1525"
-                                            result="effect2_dropShadow_597_1525" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_597_1525"
-                                            result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            <div class="toggle" id="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
                         </div>
                         <div class="row">
                             <p>SMS instellen</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="57" height="43" viewBox="0 0 57 43" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M41.143 33.9078C39.403 34.0078 37.665 33.9998 35.925 33.9998C35.913 33.9998 27.108 33.9998 27.108 33.9998C25.334 33.9998 23.596 34.0078 21.857 33.9078C20.276 33.8178 18.736 33.6258 17.203 33.1968C13.976 32.2948 11.158 30.4108 9.121 27.7398C7.096 25.0858 6 21.8368 6 18.5008C6 15.1608 7.096 11.9138 9.121 9.25985C11.158 6.58985 13.976 4.70485 17.203 3.80285C18.736 3.37385 20.276 3.18285 21.857 3.09185C23.596 2.99185 25.334 3.00085 27.074 3.00085C27.086 3.00085 35.893 2.99985 35.893 2.99985C37.665 3.00085 39.403 2.99185 41.143 3.09185C42.723 3.18285 44.263 3.37385 45.796 3.80285C49.023 4.70485 51.841 6.58985 53.878 9.25985C55.903 11.9138 57 15.1608 57 18.4998C57 21.8368 55.903 25.0858 53.878 27.7398C51.841 30.4108 49.023 32.2948 45.796 33.1968C44.263 33.6258 42.723 33.8178 41.143 33.9078Z"
-                                    fill="#F6F6F6" />
-                                <g filter="url(#filter0_dd_597_1525)">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M21.5 5C14.0442 5 8 11.0442 8 18.5C8 25.9558 14.0442 32 21.5 32C28.9558 32 35 25.9558 35 18.5C35 11.0442 28.9558 5 21.5 5Z"
-                                        fill="white" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_dd_597_1525" x="0" y="0" width="43" height="43"
-                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="0.5" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix"
-                                            result="effect1_dropShadow_597_1525" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="4" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
-                                        <feBlend mode="normal" in2="effect1_dropShadow_597_1525"
-                                            result="effect2_dropShadow_597_1525" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_597_1525"
-                                            result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            <div class="toggle" id="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -292,143 +234,27 @@ if (isset ($_SESSION["user_id"])) {
                     <div class="notifications">
                         <div class="row">
                             <p>Beveiligingswaarschuwingen</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="57" height="43" viewBox="0 0 57 43" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M41.143 33.9078C39.403 34.0078 37.665 33.9998 35.925 33.9998C35.913 33.9998 27.108 33.9998 27.108 33.9998C25.334 33.9998 23.596 34.0078 21.857 33.9078C20.276 33.8178 18.736 33.6258 17.203 33.1968C13.976 32.2948 11.158 30.4108 9.121 27.7398C7.096 25.0858 6 21.8368 6 18.5008C6 15.1608 7.096 11.9138 9.121 9.25985C11.158 6.58985 13.976 4.70485 17.203 3.80285C18.736 3.37385 20.276 3.18285 21.857 3.09185C23.596 2.99185 25.334 3.00085 27.074 3.00085C27.086 3.00085 35.893 2.99985 35.893 2.99985C37.665 3.00085 39.403 2.99185 41.143 3.09185C42.723 3.18285 44.263 3.37385 45.796 3.80285C49.023 4.70485 51.841 6.58985 53.878 9.25985C55.903 11.9138 57 15.1608 57 18.4998C57 21.8368 55.903 25.0858 53.878 27.7398C51.841 30.4108 49.023 32.2948 45.796 33.1968C44.263 33.6258 42.723 33.8178 41.143 33.9078Z"
-                                    fill="#F6F6F6" />
-                                <g filter="url(#filter0_dd_597_1525)">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M21.5 5C14.0442 5 8 11.0442 8 18.5C8 25.9558 14.0442 32 21.5 32C28.9558 32 35 25.9558 35 18.5C35 11.0442 28.9558 5 21.5 5Z"
-                                        fill="white" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_dd_597_1525" x="0" y="0" width="43" height="43"
-                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="0.5" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix"
-                                            result="effect1_dropShadow_597_1525" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="4" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
-                                        <feBlend mode="normal" in2="effect1_dropShadow_597_1525"
-                                            result="effect2_dropShadow_597_1525" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_597_1525"
-                                            result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            <div class="toggle" id="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
                         </div>
                         <div class="row">
                             <p>Email meldingen</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="57" height="43" viewBox="0 0 57 43" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M41.143 33.9078C39.403 34.0078 37.665 33.9998 35.925 33.9998C35.913 33.9998 27.108 33.9998 27.108 33.9998C25.334 33.9998 23.596 34.0078 21.857 33.9078C20.276 33.8178 18.736 33.6258 17.203 33.1968C13.976 32.2948 11.158 30.4108 9.121 27.7398C7.096 25.0858 6 21.8368 6 18.5008C6 15.1608 7.096 11.9138 9.121 9.25985C11.158 6.58985 13.976 4.70485 17.203 3.80285C18.736 3.37385 20.276 3.18285 21.857 3.09185C23.596 2.99185 25.334 3.00085 27.074 3.00085C27.086 3.00085 35.893 2.99985 35.893 2.99985C37.665 3.00085 39.403 2.99185 41.143 3.09185C42.723 3.18285 44.263 3.37385 45.796 3.80285C49.023 4.70485 51.841 6.58985 53.878 9.25985C55.903 11.9138 57 15.1608 57 18.4998C57 21.8368 55.903 25.0858 53.878 27.7398C51.841 30.4108 49.023 32.2948 45.796 33.1968C44.263 33.6258 42.723 33.8178 41.143 33.9078Z"
-                                    fill="#F6F6F6" />
-                                <g filter="url(#filter0_dd_597_1525)">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M21.5 5C14.0442 5 8 11.0442 8 18.5C8 25.9558 14.0442 32 21.5 32C28.9558 32 35 25.9558 35 18.5C35 11.0442 28.9558 5 21.5 5Z"
-                                        fill="white" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_dd_597_1525" x="0" y="0" width="43" height="43"
-                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="0.5" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix"
-                                            result="effect1_dropShadow_597_1525" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="4" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
-                                        <feBlend mode="normal" in2="effect1_dropShadow_597_1525"
-                                            result="effect2_dropShadow_597_1525" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_597_1525"
-                                            result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            <div class="toggle" id="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
                         </div>
                         <div class="row">
                             <p>SMS-melding</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="57" height="43" viewBox="0 0 57 43" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M41.143 33.9078C39.403 34.0078 37.665 33.9998 35.925 33.9998C35.913 33.9998 27.108 33.9998 27.108 33.9998C25.334 33.9998 23.596 34.0078 21.857 33.9078C20.276 33.8178 18.736 33.6258 17.203 33.1968C13.976 32.2948 11.158 30.4108 9.121 27.7398C7.096 25.0858 6 21.8368 6 18.5008C6 15.1608 7.096 11.9138 9.121 9.25985C11.158 6.58985 13.976 4.70485 17.203 3.80285C18.736 3.37385 20.276 3.18285 21.857 3.09185C23.596 2.99185 25.334 3.00085 27.074 3.00085C27.086 3.00085 35.893 2.99985 35.893 2.99985C37.665 3.00085 39.403 2.99185 41.143 3.09185C42.723 3.18285 44.263 3.37385 45.796 3.80285C49.023 4.70485 51.841 6.58985 53.878 9.25985C55.903 11.9138 57 15.1608 57 18.4998C57 21.8368 55.903 25.0858 53.878 27.7398C51.841 30.4108 49.023 32.2948 45.796 33.1968C44.263 33.6258 42.723 33.8178 41.143 33.9078Z"
-                                    fill="#F6F6F6" />
-                                <g filter="url(#filter0_dd_597_1525)">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M21.5 5C14.0442 5 8 11.0442 8 18.5C8 25.9558 14.0442 32 21.5 32C28.9558 32 35 25.9558 35 18.5C35 11.0442 28.9558 5 21.5 5Z"
-                                        fill="white" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_dd_597_1525" x="0" y="0" width="43" height="43"
-                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="0.5" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix"
-                                            result="effect1_dropShadow_597_1525" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="4" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
-                                        <feBlend mode="normal" in2="effect1_dropShadow_597_1525"
-                                            result="effect2_dropShadow_597_1525" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_597_1525"
-                                            result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            <div class="toggle" id="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
                         </div>
                         <div class="row">
                             <p>Waarschuwingen apparaat aanmelden</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="57" height="43" viewBox="0 0 57 43" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M41.143 33.9078C39.403 34.0078 37.665 33.9998 35.925 33.9998C35.913 33.9998 27.108 33.9998 27.108 33.9998C25.334 33.9998 23.596 34.0078 21.857 33.9078C20.276 33.8178 18.736 33.6258 17.203 33.1968C13.976 32.2948 11.158 30.4108 9.121 27.7398C7.096 25.0858 6 21.8368 6 18.5008C6 15.1608 7.096 11.9138 9.121 9.25985C11.158 6.58985 13.976 4.70485 17.203 3.80285C18.736 3.37385 20.276 3.18285 21.857 3.09185C23.596 2.99185 25.334 3.00085 27.074 3.00085C27.086 3.00085 35.893 2.99985 35.893 2.99985C37.665 3.00085 39.403 2.99185 41.143 3.09185C42.723 3.18285 44.263 3.37385 45.796 3.80285C49.023 4.70485 51.841 6.58985 53.878 9.25985C55.903 11.9138 57 15.1608 57 18.4998C57 21.8368 55.903 25.0858 53.878 27.7398C51.841 30.4108 49.023 32.2948 45.796 33.1968C44.263 33.6258 42.723 33.8178 41.143 33.9078Z"
-                                    fill="#F6F6F6" />
-                                <g filter="url(#filter0_dd_597_1525)">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M21.5 5C14.0442 5 8 11.0442 8 18.5C8 25.9558 14.0442 32 21.5 32C28.9558 32 35 25.9558 35 18.5C35 11.0442 28.9558 5 21.5 5Z"
-                                        fill="white" />
-                                </g>
-                                <defs>
-                                    <filter id="filter0_dd_597_1525" x="0" y="0" width="43" height="43"
-                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="0.5" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                                        <feBlend mode="normal" in2="BackgroundImageFix"
-                                            result="effect1_dropShadow_597_1525" />
-                                        <feColorMatrix in="SourceAlpha" type="matrix"
-                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                        <feOffset dy="3" />
-                                        <feGaussianBlur stdDeviation="4" />
-                                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
-                                        <feBlend mode="normal" in2="effect1_dropShadow_597_1525"
-                                            result="effect2_dropShadow_597_1525" />
-                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_597_1525"
-                                            result="shape" />
-                                    </filter>
-                                </defs>
-                            </svg>
+                            <div class="toggle" id="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -459,6 +285,17 @@ if (isset ($_SESSION["user_id"])) {
             <?php endif; ?>
         </div>
     </div>
+
+    <script>
+        const toggles = document.querySelectorAll('.toggle');
+
+        toggles.forEach(function (toggle) {
+            toggle.addEventListener("click", function (e) {
+                this.classList.toggle('active');
+            });
+        });
+
+    </script>
 </body>
 
 </html>
