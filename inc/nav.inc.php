@@ -7,28 +7,21 @@
         <div class="menu">
             <a href="./dashboard.php">
                 <div>
-                    <img class="<?php echo ($current_page == 'home') ? 'homeItem active' : 'homeItem'; ?>"
-                        src="assets/images/Home.svg" alt="homeIcon">
+                    <img class="<?php echo ($current_page == 'dashboard') ? 'dashboardItem active' : 'dashboardItem'; ?>"
+                        src="assets/images/Dashboard.svg" alt="dashboardIcon">
                     <p>Home</p>
-                </div>
-            </a>
-            <a href="./account.php">
-                <div>
-                    <img class="<?php echo ($current_page == 'account') ? 'accountItem active' : 'accountItem'; ?>"
-                        src="assets/images/Account.svg" alt="accountIcon">
-                    <p>Account</p>
                 </div>
             </a>
             <a href="./roadmap.php">
                 <div>
-                    <img class="<?php echo ($current_page == 'process') ? 'processItem active' : 'processItem'; ?>"
-                        src="assets/images/Process.svg" alt="processIcon">
+                    <img class="<?php echo ($current_page == 'roadmap') ? 'roadmapItem active' : 'roadmapItem'; ?>"
+                        src="assets/images/Process.svg" alt="roadmapIcon">
                     <p>Stappenplan</p>
                 </div>
             </a>
             <a href="./stats.php">
                 <div>
-                    <img class="<?php echo ($current_page == 'statistics') ? 'statsItem active' : 'statsItem'; ?>"
+                    <img class="<?php echo ($current_page == 'stats') ? 'statsItem active' : 'statsItem'; ?>"
                         src="assets/images/Stats.svg" alt="statsIcon">
                     <p>Statistieken</p>
                 </div>

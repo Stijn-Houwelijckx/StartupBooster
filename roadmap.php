@@ -26,7 +26,7 @@ try {
     $tasks = [];
 }
 
-$current_page = 'tasks';
+$current_page = 'roadmap';
 ?>
 
 <!DOCTYPE html>

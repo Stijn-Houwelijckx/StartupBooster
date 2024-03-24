@@ -8,7 +8,7 @@ try {
     error_log('Database error: ' . $e->getMessage());
 }
 
-$current_page = 'statistieken';
+$current_page = 'stats';
 ?>
 
 <!DOCTYPE html>

@@ -1024,8 +1024,12 @@ a.active {
   width: 100%;
 }
 
+#settings .elements .border {
+  border-left: 1px solid var(--lightBlue);
+}
+
 #settings .elements .option .border {
-  border-top: 1px solid rgba(0, 0, 0, 0.4);
+  border-top: 1px solid var(--lightBlue);
   width: 100%;
 }
 

@@ -9,18 +9,24 @@ ini_set('display_errors', 1);
 ini_set('error_log', 'error.log');
 
 session_start();
-$current_page = 'account';
+$current_page = 'settings';
 
 $currentStep = "persoonlijkeGegevens";
+
+$pages = array(
+    "persoonlijkeGegevens" => "Persoonlijke gegevens",
+    "veiligheid" => "Veiligheid",
+    "meldingen" => "Meldingen",
+    "account" => "Account"
+);
+
 $error;
 
 if (isset ($_GET['page'])) {
     $currentStep = $_GET['page'];
 }
 
-
-
-$success = false; // Initialize $success variable
+$success = false;
 
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
@@ -91,12 +97,16 @@ if (isset ($_SESSION["user_id"])) {
         <h1>Instellingen</h1>
         <div class="elements">
             <div class="navigation">
-                <a href='settings.php?page=persoonlijkeGegevens' class="active step-link"
-                    onclick="setActiveLink(event)">Persoonlijke gegevens</a>
-                <a href='settings.php?page=veiligheid' class="step-link" onclick="setActiveLink(event)">Veiligheid</a>
-                <a href='settings.php?page=meldingen' class="step-link" onclick="setActiveLink(event)">Meldingen</a>
-                <a href='settings.php?page=account' class="step-link" onclick="setActiveLink(event)">Account</a>
+                <?php
+                foreach ($pages as $page => $text) {
+                    if ($currentStep == $page) {
+                        echo "<a href='settings.php?page=$page' class='active'>$text</a>";
+                    } else {
+                        echo "<a href='settings.php?page=$page'>$text</a>";
+                    }
+                } ?>
             </div>
+            <p class="border"></p>
             <?php if ($currentStep == "persoonlijkeGegevens"): ?>
                 <div class="option">
                     <h2>Persoonlijke gegevens</h2>
@@ -449,17 +459,6 @@ if (isset ($_SESSION["user_id"])) {
             <?php endif; ?>
         </div>
     </div>
-
-    <script>
-        function setActiveLink(event) {
-            event.preventDefault();
-            var links = document.querySelectorAll('.step-link');
-            links.forEach(function (link) {
-                link.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-    </script>
 </body>
 
 </html>

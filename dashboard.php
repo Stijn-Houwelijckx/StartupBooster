@@ -1,5 +1,5 @@
 <?php
-$current_page = 'home';
+$current_page = 'dashboard';
 ?>
 
 <!DOCTYPE html>
