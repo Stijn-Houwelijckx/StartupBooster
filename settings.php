@@ -44,34 +44,58 @@ if (isset ($_SESSION["user_id"])) {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = new User();
 
-        $firstName = filter_input(INPUT_POST, 'firstname');
-        $lastName = filter_input(INPUT_POST, 'lastname');
-        $statute = filter_input(INPUT_POST, 'statute');
-        $sector = filter_input(INPUT_POST, 'sector');
-        $phone = filter_input(INPUT_POST, 'phone');
-        $street = filter_input(INPUT_POST, 'street');
-        $houseNumber = filter_input(INPUT_POST, 'houseNumber');
-        $zipCode = filter_input(INPUT_POST, 'zipCode');
-        $city = filter_input(INPUT_POST, 'city');
+        if (isset ($_POST["firstname"])) {
+            $firstName = filter_input(INPUT_POST, 'firstname');
+            $lastName = filter_input(INPUT_POST, 'lastname');
+            $statute = filter_input(INPUT_POST, 'statute');
+            $sector = filter_input(INPUT_POST, 'sector');
+            $phone = filter_input(INPUT_POST, 'phone');
+            $street = filter_input(INPUT_POST, 'street');
+            $houseNumber = filter_input(INPUT_POST, 'houseNumber');
+            $zipCode = filter_input(INPUT_POST, 'zipCode');
+            $city = filter_input(INPUT_POST, 'city');
 
-        $user->setFirstname($firstName);
-        $user->setLastname($lastName);
-        $user->setStatute($statute);
-        $user->setStatute($sector);
-        $user->setPhoneNumber($phone);
-        $user->setStreet($street);
-        $user->setHouseNumber($houseNumber);
-        $user->setZipCode($zipCode);
-        $user->setCity($city);
+            $user->setFirstname($firstName);
+            $user->setLastname($lastName);
+            $user->setStatute($statute);
+            $user->setStatute($sector);
+            $user->setPhoneNumber($phone);
+            $user->setStreet($street);
+            $user->setHouseNumber($houseNumber);
+            $user->setZipCode($zipCode);
+            $user->setCity($city);
 
-        if ($user->updateUser($pdo, $_SESSION["user_id"])) {
-            $success = true;
-            header("Location: settings.php?profileUpdate=success");
-            exit();
-        } else {
-            header("Location: settings.php?profileUpdate=error");
-            exit();
+            if ($user->updateUser($pdo, $_SESSION["user_id"])) {
+                $success = true;
+                header("Location: settings.php?profileUpdate=success");
+                exit();
+            } else {
+                header("Location: settings.php?profileUpdate=error");
+                exit();
+            }
         }
+
+        if (isset ($_POST["two_step_verification"])) {
+            $two_step_verification = filter_input(FILTER_VALIDATE_BOOLEAN, 'two_step_verification');
+            $sms_set = filter_input(FILTER_VALIDATE_BOOLEAN, 'sms_set');
+
+            $user->setTwo_step_verification($two_step_verification);
+            $user->setSms_set($sms_set);
+
+        }
+
+        if (isset ($_POST["security_alerts"])) {
+            $security_alerts = filter_input(FILTER_VALIDATE_BOOLEAN, 'security_alerts');
+            $email_notifications = filter_input(FILTER_VALIDATE_BOOLEAN, 'email_notifications');
+            $sms_notification = filter_input(FILTER_VALIDATE_BOOLEAN, 'sms_notification');
+            $device_notification_alerts = filter_input(FILTER_VALIDATE_BOOLEAN, 'device_notification_alerts');
+
+            $user->setSecurity_alerts($security_alerts);
+            $user->setEmail_notifications($email_notifications);
+            $user->setSms_notification($sms_notification);
+            $user->setDevice_notification_alerts($device_notification_alerts);
+        }
+
     }
 } else {
     header("Location: login.php?error=notLoggedIn");
@@ -148,8 +172,9 @@ if (isset ($_SESSION["user_id"])) {
                                 </div>
                                 <div class="field">
                                     <label for="phone">Telefoonnummer</label>
-                                    <input type="text" name="phone" id="phone" placeholder="+32476 75 67 36"
-                                        value="<?php echo htmlspecialchars($user["phoneNumber"]); ?>">
+                                    <input type="text" name="phone" id="phone" placeholder="+32476 75 67 36" value="<?php if ($user["phoneNumber"] != null) {
+                                        echo htmlspecialchars($user["phoneNumber"]);
+                                    } ?>">
                                 </div>
                                 <div class="field">
                                     <label for="statute">Statuut</label>
