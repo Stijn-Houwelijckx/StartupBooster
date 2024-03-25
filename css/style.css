@@ -848,6 +848,145 @@ a.active {
   padding-left: 80px;
 }
 
+#stats .elements {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+#stats .top,
+#stats .left .overview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#stats .left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#stats .left .overview .elements,
+#stats .left .rapport .legenda {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+#stats .left .overview .elements .element {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  max-width: 100%;
+  height: 133px;
+}
+
+#stats .left .overview .elements .element .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+#stats .left .overview .elements .element .price {
+  font-weight: bold;
+}
+
+#stats .left .overview .elements .element .increaseRow,
+#stats .left .rapport .legenda .item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+#stats .left .overview .elements .element .increaseRow.green,
+#stats .left .overview .elements .element .increaseRow.green p {
+  color: green;
+}
+
+#stats .left .overview .elements .element .increaseRow.red,
+#stats .left .overview .elements .element .increaseRow.red p {
+  color: red;
+}
+
+#stats .left .rapport {
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 16px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#stats .left .rapport .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+#stats .left .rapport .row select {
+  background-color: transparent;
+  border: none;
+}
+
+#stats .left .figure {
+  display: flex;
+  flex-direction: row;
+}
+
+#stats .left .figure .yAs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-end;
+  padding-right: 16px;
+}
+
+#stats .left .figure .figureRight {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+#stats .left .figure .figureRight .graphic {
+  background-color: var(--gray);
+  height: 100%;
+  border-left: 1px solid var(--lightBlue);
+}
+
+#stats .left .figure .figureRight .xAs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 76px;
+}
+
+#stats .left .rapport .legenda .item .circle {
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+}
+
+#stats .left .rapport .legenda .item .circle.blue {
+  background-color: var(--blue);
+}
+
+#stats .left .rapport .legenda .item .circle.green {
+  background-color: green;
+}
+
 /* ---- subsidies ---- */
 #subsidies,
 #subsidie-details {
@@ -1306,6 +1445,12 @@ a.active {
   /* ---- account ---- */
   #account .gegevens .fields .field {
     width: 100%;
+  }
+
+  /* ---- stats ---- */
+  #stats .elements .left,
+  #stats .elements .right {
+    width: 50%;
   }
 
   /* ---- helpdesk ---- */
