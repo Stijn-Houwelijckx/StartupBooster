@@ -72,7 +72,7 @@ $current_page = 'subsidie_details';
         </div>
         <div class="image"
             style="background-image: url('./assets/images/subsidies/tegel<?php echo htmlspecialchars($subsidie["id"]); ?>.jpg')">
-            ></div>
+        </div>
     </div>
 </body>
 

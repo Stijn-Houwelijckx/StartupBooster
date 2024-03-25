@@ -39,6 +39,17 @@ if (isset ($_SESSION["user_id"])) {
     <?php include_once ('inc/nav.inc.php'); ?>
     <div id="dashboard">
         <h1>Mijn dashboard</h1>
+        <div class="notifications">
+            <h2>Meldingen</h2>
+            <div class="notification">
+                <p>U heeft 3 ongelezen berichten in ‘Chat’.</p>
+                <i class="fa fa-angle-right"></i>
+            </div>
+            <div class="notification error">
+                <p>U heeft 1 opmerking bij het aanvragen van uw statuut als zelfstandige.</p>
+                <i class="fa fa-angle-right"></i>
+            </div>
+        </div>
     </div>
 </body>
 

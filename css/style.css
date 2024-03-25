@@ -453,6 +453,28 @@ a.active {
   padding-left: 80px;
 }
 
+#dashboard .notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#dashboard .notifications .notification {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 16px;
+  border-radius: 16px;
+}
+
+#dashboard .notifications .notification.error,
+#dashboard .notifications .notification.error p {
+  color: red;
+}
+
 /* ---- account ---- */
 #account {
   display: flex;
@@ -777,24 +799,35 @@ a.active {
   padding-left: 80px;
 }
 
-#task-details .text {
+#task-details .top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+}
+
+#task-details .top i {
+  background-color: var(--lightBlue);
+  padding: 8px;
+  font-size: 24px;
+  width: 24px;
+  height: 100%;
+  text-align: center;
+  border-radius: 50%;
+}
+
+#task-details .elements {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-#task-details .text .description,
-#task-details .text .summary {
+#task-details .elements .text {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  justify-content: start;
+  align-items: flex-start;
   gap: 16px;
-}
-
-#task-details .text .summary {
-  padding: 16px;
-  background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
 }
 
 #task-details .image {
@@ -1357,6 +1390,11 @@ a.active {
 
   #roadmap .tasks .task:nth-child(odd) {
     transform: translateX(calc(-100% + (-57px)));
+  }
+
+  #task-details .elements {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   #settings .elements .option .info .profilePicture {
