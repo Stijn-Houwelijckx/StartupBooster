@@ -21,12 +21,10 @@ $pages = array(
 );
 
 $error;
-
+$success;
 if (isset ($_GET['page'])) {
     $currentStep = $_GET['page'];
 }
-
-$success = false;
 
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
@@ -43,35 +41,33 @@ if (isset ($_SESSION["user_id"])) {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = new User();
 
-        if (isset ($_POST["firstname"])) {
-            $firstName = filter_input(INPUT_POST, 'firstname');
-            $lastName = filter_input(INPUT_POST, 'lastname');
-            $statute = filter_input(INPUT_POST, 'statute');
-            $sector = filter_input(INPUT_POST, 'sector');
-            $phone = filter_input(INPUT_POST, 'phone');
-            $street = filter_input(INPUT_POST, 'street');
-            $houseNumber = filter_input(INPUT_POST, 'houseNumber');
-            $zipCode = filter_input(INPUT_POST, 'zipCode');
-            $city = filter_input(INPUT_POST, 'city');
+        try {
+            if (isset ($_POST["firstname"])) {
+                $firstName = filter_input(INPUT_POST, 'firstname');
+                $lastName = filter_input(INPUT_POST, 'lastname');
+                $statute = filter_input(INPUT_POST, 'statute');
+                $sector = filter_input(INPUT_POST, 'sector');
+                $phone = filter_input(INPUT_POST, 'phone');
+                $street = filter_input(INPUT_POST, 'street');
+                $houseNumber = filter_input(INPUT_POST, 'houseNumber');
+                $zipCode = filter_input(INPUT_POST, 'zipCode');
+                $city = filter_input(INPUT_POST, 'city');
 
-            $user->setFirstname($firstName);
-            $user->setLastname($lastName);
-            $user->setStatute($statute);
-            $user->setSector($sector);
-            $user->setPhoneNumber($phone);
-            $user->setStreet($street);
-            $user->setHouseNumber($houseNumber);
-            $user->setZipCode($zipCode);
-            $user->setCity($city);
+                $user->setFirstname($firstName);
+                $user->setLastname($lastName);
+                $user->setStatute($statute);
+                $user->setSector($sector);
+                $user->setPhoneNumber($phone);
+                $user->setStreet($street);
+                $user->setHouseNumber($houseNumber);
+                $user->setZipCode($zipCode);
+                $user->setCity($city);
 
-            if ($user->updateUser($pdo, $_SESSION["user_id"])) {
-                $success = true;
-                header("Location: settings.php?profileUpdate=success");
-                exit();
-            } else {
-                header("Location: settings.php?profileUpdate=error");
-                exit();
+                $user->updateUser($pdo, $_SESSION["user_id"]);
+                $success = "Uw gegevens zijn successvol aangepast.";
             }
+        } catch (Exception $e) {
+            $error = $e->getMessage();
         }
 
         try {
@@ -81,27 +77,77 @@ if (isset ($_SESSION["user_id"])) {
                 } else {
                     $user->setEmail($_POST["email"]);
                     $user->updateEmail($pdo, $_SESSION["user_id"]);
+                    $success = "Uw emailadres is succesvol veranderd.";
                 }
             }
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
 
-        if (isset ($_POST["two_step_verification"])) {
-            $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
-            $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
 
-            if ($two_step_verification || $sms_set) {
-                if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
-                    $success = true;
-                    header("Location: settings.php?profileUpdate=success");
-                    exit();
+        if (isset ($_POST["old-password"])) {
+            $oldPassword = $_POST["old-password"];
+            $user = User::getUserById($pdo, $_SESSION["user_id"]);
+            $hashedPassword = $user["password"];
+            if (password_verify($oldPassword, $hashedPassword)) {
+                $newPassword = $_POST["new-password"];
+                $confirmNewPassword = $_POST["confirm-new-password"];
+                if ($newPassword === $confirmNewPassword) {
+                    try {
+                        $user = new User();
+                        $user->setPassword($newPassword);
+                        $user->updatePassword($pdo, $_SESSION["user_id"]);
+                        $success = "Uw wachtwoord is successvol veranderd.";
+                    } catch (Exception $e) {
+                        $error = $e->getMessage();
+                    }
                 } else {
-                    header("Location: settings.php?profileUpdate=error");
-                    exit();
+                    $error = "Wachtwoorden komen niet overeen.";
                 }
+            } else {
+                $error = "Oud wachtwoord is onjuist.";
             }
         }
+
+        if (isset ($_POST["password"])) {
+            $password = $_POST["password"];
+            $user = User::getUserById($pdo, $_SESSION["user_id"]);
+            $hashedPassword = $user["password"];
+            if (password_verify($password, $hashedPassword)) {
+
+                if ($newPassword === $confirmNewPassword) {
+                    try {
+                        User::deleteUser($pdo, $_SESSION["user_id"]);
+                        session_unset();
+                        session_destroy();
+                        header("Location: login.php?delete=success");
+                        exit();
+                    } catch (Exception $e) {
+                        $error = $e->getMessage();
+                    }
+                } else {
+                    $error = "Error";
+                }
+            } else {
+                $error = "Wachtwoord is onjuist.";
+            }
+        }
+
+        // if (isset ($_POST["two_step_verification"])) {
+        //     $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
+        //     $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
+
+        //     if ($two_step_verification || $sms_set) {
+        //         if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
+        //             $success = true;
+        //             header("Location: settings.php?profileUpdate=success");
+        //             exit();
+        //         } else {
+        //             header("Location: settings.php?profileUpdate=error");
+        //             exit();
+        //         }
+        //     }
+        // }
     }
 
     // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
@@ -160,10 +206,19 @@ if (isset ($_SESSION["user_id"])) {
         <h1>Instellingen</h1>
         <div class="elements">
             <div class="navigation">
-                <a href='settings.php?page=persoonlijkeGegevens' class='<?php if($currentStep === "persoonlijkeGegevens") {echo "active";} ?>'>Persoonlijke Gegevens</a>
-                <a href='settings.php?page=veiligheid' class='<?php if($currentStep === "veiligheid") {echo "active";} ?>'>Veiligheid</a>
-                <a href='settings.php?page=meldingen' class='<?php if($currentStep === "meldingen") {echo "active";} ?>'>Meldingen</a>
-                <a href='settings.php?page=account' class='<?php if($currentStep === "account" || $currentStep === "EmailWijzigen") {echo "active";} ?>'>Account</a>
+                <a href='settings.php?page=persoonlijkeGegevens' class='<?php if ($currentStep === "persoonlijkeGegevens") {
+                    echo "active";
+                } ?>'>Persoonlijke
+                    Gegevens</a>
+                <a href='settings.php?page=veiligheid' class='<?php if ($currentStep === "veiligheid") {
+                    echo "active";
+                } ?>'>Veiligheid</a>
+                <a href='settings.php?page=meldingen' class='<?php if ($currentStep === "meldingen") {
+                    echo "active";
+                } ?>'>Meldingen</a>
+                <a href='settings.php?page=account' class='<?php if ($currentStep === "account" || $currentStep === "EmailWijzigen" || $currentStep === "WachtwoordWijzigen" || $currentStep === "AccountVerwijderen") {
+                    echo "active";
+                } ?>'>Account</a>
             </div>
             <p class="border"></p>
             <?php if ($currentStep == "persoonlijkeGegevens"): ?>
@@ -174,7 +229,7 @@ if (isset ($_SESSION["user_id"])) {
                         <div class="profilePicture"></div>
                         <div class="text">
                             <h3>
-                                <?php echo htmlspecialchars($user["firstname"]) . " " . htmlspecialchars($user["lastname"]); ?>
+                                <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo htmlspecialchars($user["firstname"]) . " " . htmlspecialchars($user["lastname"]); ?>
                             </h3>
                             <p>
                                 <?php
@@ -187,6 +242,11 @@ if (isset ($_SESSION["user_id"])) {
                             </p>
                         </div>
                     </div>
+                    <?php if (isset ($success)): ?>
+                            <p class="alert success">
+                                <?php echo $success ?>
+                            </p>
+                        <?php endif; ?>
                     <form action="" method="post">
                         <div class="extraInfo">
                             <h3>Persoonlijke gegevens</h3>
@@ -254,11 +314,13 @@ if (isset ($_SESSION["user_id"])) {
                                 </div>
                             </div>
                         </div>
-                        <?php if ($success): ?>
-                            <p class="success">Uw gegevens zijn succesvol aangepast.</p>
-                        <?php endif ?>
                         <button type="submit" class="btn" id="btnSave">Bewaren</button>
                     </form>
+                    <?php if (isset ($error)): ?>
+                        <p class="alert">
+                            <?php echo $error ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
             <?php if ($currentStep == "veiligheid"): ?>
@@ -346,25 +408,31 @@ if (isset ($_SESSION["user_id"])) {
                         <h3>Email wijzigen</h3>
                         <div class="row">
                             <p>Email wijzigen</p>
-                            <a href="settings.php?page=EmailWijzigen" class="btn email">Email wijzigen</a>
+                            <a href="settings.php?page=EmailWijzigen" class="btn">Email wijzigen</a>
                         </div>
                         <h3>Wachtwoord wijzigen</h3>
                         <div class="row">
                             <p>Wachtwoord wijzigen</p>
-                            <a href="#" class="btn">Wachtwoord wijzigen</a>
+                            <a href="settings.php?page=WachtwoordWijzigen" class="btn">Wachtwoord wijzigen</a>
                         </div>
                         <h3>Account verwijderen</h3>
                         <div class="row">
                             <p>Account verwijderen</p>
-                            <a href="#" class="btn red">Account verwijderen</a>
+                            <a href="settings.php?page=AccountVerwijderen" class="btn red">Account verwijderen</a>
                         </div>
                     </div>
                 </div>
             <?php endif; ?>
+
             <?php if ($currentStep == "EmailWijzigen"): ?>
                 <div class="option">
                     <h2>E-mailadres wijzigen</h2>
                     <p class="border"></p>
+                    <?php if (isset ($success)): ?>
+                        <p class="alert success">
+                            <?php echo $success ?>
+                        </p>
+                    <?php endif; ?>
                     <form action="" method="POST">
                         <div class="field">
                             <label for="email">Uw nieuwe e-mailadres</label>
@@ -382,10 +450,88 @@ if (isset ($_SESSION["user_id"])) {
                 </div>
             <?php endif; ?>
 
+            <?php if ($currentStep == "WachtwoordWijzigen"): ?>
+                <div class="option">
+                    <h2>Wachtwoord wijzigen</h2>
+                    <p class="border"></p>
+                    <?php if (isset ($success)): ?>
+                        <p class="alert success">
+                            <?php echo $success ?>
+                        </p>
+                    <?php endif; ?>
+                    <form action="" method="POST">
+                        <div class="field">
+                            <label for="old-password">Uw oud wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="old-password" name="old-password" placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-old-password"
+                                        onclick="togglePasswordVisibility('old-password', 'toggle-old-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="new-password">Nieuw wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="new-password" name="new-password" placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-new-password"
+                                        onclick="togglePasswordVisibility('new-password', 'toggle-new-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="confirm-new-password">Herhaal nieuw wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="confirm-new-password" name="confirm-new-password"
+                                        placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-confirm-new-password"
+                                        onclick="togglePasswordVisibility('confirm-new-password', 'toggle-confirm-new-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Bewaren</button>
+                    </form>
+                    <?php if (isset ($error)): ?>
+                        <p class="alert">
+                            <?php echo $error ?>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
 
+            <?php if ($currentStep == "AccountVerwijderen"): ?>
+                <div class="option">
+                    <h2>Account verwijderen</h2>
+                    <p class="border"></p>
+                    <?php if (isset ($success)): ?>
+                        <p class="alert success">
+                            <?php echo $success ?>
+                        </p>
+                    <?php endif; ?>
+                    <form action="" method="POST">
+                        <div class="field">
+                            <label for="password">Uw wachtwoord</label>
+                            <div class="passwordInput">
+                                <div class="row">
+                                    <input type="password" id="password" name="password" placeholder="••••••••">
+                                    <i class="fa fa-eye-slash" id="toggle-password"
+                                        onclick="togglePasswordVisibility('password', 'toggle-password')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn red">Verwijderen</button>
+                    </form>
+                    <?php if (isset ($error)): ?>
+                        <p class="alert">
+                            <?php echo $error ?>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const toggles = document.querySelectorAll('.toggle');
@@ -396,6 +542,22 @@ if (isset ($_SESSION["user_id"])) {
                 });
             });
         });
+
+        function togglePasswordVisibility(inputId, iconId) {
+            var input = document.getElementById(inputId);
+            var icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            }
+        }
+
+
     </script>
 </body>
 

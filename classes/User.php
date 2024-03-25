@@ -572,6 +572,19 @@ class User
         }
     }
 
+    public function updatePassword(PDO $pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :user_id");
+            $stmt->bindParam(':password', $this->password);
+            $stmt->bindParam(':user_id', $user_id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
     public static function getUserByEmail(PDO $pdo, string $email)
     {
         try {
@@ -590,6 +603,19 @@ class User
         try {
             $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public static function deleteUser(PDO $pdo, int $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM users WHERE id = :user_id;");
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

@@ -266,6 +266,9 @@ a.active {
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 8px;
   gap: 0 !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .passwordInput .row input {
@@ -403,16 +406,10 @@ a.active {
 
 #signUp .text form .row div input,
 #signUp .text form .column input {
-  padding: 4px 0px;
+  padding: 4px 8px;
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 8px;
   background-color: transparent;
-  width: 100%;
-}
-
-#signUp .text form .row div input::placeholder,
-#signUp .text form .column input::placeholder {
-  padding: 8px;
 }
 
 #signUp .text form .column input {
@@ -1148,7 +1145,8 @@ a.active {
   background-color: var(--lightBlue);
 }
 
-#settings .option .account .row .btn.red {
+#settings .option .account .row .btn.red,
+#settings .elements .option .btn.red {
   color: #d34848;
   border: 1px solid #d34848;
   background-color: rgba(211, 72, 72, 0.2);
@@ -1171,7 +1169,7 @@ a.active {
   width: 100%;
 }
 
-.toggle {
+#settings .option .field .toggle {
   width: 52px;
   height: 32px;
   background-color: #dadada;
