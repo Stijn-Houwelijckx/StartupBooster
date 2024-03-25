@@ -134,55 +134,34 @@ if (isset ($_SESSION["user_id"])) {
             }
         }
 
-        // if (isset ($_POST["two_step_verification"])) {
-        //     $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
-        //     $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
+        if (isset ($_POST["twoFactorAuthentication"]) || isset ($_POST["smsAuthentication"])) {
+            $user = new User();
 
-        //     if ($two_step_verification || $sms_set) {
-        //         if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
-        //             $success = true;
-        //             header("Location: settings.php?profileUpdate=success");
-        //             exit();
-        //         } else {
-        //             header("Location: settings.php?profileUpdate=error");
-        //             exit();
-        //         }
-        //     }
-        // }
+            try {
+                $user->setTwoFactorAuthentication($_POST["twoFactorAuthentication"]);
+                $user->setSmsAuthentication($_POST["smsAuthentication"]);
+
+                $user->updateSecurity($pdo, $_SESSION["user_id"]);
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+        }
+
+        if (isset ($_POST["securityAlerts"]) || isset ($_POST["emailNotifications"]) || isset ($_POST["smsNotifications"]) || isset ($_POST["deviceNotificationAlerts"])){
+            $user = new User();
+
+            try {
+                $user->setSecurityAlerts($_POST["securityAlerts"]);
+                $user->setEmailNotifications($_POST["emailNotifications"]);
+                $user->setSmsNotifications($_POST["smsNotifications"]);
+                $user->setDeviceNotificationAlerts($_POST["deviceNotificationAlerts"]);
+
+                $user->updateNotifications($pdo, $_SESSION["user_id"]);
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+        }
     }
-
-    // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
-    // if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    //     if ($currentStep == "veiligheid") {
-    //         $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
-    //         $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
-
-    //         if ($two_step_verification || $sms_set) {
-    //             if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
-    //                 $success = true;
-    //                 header("Location: settings.php?profileUpdate=success");
-    //                 exit();
-    //             } else {
-    //                 header("Location: settings.php?profileUpdate=error");
-    //                 exit();
-    //             }
-    //         }
-    //     }
-
-
-    // }
-
-    // if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    //     if ($currentStep == "EmailWijzigen") {
-    //         if (User::getUserByEmail((Db::getInstance()), $_POST["email"])) {
-    //             throw new Exception("Dit e-mailadres is al in gebruik.");
-    //         } else {
-    //             $user->setEmail($_POST["email"]);
-    //             var_dump($user->getEmail());
-    //         }
-    //     }
-    // }
-
 } else {
     header("Location: login.php?error=notLoggedIn");
     exit();
@@ -315,7 +294,7 @@ if (isset ($_SESSION["user_id"])) {
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn" id="btnSave">Bewaren</button>
+                        <button type="submit" class="btn" id="btnSaveInfo">Bewaren</button>
                     </form>
                     <?php if (isset ($error)): ?>
                         <p class="alert">
@@ -334,32 +313,26 @@ if (isset ($_SESSION["user_id"])) {
                             <!-- Other form fields -->
                             <div class="row">
                                 <p>Tweefactorauthenticatie</p>
-                                <label for="two_step_verification">
-                                    <div class="toggle <?php if (is_array($user) && isset ($user['two_step_verification']) && $user['two_step_verification'] == 1) {
-                                        echo "active";
-                                    } ?>" id="toggle1">
+                                <!-- <label for="twoFactorAuthentication"> -->
+                                    <div class="toggle auth <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["twoFactorAuthentication"] == 1) ? "active" : ""; ?>" onclick="toggleCheckbox('twoFactorAuthentication')">
                                         <div class="toggle-handle"></div>
                                     </div>
-                                </label>
-                                <input hidden class="input_security_two_step" type="checkbox" name="two_step_verification"
-                                    id="two_step_verification" <?php if (is_object($user) && $user->getTwo_step_verification() === true) {
-                                        echo "checked";
-                                    } ?>>
+                                <!-- </label> -->
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["twoFactorAuthentication"] == 0) ? "checked" : ""; ?> class="twoFactorAuthentication" type="checkbox" name="twoFactorAuthentication" id="twoFactorAuthenticationOff" value="0">
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["twoFactorAuthentication"] == 1) ? "checked" : ""; ?> class="twoFactorAuthentication" type="checkbox" name="twoFactorAuthentication" id="twoFactorAuthentication" value="1">
                             </div>
+
                             <div class="row">
                                 <p>Sms authenticatie</p>
-                                <label for="sms_set">
-                                    <div class="toggle <?php if (is_array($user) && isset ($user['sms_set']) && $user['sms_set'] == 1) {
-                                        echo "active";
-                                    } ?>" id="toggle2">
+                                <!-- <label for="smsAuthentication"> -->
+                                    <div class="toggle auth <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["smsAuthentication"] == 1) ? "active" : ""; ?>" onclick="toggleCheckbox('smsAuthentication')">
                                         <div class="toggle-handle"></div>
                                     </div>
-                                </label>
-                                <input hidden class="input_security_sms" type="checkbox" name="sms_set" id="sms_set" <?php if (is_object($user) && $user->getSms_set() === true) {
-                                    echo "checked";
-                                } ?>>
+                                <!-- </label> -->
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["smsAuthentication"] == 0) ? "checked" : ""; ?> class="smsAuthentication" type="checkbox" name="smsAuthentication" id="smsAuthenticationOff" value="0">
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["smsAuthentication"] == 1) ? "checked" : ""; ?> class="smsAuthentication" type="checkbox" name="smsAuthentication" id="smsAuthentication" value="1">
                             </div>
-                            <button type="submit" class="btn" id="btnSave">Bewaren</button>
+                            <button hidden type="submit" class="btn" id="btnSaveAuth">Bewaren</button>
                         </form>
 
                     </div>
@@ -371,32 +344,52 @@ if (isset ($_SESSION["user_id"])) {
                     <h2>Meldingen</h2>
                     <p class="border"></p>
                     <div class="notifications">
-                        <!-- <form action="" method="POST"> -->
-                        <div class="row">
-                            <p>Beveiligingswaarschuwingen</p>
-                            <div class="toggle" id="toggle3">
-                                <div class="toggle-handle"></div>
+                        <form action="" method="POST">
+                            <div class="row">
+                                <p>Beveiligingswaarschuwingen</p>
+
+                                    <div class="toggle notify <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["securityAlerts"] == 1) ? "active" : ""; ?>" onclick="toggleCheckbox('securityAlerts')">
+                                        <div class="toggle-handle"></div>
+                                    </div>
+
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["securityAlerts"] == 0) ? "checked" : ""; ?> class="securityAlerts" type="checkbox" name="securityAlerts" id="securityAlertsOff" value="0">
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["securityAlerts"] == 1) ? "checked" : ""; ?> class="securityAlerts" type="checkbox" name="securityAlerts" id="securityAlerts" value="1">
                             </div>
-                        </div>
-                        <div class="row">
-                            <p>Email meldingen</p>
-                            <div class="toggle" id="toggle4">
-                                <div class="toggle-handle"></div>
+
+                            <div class="row">
+                                <p>Email meldingen</p>
+
+                                    <div class="toggle notify <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["emailNotifications"] == 1) ? "active" : ""; ?>" onclick="toggleCheckbox('emailNotifications')">
+                                        <div class="toggle-handle"></div>
+                                    </div>
+
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["emailNotifications"] == 0) ? "checked" : ""; ?> class="emailNotifications" type="checkbox" name="emailNotifications" id="emailNotificationsOff" value="0">
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["emailNotifications"] == 1) ? "checked" : ""; ?> class="emailNotifications" type="checkbox" name="emailNotifications" id="emailNotifications" value="1">
                             </div>
-                        </div>
-                        <div class="row">
-                            <p>SMS-melding</p>
-                            <div class="toggle" id="toggle5">
-                                <div class="toggle-handle"></div>
+
+                            <div class="row">
+                                <p>SMS-meldingen</p>
+
+                                    <div class="toggle notify <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["smsNotifications"] == 1) ? "active" : ""; ?>" onclick="toggleCheckbox('smsNotifications')">
+                                        <div class="toggle-handle"></div>
+                                    </div>
+
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["smsNotifications"] == 0) ? "checked" : ""; ?> class="smsNotifications" type="checkbox" name="smsNotifications" id="smsNotificationsOff" value="0">
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["smsNotifications"] == 1) ? "checked" : ""; ?> class="smsNotifications" type="checkbox" name="smsNotifications" id="smsNotifications" value="1">
                             </div>
-                        </div>
-                        <div class="row">
-                            <p>Waarschuwingen apparaat aanmelden</p>
-                            <div class="toggle" id="toggle6">
-                                <div class="toggle-handle"></div>
+
+                            <div class="row">
+                                <p>Waarschuwing apparaat aanmelden</p>
+
+                                    <div class="toggle notify <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["deviceNotificationAlerts"] == 1) ? "active" : ""; ?>" onclick="toggleCheckbox('deviceNotificationAlerts')">
+                                        <div class="toggle-handle"></div>
+                                    </div>
+
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["deviceNotificationAlerts"] == 0) ? "checked" : ""; ?> class="deviceNotificationAlerts" type="checkbox" name="deviceNotificationAlerts" id="deviceNotificationAlertsOff" value="0">
+                                <input hidden <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo ($user["deviceNotificationAlerts"] == 1) ? "checked" : ""; ?> class="deviceNotificationAlerts" type="checkbox" name="deviceNotificationAlerts" id="deviceNotificationAlerts" value="1">
                             </div>
-                        </div>
-                        <!-- </form> -->
+                            <button hidden type="submit" class="btn" id="btnSaveNotify">Bewaren</button>
+                        </form>
                     </div>
                 </div>
             <?php endif; ?>
@@ -535,14 +528,37 @@ if (isset ($_SESSION["user_id"])) {
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const toggles = document.querySelectorAll('.toggle');
+            const togglesAuth = document.querySelectorAll('.toggle.auth');
+            const btnSaveAuth = document.getElementById('btnSaveAuth');
 
-            toggles.forEach(function (toggle) {
+            togglesAuth.forEach(function (toggle) {
                 toggle.addEventListener("click", function (e) {
                     this.classList.toggle('active');
+                    btnSaveAuth.click();
                 });
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const togglesNotify = document.querySelectorAll('.toggle.notify');
+            const btnSaveNotify = document.getElementById('btnSaveNotify');
+
+            togglesNotify.forEach(function (toggle) {
+                toggle.addEventListener("click", function (e) {
+                    this.classList.toggle('active');
+                    btnSaveNotify.click();
+                });
+            });
+        });
+
+        function toggleCheckbox(id) {
+            var checkboxes = document.querySelectorAll('.' + id);
+            
+            // Iterate through all checkboxes with the given class
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = !checkbox.checked;
+            });
+        }
 
         function togglePasswordVisibility(inputId, iconId) {
             var input = document.getElementById(inputId);
