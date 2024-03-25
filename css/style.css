@@ -1107,13 +1107,14 @@ a.active {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 36px;
 }
 
 #settings .option .extraInfo .fields .field {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 25%;
 }
 
 #settings .option .extraInfo .fields .field input {
@@ -1206,7 +1207,7 @@ a.active {
   width: 100%;
 }
 
-#settings .option .field .toggle {
+#settings .option .toggle {
   width: 52px;
   height: 32px;
   background-color: #dadada;
