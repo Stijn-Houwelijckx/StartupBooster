@@ -14,12 +14,12 @@ class User
     private $city;
     private $phoneNumber;
     private string $password;
-    private bool $twoStepAuthentication;
-    private bool $smsAuthentication;
-    private bool $security_alerts;
-    private bool $email_notifications;
-    private bool $sms_notification;
-    private bool $device_notification_alerts;
+    private int $twoFactorAuthentication;
+    private int $smsAuthentication;
+    private int $securityAlerts;
+    private int $emailNotifications;
+    private int $smsNotifications;
+    private int $deviceNotificationAlerts;
 
     /**
      * Get the value of firstname
@@ -340,21 +340,21 @@ class User
     }
 
     /**
-     * Get the value of twoStepAuthentication
+     * Get the value of twoFactorAuthentication
      */
-    public function getTwoStepAuthentication()
+    public function getTwoFactorAuthentication()
     {
-        return $this->twoStepAuthentication;
+        return $this->twoFactorAuthentication;
     }
 
     /**
-     * Set the value of twoStepAuthentication
+     * Set the value of twoFactorAuthentication
      *
      * @return  self
      */
-    public function setTwoStepAuthentication($twoStepAuthentication)
+    public function setTwoFactorAuthentication($twoFactorAuthentication)
     {
-        $this->twoStepAuthentication = $twoStepAuthentication;
+        $this->twoFactorAuthentication = $twoFactorAuthentication;
 
         return $this;
     }
@@ -379,82 +379,82 @@ class User
         return $this;
     }
 
-    /**
-     * Get the value of security_alerts
-     */
-    public function getSecurity_alerts()
+        /**
+     * Get the value of securityAlerts
+     */ 
+    public function getSecurityAlerts()
     {
-        return $this->security_alerts;
+        return $this->securityAlerts;
     }
 
     /**
-     * Set the value of security_alerts
+     * Set the value of securityAlerts
      *
      * @return  self
-     */
-    public function setSecurity_alerts($security_alerts)
+     */ 
+    public function setSecurityAlerts($securityAlerts)
     {
-        $this->security_alerts = $security_alerts;
+        $this->securityAlerts = $securityAlerts;
 
         return $this;
     }
 
     /**
-     * Get the value of email_notifications
-     */
-    public function getEmail_notifications()
+     * Get the value of emailNotifications
+     */ 
+    public function getEmailNotifications()
     {
-        return $this->email_notifications;
+        return $this->emailNotifications;
     }
 
     /**
-     * Set the value of email_notifications
+     * Set the value of emailNotifications
      *
      * @return  self
-     */
-    public function setEmail_notifications($email_notifications)
+     */ 
+    public function setEmailNotifications($emailNotifications)
     {
-        $this->email_notifications = $email_notifications;
+        $this->emailNotifications = $emailNotifications;
 
         return $this;
     }
 
     /**
-     * Get the value of sms_notification
-     */
-    public function getSms_notification()
+     * Get the value of smsNotifications
+     */ 
+    public function getSmsNotifications()
     {
-        return $this->sms_notification;
+        return $this->smsNotifications;
     }
 
     /**
-     * Set the value of sms_notification
+     * Set the value of smsNotifications
      *
      * @return  self
-     */
-    public function setSms_notification($sms_notification)
+     */ 
+    public function setSmsNotifications($smsNotifications)
     {
-        $this->sms_notification = $sms_notification;
+        $this->smsNotifications = $smsNotifications;
 
         return $this;
     }
 
     /**
-     * Get the value of device_notification_alerts
-     */
-    public function getDevice_notification_alerts()
+     * Get the value of deviceNotificationAlerts
+     */ 
+    public function getDeviceNotificationAlerts()
     {
-        return $this->device_notification_alerts;
+        return $this->deviceNotificationAlerts;
     }
 
     /**
-     * Set the value of device_notification_alerts
+     * Set the value of deviceNotificationAlerts
      *
      * @return  self
-     */
-    public function setDevice_notification_alerts($device_notification_alerts)
+     */ 
+    public function setDeviceNotificationAlerts($deviceNotificationAlerts)
     {
-        $this->device_notification_alerts = $device_notification_alerts;
+        $this->deviceNotificationAlerts = $deviceNotificationAlerts;
 
         return $this;
     }
@@ -519,8 +519,8 @@ class User
     public function updateSecurity(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET twoStepAuthentication = :twoStepAuthentication, smsAuthentication = :smsAuthentication WHERE id = :user_id");
-            $stmt->bindParam(':twoStepAuthentication', $this->twoStepAuthentication);
+            $stmt = $pdo->prepare("UPDATE users SET twoFactorAuthentication = :twoFactorAuthentication, smsAuthentication = :smsAuthentication WHERE id = :user_id");
+            $stmt->bindParam(':twoFactorAuthentication', $this->twoFactorAuthentication);
             $stmt->bindParam(':smsAuthentication', $this->smsAuthentication);
             $stmt->bindParam(':user_id', $user_id);
 
@@ -537,14 +537,14 @@ class User
     }
 
 
-    public function updateNotifications(PDO $pdo, $user_id): bool
+    public function updateNotifications(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET security_alerts = :security_alerts, email_notifications = :email_notifications, sms_notification = :sms_notification, device_notification_alerts = :device_notification_alerts WHERE id = :user_id");
-            $stmt->bindParam(':security_alerts', $security_alerts);
-            $stmt->bindParam(':email_notifications', $email_notifications);
-            $stmt->bindParam(':sms_notification', $sms_notification);
-            $stmt->bindParam(':device_notification_alerts', $device_notification_alerts);
+            $stmt = $pdo->prepare("UPDATE users SET securityAlerts = :securityAlerts, emailNotifications = :emailNotifications, smsNotifications = :smsNotifications, deviceNotificationAlerts = :deviceNotificationAlerts WHERE id = :user_id");
+            $stmt->bindParam(':securityAlerts', $this->securityAlerts);
+            $stmt->bindParam(':emailNotifications', $this->emailNotifications);
+            $stmt->bindParam(':smsNotifications', $this->smsNotifications);
+            $stmt->bindParam(':deviceNotificationAlerts', $this->deviceNotificationAlerts);
             $stmt->bindParam(':user_id', $user_id);
 
             // Controleer of de SQL-instructie met succes is uitgevoerd
