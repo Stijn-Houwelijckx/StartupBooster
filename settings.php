@@ -42,35 +42,33 @@ if (isset ($_SESSION["user_id"])) {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = new User();
 
-        if (isset ($_POST["firstname"])) {
-            $firstName = filter_input(INPUT_POST, 'firstname');
-            $lastName = filter_input(INPUT_POST, 'lastname');
-            $statute = filter_input(INPUT_POST, 'statute');
-            $sector = filter_input(INPUT_POST, 'sector');
-            $phone = filter_input(INPUT_POST, 'phone');
-            $street = filter_input(INPUT_POST, 'street');
-            $houseNumber = filter_input(INPUT_POST, 'houseNumber');
-            $zipCode = filter_input(INPUT_POST, 'zipCode');
-            $city = filter_input(INPUT_POST, 'city');
+        try {
+            if (isset ($_POST["firstname"])) {
+                $firstName = filter_input(INPUT_POST, 'firstname');
+                $lastName = filter_input(INPUT_POST, 'lastname');
+                $statute = filter_input(INPUT_POST, 'statute');
+                $sector = filter_input(INPUT_POST, 'sector');
+                $phone = filter_input(INPUT_POST, 'phone');
+                $street = filter_input(INPUT_POST, 'street');
+                $houseNumber = filter_input(INPUT_POST, 'houseNumber');
+                $zipCode = filter_input(INPUT_POST, 'zipCode');
+                $city = filter_input(INPUT_POST, 'city');
 
-            $user->setFirstname($firstName);
-            $user->setLastname($lastName);
-            $user->setStatute($statute);
-            $user->setSector($sector);
-            $user->setPhoneNumber($phone);
-            $user->setStreet($street);
-            $user->setHouseNumber($houseNumber);
-            $user->setZipCode($zipCode);
-            $user->setCity($city);
+                $user->setFirstname($firstName);
+                $user->setLastname($lastName);
+                $user->setStatute($statute);
+                $user->setSector($sector);
+                $user->setPhoneNumber($phone);
+                $user->setStreet($street);
+                $user->setHouseNumber($houseNumber);
+                $user->setZipCode($zipCode);
+                $user->setCity($city);
 
-            if ($user->updateUser($pdo, $_SESSION["user_id"])) {
-                $success = true;
-                header("Location: settings.php?profileUpdate=success");
-                exit();
-            } else {
-                header("Location: settings.php?profileUpdate=error");
-                exit();
+                $user->updateUser($pdo, $_SESSION["user_id"]);
+                $success = "Uw gegevens zijn successvol aangepast.";
             }
+        } catch (Exception $e) {
+            $error = $e->getMessage();
         }
 
         try {
@@ -135,6 +133,22 @@ if (isset ($_SESSION["user_id"])) {
                 $error = "Wachtwoord is onjuist.";
             }
         }
+
+        // if (isset ($_POST["two_step_verification"])) {
+        //     $two_step_verification = isset ($_POST["two_step_verification"]) ? (bool) $_POST["two_step_verification"] : false;
+        //     $sms_set = isset ($_POST["sms_set"]) ? (bool) $_POST["sms_set"] : false;
+
+        //     if ($two_step_verification || $sms_set) {
+        //         if ($user instanceof User && $user->updateSecurity($pdo, $_SESSION["user_id"], $two_step_verification, $sms_set)) {
+        //             $success = true;
+        //             header("Location: settings.php?profileUpdate=success");
+        //             exit();
+        //         } else {
+        //             header("Location: settings.php?profileUpdate=error");
+        //             exit();
+        //         }
+        //     }
+        // }
     }
 
     // Ensure that $two_step_verification and $sms_set are initialized before calling updateSecurity
@@ -216,7 +230,7 @@ if (isset ($_SESSION["user_id"])) {
                         <div class="profilePicture"></div>
                         <div class="text">
                             <h3>
-                                <?php echo htmlspecialchars($user["firstname"]) . " " . htmlspecialchars($user["lastname"]); ?>
+                                <?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo htmlspecialchars($user["firstname"]) . " " . htmlspecialchars($user["lastname"]); ?>
                             </h3>
                             <p>
                                 <?php
@@ -229,6 +243,11 @@ if (isset ($_SESSION["user_id"])) {
                             </p>
                         </div>
                     </div>
+                    <?php if (isset ($success)): ?>
+                            <p class="alert success">
+                                <?php echo $success ?>
+                            </p>
+                        <?php endif; ?>
                     <form action="" method="post">
                         <div class="extraInfo">
                             <h3>Persoonlijke gegevens</h3>
@@ -296,11 +315,13 @@ if (isset ($_SESSION["user_id"])) {
                                 </div>
                             </div>
                         </div>
-                        <?php if ($success): ?>
-                            <p class="success">Uw gegevens zijn successvol aangepast.</p>
-                        <?php endif ?>
                         <button type="submit" class="btn" id="btnSave">Bewaren</button>
                     </form>
+                    <?php if (isset ($error)): ?>
+                        <p class="alert">
+                            <?php echo $error ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
             <?php if ($currentStep == "veiligheid"): ?>
@@ -312,7 +333,7 @@ if (isset ($_SESSION["user_id"])) {
                         <form action="" method="POST">
                             <!-- Other form fields -->
                             <div class="row">
-                                <p>Tweestapsverificatie</p>
+                                <p>Tweefactorauthenticatie</p>
                                 <label for="two_step_verification">
                                     <div class="toggle <?php if (is_array($user) && isset ($user['two_step_verification']) && $user['two_step_verification'] == 1) {
                                         echo "active";
@@ -326,7 +347,7 @@ if (isset ($_SESSION["user_id"])) {
                                     } ?>>
                             </div>
                             <div class="row">
-                                <p>SMS instellen</p>
+                                <p>Sms authenticatie</p>
                                 <label for="sms_set">
                                     <div class="toggle <?php if (is_array($user) && isset ($user['sms_set']) && $user['sms_set'] == 1) {
                                         echo "active";
