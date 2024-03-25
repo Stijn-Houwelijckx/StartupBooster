@@ -114,7 +114,7 @@ if (isset ($_SESSION["user_id"])) {
                             </div>
                         </div>
                     </div>
-                    <div class=" legenda">
+                    <div class="legenda">
                         <div class="item">
                             <p class="circle blue"></p>
                             <p>Mijn rapport</p>
@@ -127,7 +127,41 @@ if (isset ($_SESSION["user_id"])) {
                 </div>
             </div>
             <div class="right">
-                <div class="customerSatisfactionScore"></div>
+                <div class="background center">
+                    <h2>Klanttevredenheidsscore</h2>
+                    <!-- maak hier een circular percentage chart -->
+                    <div class="circle1">
+                        <h3>70%</h3>
+                        <p>Tevreden klanten</p>
+                    </div>
+                    <div class="legenda">
+                        <div class="item">
+                            <p class="circle blue"></p>
+                            <p>Tevreden</p>
+                        </div>
+                        <div class="item">
+                            <p class="circle gray"></p>
+                            <p>Ontevreden</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="background">
+                    <h2>Meest gestelde vragen</h2>
+                    <div class="questions">
+                        <div class="question">
+                            <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
+                            <i class="fa fa-angle-down"></i>
+                        </div>
+                        <div class="question">
+                            <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
+                            <i class="fa fa-angle-down"></i>
+                        </div>
+                        <div class="question">
+                            <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
+                            <i class="fa fa-angle-down"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
