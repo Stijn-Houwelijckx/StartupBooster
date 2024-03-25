@@ -453,6 +453,28 @@ a.active {
   padding-left: 80px;
 }
 
+#dashboard .notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#dashboard .notifications .notification {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 16px;
+  border-radius: 16px;
+}
+
+#dashboard .notifications .notification.error,
+#dashboard .notifications .notification.error p {
+  color: red;
+}
+
 /* ---- account ---- */
 #account {
   display: flex;
