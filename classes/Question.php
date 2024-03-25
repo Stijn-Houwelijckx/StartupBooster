@@ -5,6 +5,7 @@ class Question
     private $function;
     private $question;
     private $answer;
+    private $image;
 
     /**
      * Get the value of function
@@ -64,10 +65,30 @@ class Question
         return $this;
     }
 
+    /**
+     * Get the value of image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set the value of image
+     *
+     * @return  self
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
     public static function getStudentZelfstandigeQuestions(PDO $pdo)
     {
         try {
-            $stmt = $pdo->prepare("SELECT question, answer FROM questions WHERE function = :function");
+            $stmt = $pdo->prepare("SELECT * FROM questions WHERE function = :function");
             $stmt->bindParam(':function', $function);
             $function = 'student-zelfstandige';
             $stmt->execute();
@@ -82,7 +103,7 @@ class Question
     public static function getZelfstandigeQuestions(PDO $pdo)
     {
         try {
-            $stmt = $pdo->prepare("SELECT question, answer FROM questions WHERE function = :function");
+            $stmt = $pdo->prepare("SELECT * FROM questions WHERE function = :function");
             $stmt->bindParam(':function', $function);
             $function = 'Zelfstandige';
             $stmt->execute();
