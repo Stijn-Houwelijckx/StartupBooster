@@ -129,10 +129,11 @@ if (isset ($_SESSION["user_id"])) {
             <div class="right">
                 <div class="background center">
                     <h2>Klanttevredenheidsscore</h2>
-                    <!-- maak hier een circular percentage chart -->
-                    <div class="circle1">
-                        <h3>70%</h3>
-                        <p>Tevreden klanten</p>
+                    <div class="circle2">
+                        <div class="circle1">
+                            <h3>70%</h3>
+                            <p>Tevreden klanten</p>
+                        </div>
                     </div>
                     <div class="legenda">
                         <div class="item">
