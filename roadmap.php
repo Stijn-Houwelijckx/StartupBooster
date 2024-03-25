@@ -95,7 +95,8 @@ $current_page = 'dashboard';
                                 <?php echo htmlspecialchars($task["answer"]); ?>
                             </p>
                             <div class="row display">
-                                <a class="readmore">Lees meer</a>
+                                <a href="taskDetails.php?question=<?php echo urlencode($task["question"]); ?>" class="
+                                    readmore">Lees meer</a>
                                 <div>
                                     <?php
                                     if ($task["id"] == $activeTaskString) {

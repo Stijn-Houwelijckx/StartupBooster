@@ -22,6 +22,7 @@ $pages = array(
 
 $error;
 $success;
+
 if (isset ($_GET['page'])) {
     $currentStep = $_GET['page'];
 }

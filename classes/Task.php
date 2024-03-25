@@ -148,5 +148,19 @@ class Task
         }
     }
 
+    public static function getTaskByQuestion(PDO $pdo, $question)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM roadmap WHERE question = :question");
+            $stmt->bindParam(':question', $question);
+            $stmt->execute();
+            $task = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $task ? $task : null;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
 
 }

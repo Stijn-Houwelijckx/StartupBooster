@@ -764,6 +764,43 @@ a.active {
   transform: translateY(-3.2px);
 }
 
+#task-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
+#task-details .text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#task-details .text .description,
+#task-details .text .summary {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 16px;
+}
+
+#task-details .text .summary {
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+}
+
+#task-details .image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 200px;
+  border-radius: 16px;
+}
+
 /* ---- stats ---- */
 #stats {
   display: flex;
@@ -1238,12 +1275,14 @@ a.active {
   }
 
   /* ---- subsidies ---- */
-  #subsidie-details .text {
+  #subsidie-details .text,
+  #task-details .text {
     flex-direction: row;
     justify-content: space-between;
   }
 
-  #subsidie-details .text div {
+  #subsidie-details .text div,
+  #task-details .text div {
     width: 48%;
   }
 
@@ -1388,6 +1427,7 @@ a.active {
   #stats,
   #subsidies,
   #subsidie-details,
+  #task-details,
   #helpdesk,
   #settings {
     padding-left: 144px;
@@ -1407,7 +1447,8 @@ a.active {
     width: 319px;
   }
 
-  #subsidie-details .image {
+  #subsidie-details .image,
+  #task-details .image {
     height: 320px;
   }
 

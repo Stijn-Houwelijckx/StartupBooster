@@ -3,8 +3,16 @@ include_once (__DIR__ . "/classes/Subsidie.php");
 include_once (__DIR__ . "/classes/Db.php");
 session_start();
 
+$subsidie_name = isset ($_GET['name']) ? $_GET['name'] : '';
+
+if (empty ($subsidie_name)) {
+    echo "Ongeldige subsidienaam.";
+    exit;
+}
+
 if (isset ($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
+
     $subsidie = Subsidie::getSubsidieByName($pdo, $subsidie_name);
 
     if (!$subsidie) {
@@ -16,16 +24,9 @@ if (isset ($_SESSION["user_id"])) {
     exit();
 }
 
-$subsidie_name = isset ($_GET['name']) ? $_GET['name'] : '';
-
-if (empty ($subsidie_name)) {
-    echo "Ongeldige subsidienaam.";
-    exit;
-}
-
-
 $current_page = 'subsidie_details';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
