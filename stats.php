@@ -125,6 +125,54 @@ if (isset ($_SESSION["user_id"])) {
                         </div>
                     </div>
                 </div>
+                <div class="rapport two">
+                    <div class="row">
+                        <h2>Overzicht sectoren</h2>
+                        <select name="year" id="year">
+                            <option value="year">2024</option>
+                            <option value="year">2023</option>
+                            <option value="year">2022</option>
+                            <option value="year">2021</option>
+                        </select>
+                    </div>
+                    <div class="figure">
+                        <div class="yAs">
+                            <select name="filter" id="filter">
+                                <option value="revenue">Omzet</option>
+                                <option value="cost">Kosten</option>
+                                <option value="profit">Winst</option>
+                            </select>
+                            <div>
+                                <p>1K</p>
+                                <p>800</p>
+                                <p>600</p>
+                                <p>400</p>
+                                <p>200</p>
+                                <p>0</p>
+                                <p style="visibility: hidden">0</p>
+                            </div>
+                        </div>
+                        <div class="figureRight">
+                            <div class="graphic"></div>
+                            <div class="xAs">
+                                <div class="days">
+                                    <p>Ma</p>
+                                    <p>Di</p>
+                                    <p>Woe</p>
+                                    <p>Do</p>
+                                    <p>Vr</p>
+                                    <p>Za</p>
+                                    <p>Zo</p>
+                                </div>
+                                <select name="filter" id="filter">
+                                    <option value="revenue">Omzet</option>
+                                    <option value="cost">Kosten</option>
+                                    <option value="profit">Winst</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="right">
                 <div class="background center">
