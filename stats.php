@@ -5,7 +5,7 @@ include_once (__DIR__ . "/classes/User.php");
 session_start();
 $current_page = 'stats';
 
-if (isset ($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
@@ -125,6 +125,9 @@ if (isset ($_SESSION["user_id"])) {
                         </div>
                     </div>
                 </div>
+
+
+
                 <div class="rapport two">
                     <div class="row">
                         <h2>Overzicht sectoren</h2>
@@ -136,40 +139,18 @@ if (isset ($_SESSION["user_id"])) {
                         </select>
                     </div>
                     <div class="figure">
-                        <div class="yAs">
+                        <select name="filter" id="filter">
+                            <option value="revenue">Omzet</option>
+                            <option value="cost">Kosten</option>
+                            <option value="profit">Winst</option>
+                        </select>
+                        <div class="column">
+                            <canvas id="myChart" style="width:100%"></canvas>
                             <select name="filter" id="filter">
                                 <option value="revenue">Omzet</option>
                                 <option value="cost">Kosten</option>
                                 <option value="profit">Winst</option>
                             </select>
-                            <div>
-                                <p>1K</p>
-                                <p>800</p>
-                                <p>600</p>
-                                <p>400</p>
-                                <p>200</p>
-                                <p>0</p>
-                                <p style="visibility: hidden">0</p>
-                            </div>
-                        </div>
-                        <div class="figureRight">
-                            <div class="graphic"></div>
-                            <div class="xAs">
-                                <div class="days">
-                                    <p>Ma</p>
-                                    <p>Di</p>
-                                    <p>Woe</p>
-                                    <p>Do</p>
-                                    <p>Vr</p>
-                                    <p>Za</p>
-                                    <p>Zo</p>
-                                </div>
-                                <select name="filter" id="filter">
-                                    <option value="revenue">Omzet</option>
-                                    <option value="cost">Kosten</option>
-                                    <option value="profit">Winst</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -215,6 +196,7 @@ if (isset ($_SESSION["user_id"])) {
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
         window.onload = function () {
             var increases = document.querySelectorAll('.increase');
@@ -228,6 +210,53 @@ if (isset ($_SESSION["user_id"])) {
                 }
             });
         };
+
+        const xyValues = [
+            { name: "Gezondheidszorg en sociale diensten", x: 200, y: 80, pointRadius: 25, backgroundColor: "rgba(255, 0, 0, 0.6)" }, // Rood met 80% opacity
+            { name: "Detailhandel", x: 340, y: 160, pointRadius: 10, backgroundColor: "rgba(0, 0, 255, 0.6)" }, // Blauw met 80% opacity
+            { name: "Industrie", x: 450, y: 580, pointRadius: 40, backgroundColor: "rgba(0, 255, 0, 0.6)" }, // Groen met 80% opacity
+            { name: "Onderwijs", x: 280, y: 480, pointRadius: 55, backgroundColor: "rgba(255, 255, 0, 0.6)" }, // Geel met 80% opacity
+            { name: "ICT en technologie  ", x: 430, y: 120, pointRadius: 30, backgroundColor: "rgba(255, 165, 0, 0.6)" }, // Oranje met 80% opacity
+            { name: "Bouw en vastgoed", x: 320, y: 820, pointRadius: 20, backgroundColor: "rgba(128, 0, 128, 0.6)" }, // Paars met 80% opacity
+            { name: "Horeca en toerisme  ", x: 120, y: 100, pointRadius: 50, backgroundColor: "rgba(0, 255, 255, 0.6)" }, // Cyaan met 80% opacity
+            { name: "Transport en logistiek  ", x: 630, y: 360, pointRadius: 15, backgroundColor: "rgba(255, 0, 255, 0.6)" }, // Magenta met 80% opacity
+            { name: "Consultancy en professionele dienstverlening", x: 520, y: 420, pointRadius: 45, backgroundColor: "rgba(0, 128, 128, 0.6)" }, // Teal met 80% opacity
+            { name: "Landbouw en voedingsindustrie", x: 830, y: 630, pointRadius: 14, backgroundColor: "rgba(0, 0, 128, 0.6)" }, // Navy met 80% opacity
+            { name: "Landbouw en voedingsindustrie", x: 420, y: 630, pointRadius: 24, backgroundColor: "rgba(100, 100, 0, 0.6)" }, // Aangepaste kleur
+            { name: "Landbouw en voedingsindustrie", x: 510, y: 630, pointRadius: 40, backgroundColor: "rgba(200, 200, 0, 0.6)" }, // Aangepaste kleur
+            { name: "Energie en milieu", x: 630, y: 630, pointRadius: 25, backgroundColor: "rgba(0, 128, 128, 0.6)" }, // Teal met 80% opacity
+            { name: "Landbouw en voedingsindustrie", x: 310, y: 630, pointRadius: 35, backgroundColor: "rgba(0, 100, 128, 0.6)" }, // Aangepaste kleur
+            { name: "Media en communicatie", x: 600, y: 630, pointRadius: 44, backgroundColor: "rgba(100, 0, 128, 0.6)" }, // Aangepaste kleur
+            { name: "Automotive sector", x: 100, y: 630, pointRadius: 32, backgroundColor: "rgba(0, 200, 128, 0.6)" }, // Aangepaste kleur
+            { name: "Farmaceutische industrie", x: 780, y: 630, pointRadius: 52, backgroundColor: "rgba(200, 128, 0, 0.6)" }, // Aangepaste kleur
+            { name: "Creatieve industrieën", x: 220, y: 630, pointRadius: 59, backgroundColor: "rgba(128, 200, 0, 0.6)" }, // Aangepaste kleur
+            { name: "Telecommunicatie", x: 180, y: 630, pointRadius: 22, backgroundColor: "rgba(128, 0, 200, 0.6)" }, // Aangepaste kleur
+            { name: "Juridische dienstverlening", x: 800, y: 630, pointRadius: 31, backgroundColor: "rgba(128, 0, 0, 0.6)" }, // Donkerrood met 80% opacity
+        ];
+
+        const datasets = xyValues.map(value => ({
+            pointRadius: value.pointRadius,
+            backgroundColor: value.backgroundColor,
+            label: value.name, // Gebruik de naam uit xyValues als label voor elke dataset
+            data: [value]
+        }));
+
+        new Chart("myChart", {
+            type: "scatter",
+            data: {
+                datasets: datasets
+            },
+            options: {
+                legend: { display: true },
+                scales: {
+                    xAxes: [{ ticks: { min: 0, max: 1000 } }],
+                    yAxes: [{ ticks: { min: 0, max: 1000 } }],
+                }
+            }
+        });
+
+
+
     </script>
 </body>
 

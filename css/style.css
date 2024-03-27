@@ -942,6 +942,7 @@ a.active {
 #stats .left .figure {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 #stats .left .figure .yAs {
@@ -990,54 +991,20 @@ a.active {
   background-color: #dadada;
 }
 
-#stats .left .two .figure .yAs {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-}
-
-#stats .left .two .figure .yAs select {
-  transform: rotate(-90deg);
-}
-
-#stats .left .two .figure .yAs div {
+#stats .two .figure .column {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 16px;
-}
-
-#stats .left .two .figure .yAs .filter {
-  transform: rotate(-90deg);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-#stats .left .two .figure .figureRight .xAs {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   gap: 16px;
-}
-
-#stats .left .two .figure .xAs .days {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
   width: 100%;
 }
 
-#stats .left .two .figure .xAs .filter {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
+#stats .two .figure select {
+  transform: rotate(-90deg);
+}
+
+#stats .two .figure .column select {
+  transform: rotate(0deg);
 }
 
 #stats .right {
@@ -1045,6 +1012,7 @@ a.active {
   flex-direction: column;
   gap: 24px;
 }
+
 #stats .right .background {
   padding: 16px;
   border-radius: 16px;
