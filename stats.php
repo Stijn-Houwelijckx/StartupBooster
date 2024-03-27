@@ -5,19 +5,19 @@ include_once (__DIR__ . "/classes/User.php");
 session_start();
 $current_page = 'stats';
 
-if (isset($_SESSION["user_id"])) {
-    $pdo = Db::getInstance();
-    $user = User::getUserById($pdo, $_SESSION["user_id"]);
+// if (isset($_SESSION["user_id"])) {
+//     $pdo = Db::getInstance();
+//     $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
-    try {
-        $pdo = Db::getInstance();
-    } catch (Exception $e) {
-        error_log('Database error: ' . $e->getMessage());
-    }
-} else {
-    header("Location: login.php?error=notLoggedIn");
-    exit();
-}
+//     try {
+//         $pdo = Db::getInstance();
+//     } catch (Exception $e) {
+//         error_log('Database error: ' . $e->getMessage());
+//     }
+// } else {
+//     header("Location: login.php?error=notLoggedIn");
+//     exit();
+// }
 ?>
 
 <!DOCTYPE html>
@@ -85,44 +85,20 @@ if (isset($_SESSION["user_id"])) {
                 <div class="rapport">
                     <div class="row">
                         <h2>Rapport</h2>
-                        <select name="filter" id="filter">
-                            <option value="revenue">Omzet</option>
-                            <option value="cost">Kosten</option>
-                            <option value="profit">Winst</option>
-                        </select>
+                        <div>
+                            <select name="filter" id="filter">
+                                <option value="Student-zelfstandigen">Student-zelfstandigen</option>
+                                <option value="Zelfstandigen">Zelfstandigen</option>
+                            </select>
+                            <select name="filter" id="filter">
+                                <option value="revenue">Omzet</option>
+                                <option value="cost">Kosten</option>
+                                <option value="profit">Winst</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="figure">
-                        <div class="yAs">
-                            <p>1K</p>
-                            <p>800</p>
-                            <p>600</p>
-                            <p>400</p>
-                            <p>200</p>
-                            <p>0</p>
-                            <p style="visibility: hidden">0</p>
-                        </div>
-                        <div class="figureRight">
-                            <div class="graphic"></div>
-                            <div class="xAs">
-                                <p>Ma</p>
-                                <p>Di</p>
-                                <p>Woe</p>
-                                <p>Do</p>
-                                <p>Vr</p>
-                                <p>Za</p>
-                                <p>Zo</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="legenda">
-                        <div class="item">
-                            <p class="circle blue"></p>
-                            <p>Mijn rapport</p>
-                        </div>
-                        <div class="item">
-                            <p class="circle green"></p>
-                            <p>Rapport gemiddelde ondernemer binnen mijn sector</p>
-                        </div>
+                        <div id="curve_chart" style="width: 100%; height: 500px"></div>
                     </div>
                 </div>
 
@@ -254,9 +230,30 @@ if (isset($_SESSION["user_id"])) {
                 }
             }
         });
+    </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
 
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Year', 'Mijn rapport', 'Rapport gemiddelde ondernemer'],
+                ['2023', 1000, 400],
+                ['2022', 1170, 460],
+                ['2021', 660, 1120],
+                ['2020', 1030, 540]
+            ]);
 
+            var options = {
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
 
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart.draw(data, options);
+        }
     </script>
 </body>
 

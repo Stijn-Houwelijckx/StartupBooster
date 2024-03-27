@@ -945,6 +945,11 @@ a.active {
   align-items: center;
 }
 
+#stats .left .figure rect {
+  fill: transparent;
+  width: 100%;
+}
+
 #stats .left .figure .yAs {
   display: flex;
   flex-direction: column;
