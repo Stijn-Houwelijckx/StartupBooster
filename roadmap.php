@@ -2,9 +2,10 @@
 include_once (__DIR__ . "/classes/Task.php");
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
+
 session_start();
 
-if (isset ($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
@@ -13,13 +14,20 @@ if (isset ($_SESSION["user_id"])) {
         $finished_steps = Task::getProgress($pdo);
         $tasks = Task::getTasks($pdo);
         $activeTask = Task::getActiveTask($pdo);
-        $activeTaskString = implode(', ', $activeTask); // Convert array to string
+        $activeTaskString = '';
+
+        $activeTask = Task::getActiveTask($pdo);
+        $activeTaskString = '';
+
+        if (is_array($activeTask)) {
+            $activeTaskString = implode(', ', $activeTask);
+        }
 
         $progress = ($finished_steps["finished_steps"] / $finished_steps["total_steps"]) * 100;
         $progressRounded = number_format($progress, 0);
         $tasks = array_reverse($tasks);
 
-        if (isset ($_POST['taskId'])) {
+        if (isset($_POST['taskId'])) {
             $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
             if ($taskId) {
                 Task::updateRead($pdo, $taskId);
@@ -36,13 +44,6 @@ if (isset ($_SESSION["user_id"])) {
 }
 
 $current_page = 'roadmap';
-?>
-
-<?php
-include_once (__DIR__ . "/classes/Db.php");
-$current_page = 'dashboard';
-
-
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +67,7 @@ $current_page = 'dashboard';
                 <p class="border"></p>
             </div>
             <div class="tasks">
-                <?php if (!empty ($tasks)): ?>
+                <?php if (!empty($tasks)): ?>
                     <?php foreach ($tasks as $task): ?>
                         <?php
                         if ($task["id"] == $activeTaskString) {
