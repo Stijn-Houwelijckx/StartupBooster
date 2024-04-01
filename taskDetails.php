@@ -3,14 +3,14 @@ include_once (__DIR__ . "/classes/Task.php");
 include_once (__DIR__ . "/classes/Db.php");
 session_start();
 
-$task_question = isset ($_GET['question']) ? $_GET['question'] : '';
+$task_question = isset($_GET['question']) ? $_GET['question'] : '';
 
-if (empty ($task_question)) {
+if (empty($task_question)) {
     echo "Ongeldige tasknaam.";
     exit;
 }
 
-if (isset ($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $task = Task::getTaskByQuestion($pdo, $task_question);
     if (!$task) {
@@ -18,7 +18,7 @@ if (isset ($_SESSION["user_id"])) {
         exit;
     }
     try {
-        if (isset ($_POST['taskId'])) {
+        if (isset($_POST['taskId'])) {
             $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
             if ($taskId) {
                 Task::updateRead($pdo, $taskId);
