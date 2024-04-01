@@ -483,9 +483,6 @@ class User
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return false;
-        } catch (Exception $e) {
-            error_log('Error: ' . $e->getMessage());
-            return false;
         }
     }
 

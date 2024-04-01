@@ -4,7 +4,6 @@ class Task
     private $label;
     private $question;
     private $answer;
-    private $done;
 
     /**
      * Get the value of label
@@ -66,31 +65,29 @@ class Task
         return $this;
     }
 
-
-    /**
-     * Get the value of done
-     */
-    public function getDone()
-    {
-        return $this->done;
-    }
-
-    /**
-     * Set the value of done
-     *
-     * @return  self
-     */
-    public function setDone($done)
-    {
-        $this->done = $done;
-
-        return $this;
-    }
-
-    public static function getTasks(PDO $pdo)
+    public static function linkTasksToUser(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM roadmap");
+            $stmt = $pdo->prepare("INSERT INTO user_tasks (user_id, task_id) SELECT :user_id, id FROM tasks");
+            $stmt->bindParam(':user_id', $user_id);
+
+            // Controleer of de SQL-instructie met succes is uitgevoerd
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public static function getTasks(PDO $pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, user_tasks.is_complete FROM tasks, user_tasks WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $tasks ?: [];
@@ -100,10 +97,11 @@ class Task
         }
     }
 
-    public static function getActiveTask(PDO $pdo)
+    public static function getActiveTask(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT id FROM roadmap WHERE done = 0 ORDER BY id ASC LIMIT 1");
+            $stmt = $pdo->prepare("SELECT task_id FROM user_tasks WHERE is_complete = 0 AND user_id = :user_id ORDER BY id ASC LIMIT 1");
+            $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
             return $tasks;
@@ -113,11 +111,12 @@ class Task
         }
     }
 
-    public static function updateRead(PDO $pdo, $taskId)
+    public static function updateRead(PDO $pdo, $taskId, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE roadmap SET done = 1 - done WHERE id = :taskId");
-            $stmt->bindParam(':taskId', $taskId, PDO::PARAM_INT);
+            $stmt = $pdo->prepare("UPDATE user_tasks SET is_complete = 1 WHERE task_id = :taskId AND user_id = :user_id");
+            $stmt->bindParam(':taskId', $taskId);
+            $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
         } catch (PDOException $e) {
             error_log('Database error in updateRead(): ' . $e->getMessage());
@@ -126,24 +125,28 @@ class Task
     }
 
 
-    public static function getProgress(PDO $pdo)
+    public static function getProgress(PDO $pdo, $user_id)
     {
         try {
             $query = "SELECT (
                         SELECT COUNT(id)
-                        FROM roadmap
-                        WHERE done = 1
+                        FROM user_tasks
+                        WHERE is_complete = 1
+                        AND user_id = :user_id_1
                     ) AS finished_steps,
                     (
                         SELECT COUNT(id)
-                        FROM roadmap
+                        FROM user_tasks
+                        WHERE user_id = :user_id_2
                     ) AS total_steps;";
             $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':user_id_1', $user_id);
+            $stmt->bindParam(':user_id_2', $user_id);
             $stmt->execute();
             $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
             return $tasks;
         } catch (PDOException $e) {
-            error_log('Database error in getTasks(): ' . $e->getMessage());
+            error_log('Database error in getProgress(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve tasks');
         }
     }
@@ -151,7 +154,7 @@ class Task
     public static function getTaskByQuestion(PDO $pdo, $question)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM roadmap WHERE question = :question");
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE question = :question");
             $stmt->bindParam(':question', $question);
             $stmt->execute();
             $task = $stmt->fetch(PDO::FETCH_ASSOC);
