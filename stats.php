@@ -1,23 +1,25 @@
 <?php
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
+include_once (__DIR__ . "/classes/Stats.php");
 
 session_start();
 $current_page = 'stats';
 
-// if (isset($_SESSION["user_id"])) {
-//     $pdo = Db::getInstance();
-//     $user = User::getUserById($pdo, $_SESSION["user_id"]);
-
-//     try {
-//         $pdo = Db::getInstance();
-//     } catch (Exception $e) {
-//         error_log('Database error: ' . $e->getMessage());
-//     }
-// } else {
-//     header("Location: login.php?error=notLoggedIn");
-//     exit();
-// }
+if (isset($_SESSION["user_id"])) {
+    $pdo = Db::getInstance();
+    $user = User::getUserById($pdo, $_SESSION["user_id"]);
+    try {
+        $year = isset($_POST['year']) ? $_POST['year'] : date("Y", strtotime("-1 year"));
+        $pdo = Db::getInstance();
+        $stats = Stats::getStats($pdo, $year, $_SESSION["user_id"]);
+    } catch (Exception $e) {
+        error_log('Database error: ' . $e->getMessage());
+    }
+} else {
+    header("Location: login.php?error=notLoggedIn");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -45,52 +47,117 @@ $current_page = 'stats';
         <div class="elements">
             <div class="left">
                 <div class="overview">
-                    <h2>Overzicht</h2>
-                    <div class="elements">
-                        <div class="element">
-                            <div class="row">
-                                <img src="./assets/images/revenue.svg" alt="revenue">
-                                <h3>Omzet</h3>
-                            </div>
-                            <p class="price">€1.206</p>
-                            <div class="increaseRow">
-                                <i class="fa fa-arrow-up"></i>
-                                <p class="increase">+12%</p>
-                            </div>
-                        </div>
-                        <div class="element">
-                            <div class="row">
-                                <img src="./assets/images/cost.svg" alt="cost">
-                                <h3>Kosten</h3>
-                            </div>
-                            <p class="price">€89</p>
-                            <div class="increaseRow">
-                                <i class="fa fa-arrow-up"></i>
-                                <p class="increase">+18%</p>
-                            </div>
-                        </div>
-                        <div class="element">
-                            <div class="row">
-                                <img src="./assets/images/profit.svg" alt="profit">
-                                <h3>Winst</h3>
-                            </div>
-                            <p class="price">€1.117</p>
-                            <div class="increaseRow">
-                                <i class="fa fa-arrow-down"></i>
-                                <p class="increase">-2%</p>
-                            </div>
-                        </div>
+                    <div class="row">
+                        <h2>Overzicht</h2>
+                        <form action="" method="POST" id="filter_year_form">
+                            <select name="year" id="filter_year" onchange="submitForm()">
+                                <option value="2023" <?php if ($year == "2023")
+                                    echo "selected"; ?>>2023</option>
+                                <option value="2022" <?php if ($year == "2022")
+                                    echo "selected"; ?>>2022</option>
+                                <option value="2021" <?php if ($year == "2021")
+                                    echo "selected"; ?>>2021</option>
+                                <option value="2020" <?php if ($year == "2020")
+                                    echo "selected"; ?>>2020</option>
+                            </select>
+                        </form>
                     </div>
+                    <?php if (!empty($stats)): ?>
+                        <?php foreach ($stats as $c): ?>
+                            <div class="elements">
+                                <div class="element">
+                                    <div class="row">
+                                        <img src="./assets/images/profit.svg" alt="profit">
+                                        <h3>Winst/verlies</h3>
+                                    </div>
+                                    <p class="price">€
+                                        <?php echo htmlspecialchars($c["profit_loss"]); ?>
+                                    </p>
+                                    <div class="increaseRow">
+                                        <i class="fa fa-arrow-down"></i>
+                                        <p class="increase">-980%</p>
+                                    </div>
+                                </div>
+                                <div class="element">
+                                    <div class="row">
+                                        <img src="./assets/images/profit.svg" alt="profit">
+                                        <h3>Eigen vermogen</h3>
+                                    </div>
+                                    <p class="price">€
+                                        <?php echo htmlspecialchars($c["equityCapital"]); ?>
+                                    </p>
+                                    <div class="increaseRow">
+                                        <i class="fa fa-arrow-down"></i>
+                                        <p class="increase">-25%</p>
+                                    </div>
+                                </div>
+                                <div class="element">
+                                    <div class="row">
+                                        <img src="./assets/images/profit.svg" alt="profit">
+                                        <h3>Brutomarge</h3>
+                                    </div>
+                                    <p class="price">€
+                                        <?php echo htmlspecialchars($c["grossMargin"]); ?>
+                                    </p>
+                                    <div class="increaseRow">
+                                        <i class="fa fa-arrow-down"></i>
+                                        <p class="increase">-2%</p>
+                                    </div>
+                                </div>
+                                <div class="element">
+                                    <div class="row">
+                                        <img src="./assets/images/revenue.svg" alt="revenue">
+                                        <h3>Omzet</h3>
+                                    </div>
+                                    <p class="price">€
+                                        <?php echo htmlspecialchars($c["revenue"]); ?>
+                                    </p>
+                                    <div class="increaseRow">
+                                        <i class="fa fa-arrow-up"></i>
+                                        <p class="increase">+12%</p>
+                                    </div>
+                                </div>
+                                <div class="element">
+                                    <div class="row">
+                                        <img src="./assets/images/cost.svg" alt="cost">
+                                        <h3>Kosten</h3>
+                                    </div>
+                                    <p class="price">€
+                                        <?php echo htmlspecialchars($c["costs"]); ?>
+                                    </p>
+                                    <div class="increaseRow">
+                                        <i class="fa fa-arrow-up"></i>
+                                        <p class="increase">+18%</p>
+                                    </div>
+                                </div>
+                                <div class="element">
+                                    <div class="row">
+                                        <img src="./assets/images/profit.svg" alt="profit">
+                                        <h3>Personeel <span>FTE</span></h3>
+                                    </div>
+                                    <p class="price">
+                                        <?php echo htmlspecialchars($c["personnel"]); ?>
+                                    </p>
+                                    <div class="increaseRow">
+                                        <i class="fa fa-arrow-down"></i>
+                                        <p class="increase">-2%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No stats found.</p>
+                    <?php endif; ?>
                 </div>
                 <div class="rapport">
                     <div class="row">
                         <h2>Rapport</h2>
                         <div>
-                            <select name="filter" id="filter">
+                            <select name="filter">
                                 <option value="Student-zelfstandigen">Student-zelfstandigen</option>
                                 <option value="Zelfstandigen">Zelfstandigen</option>
                             </select>
-                            <select name="filter" id="filter">
+                            <select name="filter">
                                 <option value="revenue">Omzet</option>
                                 <option value="cost">Kosten</option>
                                 <option value="profit">Winst</option>
@@ -107,7 +174,7 @@ $current_page = 'stats';
                 <div class="rapport two">
                     <div class="row">
                         <h2>Overzicht sectoren</h2>
-                        <select name="year" id="year">
+                        <select name="year">
                             <option value="year">2024</option>
                             <option value="year">2023</option>
                             <option value="year">2022</option>
@@ -115,14 +182,14 @@ $current_page = 'stats';
                         </select>
                     </div>
                     <div class="figure">
-                        <select name="filter" id="filter">
+                        <select name="filter">
                             <option value="revenue">Omzet</option>
                             <option value="cost">Kosten</option>
                             <option value="profit">Winst</option>
                         </select>
                         <div class="column">
                             <canvas id="myChart" style="width:100%"></canvas>
-                            <select name="filter" id="filter">
+                            <select name="filter">
                                 <option value="revenue">Omzet</option>
                                 <option value="cost">Kosten</option>
                                 <option value="profit">Winst</option>
@@ -253,6 +320,9 @@ $current_page = 'stats';
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
             chart.draw(data, options);
+        }
+        function submitForm() {
+            document.getElementById("filter_year_form").submit();
         }
     </script>
 </body>
