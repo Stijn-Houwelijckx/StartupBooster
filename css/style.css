@@ -872,8 +872,15 @@ a.active {
 #stats .legenda {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#stats .left .overview .elements {
+  padding-bottom: 16px;
+  overflow-y: hidden;
 }
 
 #stats .left .overview .elements .element {

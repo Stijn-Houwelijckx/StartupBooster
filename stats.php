@@ -146,7 +146,7 @@ if (isset($_SESSION["user_id"])) {
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <p>No stats found.</p>
+                        <p>Geen statistieken gevonden.</p>
                     <?php endif; ?>
                 </div>
                 <div class="rapport">
