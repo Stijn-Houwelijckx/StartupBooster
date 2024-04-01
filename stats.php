@@ -199,25 +199,6 @@ if (isset($_SESSION["user_id"])) {
                 </div>
             </div>
             <div class="right">
-                <div class="background center">
-                    <h2>Klanttevredenheidsscore</h2>
-                    <div class="circle2">
-                        <div class="circle1">
-                            <h3>70%</h3>
-                            <p>Tevreden klanten</p>
-                        </div>
-                    </div>
-                    <div class="legenda">
-                        <div class="item">
-                            <p class="circle blue"></p>
-                            <p>Tevreden</p>
-                        </div>
-                        <div class="item">
-                            <p class="circle gray"></p>
-                            <p>Ontevreden</p>
-                        </div>
-                    </div>
-                </div>
                 <div class="background">
                     <h2>Meest gestelde vragen</h2>
                     <div class="questions">
