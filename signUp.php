@@ -21,7 +21,7 @@ try {
     error_log('Database error: ' . $e->getMessage());
 }
 
-if (isset ($_GET['step'])) {
+if (isset($_GET['step'])) {
     if ($_GET["step"] !== "1" && $_GET["step"] !== "2" && $_GET["step"] !== "3") {
         header("Location: signUp.php?step=1");
     } else {
@@ -29,10 +29,10 @@ if (isset ($_GET['step'])) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
     $user = new User();
 
-    if (isset ($_POST["firstname"])) {
+    if (isset($_POST["firstname"])) {
         try {
             $user->setFirstname($_POST["firstname"]);
             $user->setLastname($_POST["lastname"]);
@@ -43,13 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                 $user->setEmail($_POST["email"]);
             }
 
-            if (!isset ($_POST["statute"])) {
+            if (!isset($_POST["statute"])) {
                 throw new Exception("Selecteer een statuut.");
             } else {
                 $user->setStatute($_POST["statute"]);
             }
 
-            if (!isset ($_POST["sector"])) {
+            if (!isset($_POST["sector"])) {
                 throw new Exception("Selecteer een sector.");
             } else {
                 $user->setSector($_POST["sector"]);
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
-    } else if (isset ($_POST["street"])) {
+    } else if (isset($_POST["street"])) {
         try {
             $user->setStreet($_POST["street"]);
             $user->setHouseNumber($_POST["houseNumber"]);
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
-    } else if (isset ($_POST["password"])) {
+    } else if (isset($_POST["password"])) {
         $password = $_POST["password"];
         $password2 = $_POST["password2"];
         if ($password === $password2) {
@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                 <p class="border"></p>
             </div>
 
-            <?php if (isset ($error)): ?>
+            <?php if (isset($error)): ?>
                 <p class="alert">
                     <?php echo $error ?>
                 </p>
@@ -194,14 +194,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                         <div class="row">
                             <div>
                                 <label for="firstname">Voornaam</label>
-                                <input type="text" id="firstname" name="firstname" placeholder="John" value="<?php if (isset ($_SESSION["firstname"])) {
+                                <input type="text" id="firstname" name="firstname" placeholder="John" value="<?php if (isset($_SESSION["firstname"])) {
                                     echo $_SESSION["firstname"];
                                 } ?>">
                             </div>
 
                             <div>
                                 <label for="lastname">Achternaam</label>
-                                <input type="text" id="lastname" name="lastname" placeholder="Doe" value="<?php if (isset ($_SESSION["lastname"])) {
+                                <input type="text" id="lastname" name="lastname" placeholder="Doe" value="<?php if (isset($_SESSION["lastname"])) {
                                     echo $_SESSION["lastname"];
                                 } ?>">
                             </div>
@@ -209,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                         <div class="row">
                             <div class="email">
                                 <label for=" email">E-mail</label>
-                                <input type=" text" id="email" name="email" placeholder="JohnDoe@gmail.com" value="<?php if (isset ($_SESSION["email"])) {
+                                <input type=" text" id="email" name="email" placeholder="JohnDoe@gmail.com" value="<?php if (isset($_SESSION["email"])) {
                                     echo $_SESSION["email"];
                                 } ?>">
                             </div>
@@ -245,14 +245,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                         <div class="row">
                             <div>
                                 <label for="street">Straat</label>
-                                <input type="text" id="street" name="street" placeholder="Grote markt" value="<?php if (isset ($_SESSION["street"])) {
+                                <input type="text" id="street" name="street" placeholder="Grote markt" value="<?php if (isset($_SESSION["street"])) {
                                     echo $_SESSION["street"];
                                 } ?>">
                             </div>
 
                             <div>
                                 <label for="houseNumber">Huisnr.</label>
-                                <input type="text" id="houseNumber" name="houseNumber" placeholder="1" value="<?php if (isset ($_SESSION["houseNumber"])) {
+                                <input type="text" id="houseNumber" name="houseNumber" placeholder="1" value="<?php if (isset($_SESSION["houseNumber"])) {
                                     echo $_SESSION["houseNumber"];
                                 } ?>">
                             </div>
@@ -260,13 +260,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty ($_POST)) {
                         <div class="row">
                             <div>
                                 <label for="zipCode">Postcode</label>
-                                <input type="text" id="zipCode" name="zipCode" placeholder="2800" value="<?php if (isset ($_SESSION["zipCode"])) {
+                                <input type="text" id="zipCode" name="zipCode" placeholder="2800" value="<?php if (isset($_SESSION["zipCode"])) {
                                     echo $_SESSION["zipCode"];
                                 } ?>">
                             </div>
                             <div>
                                 <label for="city">Stad</label>
-                                <input type="text" id="city" name="city" placeholder="Mechelen" value="<?php if (isset ($_SESSION["city"])) {
+                                <input type="text" id="city" name="city" placeholder="Mechelen" value="<?php if (isset($_SESSION["city"])) {
                                     echo $_SESSION["city"];
                                 } ?>">
                             </div>

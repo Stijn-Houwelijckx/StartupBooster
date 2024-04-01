@@ -36,7 +36,7 @@ class User
      */
     public function setFirstname($firstname)
     {
-        if (empty (trim($firstname))) {
+        if (empty(trim($firstname))) {
             throw new Exception("Voornaam is verplicht.");
         }
 
@@ -67,7 +67,7 @@ class User
      */
     public function setLastname($lastname)
     {
-        if (empty (trim($lastname))) {
+        if (empty(trim($lastname))) {
             throw new Exception("Achternaam is verplicht.");
         }
 
@@ -98,7 +98,7 @@ class User
      */
     public function setEmail($email)
     {
-        if (empty (trim($email))) {
+        if (empty(trim($email))) {
             throw new Exception("Email is verplicht.");
         }
 
@@ -127,7 +127,7 @@ class User
      */
     public function setStatute($statute)
     {
-        if (empty (trim($statute))) {
+        if (empty(trim($statute))) {
             throw new Exception("Statuut kan niet leeg zijn.");
         }
 
@@ -152,7 +152,7 @@ class User
      */
     public function setSector($sector)
     {
-        if (empty (trim($sector))) {
+        if (empty(trim($sector))) {
             throw new Exception("Sector kan niet leeg zijn.");
         }
 
@@ -177,7 +177,7 @@ class User
      */
     public function setStreet($street)
     {
-        if (empty (trim($street))) {
+        if (empty(trim($street))) {
             throw new Exception("Straat is verplicht.");
         }
 
@@ -208,7 +208,7 @@ class User
      */
     public function setHouseNumber($houseNumber)
     {
-        if (empty (trim($houseNumber))) {
+        if (empty(trim($houseNumber))) {
             throw new Exception("Huisnummer is verplicht.");
         }
 
@@ -238,7 +238,7 @@ class User
      */
     public function setZipCode($zipCode)
     {
-        if (empty (trim($zipCode))) {
+        if (empty(trim($zipCode))) {
             throw new Exception("Postcode is verplicht.");
         }
 
@@ -268,7 +268,7 @@ class User
      */
     public function setCity($city)
     {
-        if (empty (trim($city))) {
+        if (empty(trim($city))) {
             throw new Exception("Gemeente is verplicht.");
         }
 
@@ -298,7 +298,7 @@ class User
      */
     public function setPhoneNumber($phoneNumber)
     {
-        if (empty (trim($phoneNumber))) {
+        if (empty(trim($phoneNumber))) {
             $phoneNumber = NULL;
         }
 
@@ -322,7 +322,7 @@ class User
 
     public function setPassword($password)
     {
-        if (empty (trim($password))) {
+        if (empty(trim($password))) {
             throw new Exception("Vul een wachtwoord in");
         }
 
@@ -379,9 +379,9 @@ class User
         return $this;
     }
 
-        /**
+    /**
      * Get the value of securityAlerts
-     */ 
+     */
     public function getSecurityAlerts()
     {
         return $this->securityAlerts;
@@ -391,7 +391,7 @@ class User
      * Set the value of securityAlerts
      *
      * @return  self
-     */ 
+     */
     public function setSecurityAlerts($securityAlerts)
     {
         $this->securityAlerts = $securityAlerts;
@@ -401,7 +401,7 @@ class User
 
     /**
      * Get the value of emailNotifications
-     */ 
+     */
     public function getEmailNotifications()
     {
         return $this->emailNotifications;
@@ -411,7 +411,7 @@ class User
      * Set the value of emailNotifications
      *
      * @return  self
-     */ 
+     */
     public function setEmailNotifications($emailNotifications)
     {
         $this->emailNotifications = $emailNotifications;
@@ -421,7 +421,7 @@ class User
 
     /**
      * Get the value of smsNotifications
-     */ 
+     */
     public function getSmsNotifications()
     {
         return $this->smsNotifications;
@@ -431,7 +431,7 @@ class User
      * Set the value of smsNotifications
      *
      * @return  self
-     */ 
+     */
     public function setSmsNotifications($smsNotifications)
     {
         $this->smsNotifications = $smsNotifications;
@@ -441,7 +441,7 @@ class User
 
     /**
      * Get the value of deviceNotificationAlerts
-     */ 
+     */
     public function getDeviceNotificationAlerts()
     {
         return $this->deviceNotificationAlerts;
@@ -451,7 +451,7 @@ class User
      * Set the value of deviceNotificationAlerts
      *
      * @return  self
-     */ 
+     */
     public function setDeviceNotificationAlerts($deviceNotificationAlerts)
     {
         $this->deviceNotificationAlerts = $deviceNotificationAlerts;
@@ -515,7 +515,7 @@ class User
             return false;
         }
     }
-    
+
     public function updateSecurity(PDO $pdo, $user_id)
     {
         try {
