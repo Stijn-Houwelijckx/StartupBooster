@@ -18,10 +18,17 @@ if (isset($_SESSION["user_id"])) {
         exit;
     }
     try {
+        $activeTask = Task::getActiveTask($pdo, $_SESSION["user_id"]);
+        $activeTaskString = '';
+
+        if (is_array($activeTask)) {
+            $activeTaskString = implode(', ', $activeTask);
+        }
+
         if (isset($_POST['taskId'])) {
             $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
             if ($taskId) {
-                Task::updateRead($pdo, $taskId);
+                Task::updateRead($pdo, $taskId, $_SESSION["user_id"]);
                 header("Location: roadmap.php");
                 exit();
             } else {
@@ -69,11 +76,13 @@ $current_page = 'task_details';
                 <p>
                     <?php echo htmlspecialchars($task['answer']); ?>
                 </p>
-                <form id="readForm<?php echo $task['id']; ?>" method="POST"
-                    onsubmit="submitReadForm(event, <?php echo $task['id']; ?>)">
-                    <input type="hidden" name="taskId" value="<?php echo $task['id']; ?>">
-                    <button type="submit" class="btn">Gelezen</button>
-                </form>
+                <?php if ($task["id"] == $activeTaskString) { ?>
+                    <form id='readForm<?php echo $task['id']; ?>' method='POST'
+                        onsubmit='submitReadForm(event, <?php echo $task['id']; ?>)'>
+                        <input type="hidden" name="taskId" value="<?php echo $task['id']; ?>">
+                        <button type='submit' class='btn'>Gelezen</button>
+                    </form>
+                <?php } ?>
             </div>
             <div class="image"
                 style="background-image: url('./assets/images/questions/question<?php echo htmlspecialchars($task['id']); ?>.jpg');">
