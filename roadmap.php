@@ -1,9 +1,13 @@
 <?php
+session_start();
+
 include_once (__DIR__ . "/classes/Task.php");
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
 
-session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
 
 if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
@@ -11,12 +15,11 @@ if (isset($_SESSION["user_id"])) {
 
     try {
         $pdo = Db::getInstance();
-        $finished_steps = Task::getProgress($pdo);
-        $tasks = Task::getTasks($pdo);
-        $activeTask = Task::getActiveTask($pdo);
-        $activeTaskString = '';
-
-        $activeTask = Task::getActiveTask($pdo);
+        $tasks = Task::getTasks($pdo, $_SESSION["user_id"]);
+        
+        $finished_steps = Task::getProgress($pdo, $_SESSION["user_id"]);
+        
+        $activeTask = Task::getActiveTask($pdo, $_SESSION["user_id"]);
         $activeTaskString = '';
 
         if (is_array($activeTask)) {
@@ -30,7 +33,7 @@ if (isset($_SESSION["user_id"])) {
         if (isset($_POST['taskId'])) {
             $taskId = filter_input(INPUT_POST, 'taskId', FILTER_SANITIZE_NUMBER_INT);
             if ($taskId) {
-                Task::updateRead($pdo, $taskId);
+                Task::updateRead($pdo, $taskId, $_SESSION["user_id"]);
             } else {
                 error_log('Invalid taskId received.');
             }
@@ -72,7 +75,7 @@ $current_page = 'roadmap';
                         <?php
                         if ($task["id"] == $activeTaskString) {
                             $taskClasses = "task active";
-                        } else if ($task["done"] == 1) {
+                        } else if ($task["is_complete"] == 1) {
                             $taskClasses = "task inactive";
                         } else {
                             $taskClasses = "task";
@@ -86,7 +89,7 @@ $current_page = 'roadmap';
                                 <p class="question">
                                     <?php echo htmlspecialchars($task["question"]); ?>
                                 </p>
-                                <?php if ($task["done"] == 1): ?>
+                                <?php if ($task["is_complete"] == 1): ?>
                                     <i class="fa fa-angle-up" data-task="<?php echo $task['id']; ?>"></i>
                                 <?php else: ?>
                                     <i class="fa fa-angle-down" data-task="<?php echo $task['id']; ?>"></i>
@@ -103,7 +106,7 @@ $current_page = 'roadmap';
                                     if ($task["id"] == $activeTaskString) {
                                         echo '<p>Gelezen</p>';
                                         echo '<form id="readForm' . $task['id'] . '" method="POST" onsubmit="submitReadForm(event, ' . $task['id'] . ')">';
-                                        if ($task["done"] == 0) {
+                                        if ($task["is_complete"] == 0) {
                                             // If task is active and not done
                                             echo '<i id="icon' . $task['id'] . '" class="fa fa-square-o" onclick="submitReadForm(event, ' . $task['id'] . ')"></i>';
                                         } else {

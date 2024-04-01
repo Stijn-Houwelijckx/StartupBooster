@@ -4,6 +4,7 @@ session_start();
 include_once (__DIR__ . "/classes/User.php");
 include_once (__DIR__ . "/classes/Statute.php");
 include_once (__DIR__ . "/classes/Sector.php");
+include_once (__DIR__ . "/classes/Task.php");
 include_once (__DIR__ . "/classes/Db.php");
 
 error_reporting(E_ALL);
@@ -117,6 +118,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
                     unset($_SESSION["houseNumber"]);
                     unset($_SESSION["zipCode"]);
                     unset($_SESSION["city"]);
+
+                    Task::linkTasksToUser($pdo, $_SESSION['user_id']);
 
                     header("Location: dashboard.php");
                 } else {
