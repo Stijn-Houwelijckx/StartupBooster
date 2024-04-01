@@ -868,19 +868,39 @@ a.active {
   gap: 24px;
 }
 
+#stats .left .overview .btnsElements {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
 #stats .left .overview .elements,
 #stats .legenda {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 16px;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
-#stats .left .overview .elements {
-  padding-bottom: 16px;
-  overflow-y: hidden;
+#prevBtn,
+#nextBtn {
+  background-color: var(--blue);
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  color: var(--white);
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#prevBtn i,
+#nextBtn i {
+  font-size: 24px;
 }
 
 #stats .left .overview .elements .element {
@@ -898,8 +918,9 @@ a.active {
 #stats .left .overview .elements .element .row {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 }
 
 #stats .left .overview .elements .element .price {
@@ -1538,6 +1559,10 @@ a.active {
   #stats .elements .left,
   #stats .elements .right {
     width: 48%;
+  }
+
+  #stats .left .overview .elements .element {
+    min-width: 160px !important;
   }
 
   /* ---- helpdesk ---- */

@@ -63,88 +63,92 @@ if (isset($_SESSION["user_id"])) {
                         </form>
                     </div>
                     <?php if (!empty($stats)): ?>
-                        <?php foreach ($stats as $c): ?>
-                            <div class="elements">
-                                <div class="element">
-                                    <div class="row">
-                                        <img src="./assets/images/profit.svg" alt="profit">
-                                        <h3>Winst/verlies</h3>
+                        <div class="btnsElements">
+                            <button id="prevBtn"><i class="fa fa-angle-left"></i></button>
+                            <?php foreach ($stats as $c): ?>
+                                <div class="elements tegels">
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Winst/verlies</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["profit_loss"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-980%</p>
+                                        </div>
                                     </div>
-                                    <p class="price">€
-                                        <?php echo htmlspecialchars($c["profit_loss"]); ?>
-                                    </p>
-                                    <div class="increaseRow">
-                                        <i class="fa fa-arrow-down"></i>
-                                        <p class="increase">-980%</p>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Eigen vermogen</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["equityCapital"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-25%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Brutomarge</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["grossMargin"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-2%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/revenue.svg" alt="revenue">
+                                            <h3>Omzet</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["revenue"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-up"></i>
+                                            <p class="increase">+12%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/cost.svg" alt="cost">
+                                            <h3>Kosten</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["costs"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-up"></i>
+                                            <p class="increase">+18%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Personeel <span>FTE</span></h3>
+                                        </div>
+                                        <p class="price">
+                                            <?php echo htmlspecialchars($c["personnel"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-2%</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="element">
-                                    <div class="row">
-                                        <img src="./assets/images/profit.svg" alt="profit">
-                                        <h3>Eigen vermogen</h3>
-                                    </div>
-                                    <p class="price">€
-                                        <?php echo htmlspecialchars($c["equityCapital"]); ?>
-                                    </p>
-                                    <div class="increaseRow">
-                                        <i class="fa fa-arrow-down"></i>
-                                        <p class="increase">-25%</p>
-                                    </div>
-                                </div>
-                                <div class="element">
-                                    <div class="row">
-                                        <img src="./assets/images/profit.svg" alt="profit">
-                                        <h3>Brutomarge</h3>
-                                    </div>
-                                    <p class="price">€
-                                        <?php echo htmlspecialchars($c["grossMargin"]); ?>
-                                    </p>
-                                    <div class="increaseRow">
-                                        <i class="fa fa-arrow-down"></i>
-                                        <p class="increase">-2%</p>
-                                    </div>
-                                </div>
-                                <div class="element">
-                                    <div class="row">
-                                        <img src="./assets/images/revenue.svg" alt="revenue">
-                                        <h3>Omzet</h3>
-                                    </div>
-                                    <p class="price">€
-                                        <?php echo htmlspecialchars($c["revenue"]); ?>
-                                    </p>
-                                    <div class="increaseRow">
-                                        <i class="fa fa-arrow-up"></i>
-                                        <p class="increase">+12%</p>
-                                    </div>
-                                </div>
-                                <div class="element">
-                                    <div class="row">
-                                        <img src="./assets/images/cost.svg" alt="cost">
-                                        <h3>Kosten</h3>
-                                    </div>
-                                    <p class="price">€
-                                        <?php echo htmlspecialchars($c["costs"]); ?>
-                                    </p>
-                                    <div class="increaseRow">
-                                        <i class="fa fa-arrow-up"></i>
-                                        <p class="increase">+18%</p>
-                                    </div>
-                                </div>
-                                <div class="element">
-                                    <div class="row">
-                                        <img src="./assets/images/profit.svg" alt="profit">
-                                        <h3>Personeel <span>FTE</span></h3>
-                                    </div>
-                                    <p class="price">
-                                        <?php echo htmlspecialchars($c["personnel"]); ?>
-                                    </p>
-                                    <div class="increaseRow">
-                                        <i class="fa fa-arrow-down"></i>
-                                        <p class="increase">-2%</p>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
+                            <button id="nextBtn"><i class="fa fa-angle-right"></i></button>
+                        </div>
                     <?php else: ?>
                         <p>Geen statistieken gevonden.</p>
                     <?php endif; ?>
@@ -305,6 +309,38 @@ if (isset($_SESSION["user_id"])) {
         function submitForm() {
             document.getElementById("filter_year_form").submit();
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            const elementsContainer = document.querySelector(".tegels");
+            let currentPosition = 0;
+
+            function scrollLeft() {
+                const elementsContainer = document.querySelector(".tegels");
+                const currentPosition = elementsContainer.scrollLeft;
+                const newPosition = currentPosition - 200; // Adjust scroll amount as needed
+                elementsContainer.scrollTo({
+                    left: newPosition,
+                    behavior: 'smooth' // Add smooth scrolling behavior
+                });
+            }
+
+            // Define the scrollRight function
+            function scrollRight() {
+                const elementsContainer = document.querySelector(".tegels");
+                const currentPosition = elementsContainer.scrollLeft;
+                const newPosition = currentPosition + 200; // Adjust scroll amount as needed
+                elementsContainer.scrollTo({
+                    left: newPosition,
+                    behavior: 'smooth' // Add smooth scrolling behavior
+                });
+            }
+
+            prevBtn.addEventListener("click", scrollLeft);
+            nextBtn.addEventListener("click", scrollRight);
+        });
+
     </script>
 </body>
 
