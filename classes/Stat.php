@@ -153,27 +153,29 @@ class Stat
     public static function getStats(PDO $pdo, $year, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM stats WHERE year = :year AND user_id = :user_id ORDER BY year ASC");
+            $stmt = $pdo->prepare("SELECT * FROM stats WHERE year = :year AND user_id = :user_id");
             $stmt->bindParam(':year', $year);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $stats = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $stats ?: [];
+            return $stats;
         } catch (PDOException $e) {
             error_log('Database error in getStats(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve stats');
         }
     }
 
-    public static function getAllStats(PDO $pdo, $startYear, $endYear)
+    public static function getAllStats(PDO $pdo, $startYear, $endYear, $statute_id)
     {
+        // SELECT stats.* FROM stats, users WHERE stats.year BETWEEN "2019" AND "2023" AND stats.user_id = users.id AND users.statute_id = 1 ORDER BY year ASC
         try {
-            $stmt = $pdo->prepare("SELECT year, revenue FROM stats WHERE year BETWEEN :startYear AND :endYear ORDER BY year ASC");
+            $stmt = $pdo->prepare("SELECT stats.* FROM stats, users WHERE year BETWEEN :startYear AND :endYear AND stats.user_id = users.id AND users.statute_id = :statute_id ORDER BY year ASC");
             $stmt->bindParam(':startYear', $startYear);
             $stmt->bindParam(':endYear', $endYear);
+            $stmt->bindParam(':statute_id', $statute_id);
             $stmt->execute();
             $allStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $allStats ?: [];
+            return $allStats;
         } catch (PDOException $e) {
             error_log('Database error in getAllStats(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve Allstats');
@@ -187,7 +189,7 @@ class Stat
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $userYears = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $userYears ?: [];
+            return $userYears;
         } catch (PDOException $e) {
             error_log('Database error in getUserYears(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve userYears');

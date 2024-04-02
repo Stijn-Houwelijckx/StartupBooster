@@ -22,9 +22,17 @@ if (isset($_SESSION["user_id"])) {
         $years = array_column($userYears, 'year');
         $lowestYear = min($years);
         $highestYear = max($years);
-        $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear);
+        $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear, $user['statute_id']);
 
-        var_dump($allStats);
+        $wantedStat = "revenue";
+
+        if(isset($_POST["statsFilter"])) {
+            $wantedStat = $_POST["statsFilter"];
+        }
+
+        $data = [
+            ['Year', 'Mijn rapport', 'Rapport mediaan ondernemer'],
+        ];
 
         function calculateMedian($values)
         {
@@ -39,72 +47,43 @@ if (isset($_SESSION["user_id"])) {
             return $median;
         }
 
-        // Array to store medians
-        $medians = [];
-
-        // Loop through the data
-        foreach ($allStats as $item) {
-            // Skip user_id and id
-            unset($item['id']);
-            unset($item['user_id']);
-
-            // Extract year
-            $year = $item['year'];
-            unset($item['year']);
-
-            // Initialize median array for the year if not exists
-            if (!isset($medians[$year])) {
-                $medians[$year] = [];
+        // $statsData = [];
+        $filteredStats = [];
+        foreach ($allStats as $stat) {
+            if (in_array($stat['year'], $years)) {
+                $filteredStats[] = $stat;
             }
+        }
 
-            // Calculate median for each type of financial data
-            foreach ($item as $key => $value) {
-                // Convert to float for calculation
-                $value = floatval($value);
-
-                // Initialize array for the key if not exists
-                if (!isset($medians[$year][$key])) {
-                    $medians[$year][$key] = [];
+        $medianStats = [];
+        foreach ($filteredStats as $stat) {
+            $year = $stat['year'];
+            $revenues = [];
+            foreach ($filteredStats as $filteredStat) {
+                if ($filteredStat['year'] == $year) {
+                    $revenues[] = $filteredStat[$wantedStat];
                 }
-
-                // Add value to array
-                $medians[$year][$key][] = $value;
+            }
+            $median = calculateMedian($revenues);
+            $medianStats[$year] = intval($median);
+        }
+        
+        // var_dump($medianStats);
+        
+        // var_dump($filteredStats);
+        
+        $i = 1;
+        foreach($allStats as $key => $value) {
+            if ($value['user_id'] == $_SESSION["user_id"]) {
+                // var_dump(strval($value['year']));
+                $data[$i][0] = strval($value['year']);
+                $data[$i][1] = intval($value[$wantedStat]);
+                $data[$i][2] = intval($medianStats[$value['year']]);
+                $i++;
             }
         }
 
-        $data = [
-            ['Year', 'Mijn rapport', 'Rapport mediaan ondernemer'],
-
-        ];
-
-        // Calculate medians
-        foreach ($medians as $year => $financialData) {
-            // echo "Year: $year\n";
-            foreach ($financialData as $key => $values) {
-                $median = intval(calculateMedian($values));
-                // echo "$key Median: $median\n";
-            }
-            // $data[$year + 1][2] = $median;
-        }
-
-        foreach ($userYears as $key => $userYearArray) {
-            $userYear = $userYearArray["year"];
-            $data[$key + 1][0] = strval($userYear);
-
-        }
-
-        $data[1][1] = rand(100, 100000);
-        $data[1][2] = rand(100, 100000);
-        $data[2][1] = rand(100, 100000);
-        $data[2][2] = rand(100, 100000);
-        $data[3][1] = rand(100, 100000);
-        $data[3][2] = rand(100, 100000);
-        // $data[4][1] = rand(100, 100000);
-        // $data[4][2] = rand(100, 100000);
-        // $data[5][1] = rand(100, 100000);
-        // $data[5][2] = rand(100, 100000);
-        // $data[6][1] = rand(100, 100000);
-        // $data[6][2] = rand(100, 100000);
+        // var_dump($data);
 
         // var_dump($data);
 
@@ -146,7 +125,7 @@ if (isset($_SESSION["user_id"])) {
                     <div class="row">
                         <h2>Overzicht</h2>
                         <form action="" method="POST" id="filter_year_form"> <select name="year" id="filter_year"
-                                onchange="submitForm()">
+                                onchange="submitYearForm()">
                                 <option value="2023" <?php if ($year == "2023")
                                     echo "selected"; ?>>2023</option>
                                 <option value="2022" <?php if ($year == "2022")
@@ -253,15 +232,18 @@ if (isset($_SESSION["user_id"])) {
                     <div class="row">
                         <h2>Rapport</h2>
                         <div>
-                            <form action="" method="POST">
-                                <select name="filter">
+                            <form action="" method="POST" id="statsFilter" onchange="submitStatsForm()">
+                                <!-- <select name="statuteFilter">
                                     <option value="Student-zelfstandigen">Student-zelfstandigen</option>
                                     <option value="Zelfstandigen">Zelfstandigen</option>
-                                </select>
-                                <select name="filter">
-                                    <option value="revenue">Omzet</option>
-                                    <option value="cost">Kosten</option>
-                                    <option value="profit">Winst</option>
+                                </select> -->
+                                <select name="statsFilter">
+                                    <option value="revenue" <?php if($wantedStat == "revenue") {echo "selected";} ?> >Omzet</option>
+                                    <option value="costs" <?php if($wantedStat == "costs") {echo "selected";} ?>>Kosten</option>
+                                    <option value="profit_loss" <?php if($wantedStat == "profit_loss") {echo "selected";} ?>>Winst</option>
+                                    <option value="personnel" <?php if($wantedStat == "personnel") {echo "selected";} ?>>Personeel</option>
+                                    <option value="equityCapital" <?php if($wantedStat == "equityCapital") {echo "selected";} ?>>Eigen vermogen</option>
+                                    <option value="grossMargin" <?php if($wantedStat == "grossMargin") {echo "selected";} ?>>Bruto marge</option>
                                 </select>
                             </form>
                         </div>
@@ -325,8 +307,12 @@ if (isset($_SESSION["user_id"])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-        function submitForm() {
+        function submitYearForm() {
             document.getElementById("filter_year_form").submit();
+        }
+
+        function submitStatsForm() {
+            document.getElementById("statsFilter").submit();
         }
 
         document.addEventListener("DOMContentLoaded", function () {
