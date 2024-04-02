@@ -153,7 +153,7 @@ class Stat
     public static function getStats(PDO $pdo, $year, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM stats WHERE year = :year AND user_id = :user_id");
+            $stmt = $pdo->prepare("SELECT * FROM stats WHERE year = :year AND user_id = :user_id ORDER BY year ASC");
             $stmt->bindParam(':year', $year);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
@@ -165,23 +165,25 @@ class Stat
         }
     }
 
-    public static function getAllStats(PDO $pdo)
+    public static function getAllStats(PDO $pdo, $startYear, $endYear)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM stats");
+            $stmt = $pdo->prepare("SELECT year, revenue FROM stats WHERE year BETWEEN :startYear AND :endYear ORDER BY year ASC");
+            $stmt->bindParam(':startYear', $startYear);
+            $stmt->bindParam(':endYear', $endYear);
             $stmt->execute();
             $allStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $allStats ?: [];
         } catch (PDOException $e) {
             error_log('Database error in getAllStats(): ' . $e->getMessage());
-            throw new Exception('Database error: Unable to retrieve stats');
+            throw new Exception('Database error: Unable to retrieve Allstats');
         }
     }
 
     public static function getUserYears(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT DISTINCT year FROM stats WHERE user_id = :user_id");
+            $stmt = $pdo->prepare("SELECT DISTINCT year FROM stats WHERE user_id = :user_id ORDER BY year ASC");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $userYears = $stmt->fetchAll(PDO::FETCH_ASSOC);

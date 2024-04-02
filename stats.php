@@ -4,6 +4,11 @@ include_once (__DIR__ . "/classes/User.php");
 include_once (__DIR__ . "/classes/Stat.php");
 
 session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
+
 $current_page = 'stats';
 
 if (isset($_SESSION["user_id"])) {
@@ -13,9 +18,13 @@ if (isset($_SESSION["user_id"])) {
         $year = isset($_POST['year']) ? $_POST['year'] : date("Y", strtotime("-1 year"));
         $pdo = Db::getInstance();
         $stats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
-        $allStats = Stat::getAllStats($pdo);
         $userYears = Stat::getUserYears($pdo, $_SESSION["user_id"]);
-        // var_dump($userYears);
+        $years = array_column($userYears, 'year');
+        $lowestYear = min($years);
+        $highestYear = max($years);
+        $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear);
+
+        var_dump($allStats);
 
         function calculateMedian($values)
         {
@@ -90,10 +99,12 @@ if (isset($_SESSION["user_id"])) {
         $data[2][2] = rand(100, 100000);
         $data[3][1] = rand(100, 100000);
         $data[3][2] = rand(100, 100000);
-        $data[4][1] = rand(100, 100000);
-        $data[4][2] = rand(100, 100000);
-        $data[5][1] = rand(100, 100000);
-        $data[5][2] = rand(100, 100000);
+        // $data[4][1] = rand(100, 100000);
+        // $data[4][2] = rand(100, 100000);
+        // $data[5][1] = rand(100, 100000);
+        // $data[5][2] = rand(100, 100000);
+        // $data[6][1] = rand(100, 100000);
+        // $data[6][2] = rand(100, 100000);
 
         // var_dump($data);
 
