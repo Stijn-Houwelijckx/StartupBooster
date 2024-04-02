@@ -1,6 +1,6 @@
 <?php
 
-class Stats
+class Stat
 {
     private $profit_loss;
     private $equityCapital;
@@ -160,8 +160,35 @@ class Stats
             $stats = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $stats ?: [];
         } catch (PDOException $e) {
-            error_log('Database error in getTasks(): ' . $e->getMessage());
-            throw new Exception('Database error: Unable to retrieve tasks');
+            error_log('Database error in getStats(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve stats');
+        }
+    }
+
+    public static function getAllStats(PDO $pdo)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM stats");
+            $stmt->execute();
+            $allStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $allStats ?: [];
+        } catch (PDOException $e) {
+            error_log('Database error in getAllStats(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve stats');
+        }
+    }
+
+    public static function getUserYears(PDO $pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT DISTINCT year FROM stats WHERE user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $userYears = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $userYears ?: [];
+        } catch (PDOException $e) {
+            error_log('Database error in getUserYears(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve userYears');
         }
     }
 }
