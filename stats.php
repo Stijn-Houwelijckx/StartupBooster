@@ -25,13 +25,17 @@ if (isset($_SESSION["user_id"])) {
         $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear, $user['statute_id']);
 
         $wantedStat = "revenue";
+        $wantedStatCalc = "median";
 
         if(isset($_POST["statsFilter"])) {
             $wantedStat = $_POST["statsFilter"];
+            $wantedStatCalc = $_POST["calcFilter"];
         }
 
+        $legenda = $wantedStatCalc == "median" ? "mediaan" : "gemiddelde";
+
         $data = [
-            ['Year', 'Mijn rapport', 'Rapport mediaan ondernemer'],
+            ['Year', 'Mijn rapport', 'Rapport ' . $legenda . ' ondernemer'],
         ];
 
         function calculateMedian($values)
@@ -47,6 +51,14 @@ if (isset($_SESSION["user_id"])) {
             return $median;
         }
 
+        function calculateAverage($values)
+        {
+            $sum = array_sum($values);
+            $count = count($values);
+            $average = $sum / $count;
+            return $average;
+        }
+
         // $statsData = [];
         $filteredStats = [];
         foreach ($allStats as $stat) {
@@ -55,7 +67,7 @@ if (isset($_SESSION["user_id"])) {
             }
         }
 
-        $medianStats = [];
+        $calculatedStats = [];
         foreach ($filteredStats as $stat) {
             $year = $stat['year'];
             $revenues = [];
@@ -64,8 +76,14 @@ if (isset($_SESSION["user_id"])) {
                     $revenues[] = $filteredStat[$wantedStat];
                 }
             }
-            $median = calculateMedian($revenues);
-            $medianStats[$year] = intval($median);
+
+            if ($wantedStatCalc == "median") {
+                $median = calculateMedian($revenues);
+            } else {
+                $median = calculateAverage($revenues);
+            }
+
+            $calculatedStats[$year] = intval($median);
         }
         
         // var_dump($medianStats);
@@ -78,7 +96,7 @@ if (isset($_SESSION["user_id"])) {
                 // var_dump(strval($value['year']));
                 $data[$i][0] = strval($value['year']);
                 $data[$i][1] = intval($value[$wantedStat]);
-                $data[$i][2] = intval($medianStats[$value['year']]);
+                $data[$i][2] = intval($calculatedStats[$value['year']]);
                 $i++;
             }
         }
@@ -237,6 +255,10 @@ if (isset($_SESSION["user_id"])) {
                                     <option value="Student-zelfstandigen">Student-zelfstandigen</option>
                                     <option value="Zelfstandigen">Zelfstandigen</option>
                                 </select> -->
+                                <select name="calcFilter">
+                                    <option value="median" <?php if($wantedStatCalc == "median") {echo "selected";} ?> >Mediaan</option>
+                                    <option value="average" <?php if($wantedStatCalc == "average") {echo "selected";} ?>>Gemiddelde</option>
+                                </select>
                                 <select name="statsFilter">
                                     <option value="revenue" <?php if($wantedStat == "revenue") {echo "selected";} ?> >Omzet</option>
                                     <option value="costs" <?php if($wantedStat == "costs") {echo "selected";} ?>>Kosten</option>
