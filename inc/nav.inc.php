@@ -41,10 +41,14 @@
                 </div>
             </a>
         </div>
-        <div class="logout">
-            <a href="logout.php" style="color: white;">Logout</a>
-        </div>
         <div class="settings">
+            <a href="logout.php">
+                <div>
+                    <img class="<?php echo ($current_page == 'logout') ? 'logoutItem active' : 'logoutItem'; ?>"
+                        src="assets/images/logout.svg" alt="logoutIcon">
+                    <p>Logout</p>
+                </div>
+            </a>
             <a href="./settings.php">
                 <div>
                     <img class="<?php echo ($current_page == 'settings') ? 'settingsItem active' : 'settingsItem'; ?>"

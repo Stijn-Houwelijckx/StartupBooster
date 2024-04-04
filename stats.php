@@ -27,7 +27,7 @@ if (isset($_SESSION["user_id"])) {
         $wantedStat = "revenue";
         $wantedStatCalc = "median";
 
-        if(isset($_POST["statsFilter"])) {
+        if (isset($_POST["statsFilter"])) {
             $wantedStat = $_POST["statsFilter"];
             $wantedStatCalc = $_POST["calcFilter"];
         }
@@ -85,13 +85,13 @@ if (isset($_SESSION["user_id"])) {
 
             $calculatedStats[$year] = intval($median);
         }
-        
+
         // var_dump($medianStats);
-        
+
         // var_dump($filteredStats);
-        
+
         $i = 1;
-        foreach($allStats as $key => $value) {
+        foreach ($allStats as $key => $value) {
             if ($value['user_id'] == $_SESSION["user_id"]) {
                 // var_dump(strval($value['year']));
                 $data[$i][0] = strval($value['year']);
@@ -256,16 +256,37 @@ if (isset($_SESSION["user_id"])) {
                                     <option value="Zelfstandigen">Zelfstandigen</option>
                                 </select> -->
                                 <select name="calcFilter">
-                                    <option value="median" <?php if($wantedStatCalc == "median") {echo "selected";} ?> >Mediaan</option>
-                                    <option value="average" <?php if($wantedStatCalc == "average") {echo "selected";} ?>>Gemiddelde</option>
+                                    <option value="median" <?php if ($wantedStatCalc == "median") {
+                                        echo "selected";
+                                    } ?>>
+                                        Mediaan</option>
+                                    <option value="average" <?php if ($wantedStatCalc == "average") {
+                                        echo "selected";
+                                    } ?>>
+                                        Gemiddelde</option>
                                 </select>
                                 <select name="statsFilter">
-                                    <option value="revenue" <?php if($wantedStat == "revenue") {echo "selected";} ?> >Omzet</option>
-                                    <option value="costs" <?php if($wantedStat == "costs") {echo "selected";} ?>>Kosten</option>
-                                    <option value="profit_loss" <?php if($wantedStat == "profit_loss") {echo "selected";} ?>>Winst</option>
-                                    <option value="personnel" <?php if($wantedStat == "personnel") {echo "selected";} ?>>Personeel</option>
-                                    <option value="equityCapital" <?php if($wantedStat == "equityCapital") {echo "selected";} ?>>Eigen vermogen</option>
-                                    <option value="grossMargin" <?php if($wantedStat == "grossMargin") {echo "selected";} ?>>Bruto marge</option>
+                                    <option value="revenue" <?php if ($wantedStat == "revenue") {
+                                        echo "selected";
+                                    } ?>>Omzet
+                                    </option>
+                                    <option value="costs" <?php if ($wantedStat == "costs") {
+                                        echo "selected";
+                                    } ?>>Kosten
+                                    </option>
+                                    <option value="profit_loss" <?php if ($wantedStat == "profit_loss") {
+                                        echo "selected";
+                                    } ?>>Winst</option>
+                                    <option value="personnel" <?php if ($wantedStat == "personnel") {
+                                        echo "selected";
+                                    } ?>>
+                                        Personeel</option>
+                                    <option value="equityCapital" <?php if ($wantedStat == "equityCapital") {
+                                        echo "selected";
+                                    } ?>>Eigen vermogen</option>
+                                    <option value="grossMargin" <?php if ($wantedStat == "grossMargin") {
+                                        echo "selected";
+                                    } ?>>Bruto marge</option>
                                 </select>
                             </form>
                         </div>
