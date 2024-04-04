@@ -15,71 +15,21 @@ if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
     try {
+        $year = isset($_POST['year']) ? $_POST['year'] : date("Y", strtotime("-1 year"));
         $pdo = Db::getInstance();
+        $stats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
         $userYears = Stat::getUserYears($pdo, $_SESSION["user_id"]);
         $years = array_column($userYears, 'year');
         $lowestYear = min($years);
         $highestYear = max($years);
         $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear, $user['statute_id']);
-        
+
         $wantedStat = "revenue";
         $wantedStatCalc = "median";
-        $wantedYear = 2023;
-
-        $year = isset($_POST['year']) ? $_POST['year'] : date("Y", strtotime("-1 year"));
-        // $stats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
-
-        $differenceToLastYear = [];
-        $currentYearStats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
-        $previousYearStats = Stat::getStats($pdo, $year - 1, $_SESSION["user_id"]);
-
-        unset($currentYearStats[0]["id"]);
-        unset($currentYearStats[0]["user_id"]);
-        unset($previousYearStats[0]["id"]);
-        unset($previousYearStats[0]["user_id"]);
-
-        $statNamesDutch = [
-            "revenue" => "Omzet",
-            "costs" => "Kosten",
-            "profit_loss" => "Winst/verlies",
-            "personnel" => "Personeel",
-            "equityCapital" => "Eigen vermogen",
-            "grossMargin" => "Bruto marge"
-        ];
-
-        if(isset($previousYearStats[0]["year"]) && $previousYearStats[0]["year"] > $lowestYear) {
-            unset($previousYearStats[0]["year"]);
-            unset($currentYearStats[0]["year"]);
-            foreach($currentYearStats[0] as $key => $value) {
-                if(isset($previousYearStats[0][$key])) {
-                    $differenceToLastYear[$key] = (($value - $previousYearStats[0][$key]) / $previousYearStats[0][$key]) * 100;
-                }
-            }
-
-            foreach ($differenceToLastYear as $key => $value) {
-                $differenceToLastYear[$key] = number_format($value, 2);
-            }
-            // var_dump($differenceToLastYear);
-        } else {
-            $differenceToLastYear = [
-                "revenue" => 0,
-                "costs" => 0,
-                "profit_loss" => 0,
-                "personnel" => 0,
-                "equityCapital" => 0,
-                "grossMargin" => 0
-            ];
-
-            unset($currentYearStats[0]["year"]);
-        }
 
         if (isset($_POST["statsFilter"])) {
             $wantedStat = $_POST["statsFilter"];
             $wantedStatCalc = $_POST["calcFilter"];
-        }
-
-        if(isset($_POST["year"])) {
-            $wantedYear = $_POST["year"];
         }
 
         $legenda = $wantedStatCalc == "median" ? "mediaan" : "gemiddelde";
@@ -172,7 +122,7 @@ if (isset($_SESSION["user_id"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StartupBooster - statistieken</title>
-    <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -194,32 +144,102 @@ if (isset($_SESSION["user_id"])) {
                         <h2>Overzicht</h2>
                         <form action="" method="POST" id="filter_year_form"> <select name="year" id="filter_year"
                                 onchange="submitYearForm()">
-                                <?php foreach (array_reverse($years) as $year): ?>
-                                    <option value="<?php echo $year; ?>" <?php if($year == $wantedYear) {echo "selected";} ?>><?php echo $year; ?></option>
-                                <?php endforeach; ?>
+                                <option value="2023" <?php if ($year == "2023")
+                                    echo "selected"; ?>>2023</option>
+                                <option value="2022" <?php if ($year == "2022")
+                                    echo "selected"; ?>>2022</option>
+                                <option value="2021" <?php if ($year == "2021")
+                                    echo "selected"; ?>>2021</option>
+                                <option value="2020" <?php if ($year == "2020")
+                                    echo "selected"; ?>>2020</option>
                             </select>
                         </form>
                     </div>
-                    <?php if (!empty($currentYearStats)): ?>
+                    <?php if (!empty($stats)): ?>
                         <div class="btnsElements">
                             <button id="prevBtn"><i class="fa fa-angle-left"></i></button>
-                            <div class="elements tegels">
-                                <?php foreach ($currentYearStats[0] as $key => $stat): ?>
+                            <?php foreach ($stats as $c): ?>
+                                <div class="elements tegels">
                                     <div class="element">
                                         <div class="row">
-                                            <img src="./assets/images/<?php echo $key ?>.svg" alt="profit">
-                                            <h3><?php echo $statNamesDutch[$key] ?></h3>
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Winst/verlies</h3>
                                         </div>
-                                        <p class="price">
-                                            <?php echo $key == "personnel"? htmlspecialchars($stat) : "€ " . htmlspecialchars($stat); ?>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["profit_loss"]); ?>
                                         </p>
                                         <div class="increaseRow">
-                                            <i class="fa fa-arrow-down increaseIcon"></i>
-                                            <p class="increase"><?php echo htmlspecialchars($differenceToLastYear[$key]); ?>%</p>
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-980%</p>
                                         </div>
                                     </div>
-                                <?php endforeach; ?>
-                            </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Eigen vermogen</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["equityCapital"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-25%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Brutomarge</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["grossMargin"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-2%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/revenue.svg" alt="revenue">
+                                            <h3>Omzet</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["revenue"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-up"></i>
+                                            <p class="increase">+12%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/cost.svg" alt="cost">
+                                            <h3>Kosten</h3>
+                                        </div>
+                                        <p class="price">€
+                                            <?php echo htmlspecialchars($c["costs"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-up"></i>
+                                            <p class="increase">+18%</p>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div class="row">
+                                            <img src="./assets/images/profit.svg" alt="profit">
+                                            <h3>Personeel <span>FTE</span></h3>
+                                        </div>
+                                        <p class="price">
+                                            <?php echo htmlspecialchars($c["personnel"]); ?>
+                                        </p>
+                                        <div class="increaseRow">
+                                            <i class="fa fa-arrow-down"></i>
+                                            <p class="increase">-2%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                             <button id="nextBtn"><i class="fa fa-angle-right"></i></button>
                         </div>
                     <?php else: ?>
@@ -374,16 +394,10 @@ if (isset($_SESSION["user_id"])) {
 
             increases.forEach(function (item) {
                 var increaseText = item.textContent.trim();
-                if (increaseText.includes('-')) {
+                if (increaseText.includes('+')) {
+                    item.parentElement.classList.add('green');
+                } else if (increaseText.includes('-')) {
                     item.parentElement.classList.add('red');
-                } else if (increaseText === '0%') {
-                    item.parentElement.firstElementChild.style.display = 'none';
-                    item.parentElement.classList.add('green');
-                }
-                else {
-                    item.parentElement.classList.add('green');
-                    item.parentElement.firstElementChild.classList.remove('fa-arrow-down');
-                    item.parentElement.firstElementChild.classList.add('fa-arrow-up');
                 }
             });
         };
