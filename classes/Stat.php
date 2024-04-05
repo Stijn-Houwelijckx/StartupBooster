@@ -192,7 +192,6 @@ class Stat
     {
         try {
             $stmt = $pdo->prepare("SELECT stats.$stat FROM stats, users WHERE year = :year AND stats.user_id = users.id AND users.sector_id = :sector_id");
-            // $stmt->bindParam(':stat', $stat);
             $stmt->bindParam(':year', $year);
             $stmt->bindParam(':sector_id', $sector_id);
             $stmt->execute();

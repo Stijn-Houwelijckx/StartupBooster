@@ -449,26 +449,32 @@ if (isset($_SESSION["user_id"])) {
         const xyValues = <?php echo $jsSectorValuesJSON; ?>;
 
         const modifiedXYValues = xyValues.map(value => ({
-            pointRadius: value.pointRadius,
             backgroundColor: value.backgroundColor,
             label: value.label,
-            data: [{ x: value.x, y: value.y }]
+            data: [{ x: value.x, y: value.y, r: value.pointRadius }]
         }));
 
         new Chart("myChart", {
-            type: "scatter",
+            type: "bubble",
             data: {
                 datasets: modifiedXYValues
             },
             options: {
                 legend: { display: true },
                 scales: {
-                    xAxes: [{ ticks: { min: 0, max: <?php echo round($highestXValue * 1.5)  ?> } }],
+                    xAxes: [{ ticks: { min: 0, max: <?php echo round($highestXValue * 1.5) ?> } }],
                     yAxes: [{ ticks: { min: 0, max: <?php echo round($highestYValue * 1.5) ?> } }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                            return 'X: ' + tooltipItem.xLabel + ', Y: ' + tooltipItem.yLabel;
+                        }
+                    }
                 }
             }
         });
-
     </script>
 </body>
 
