@@ -21,14 +21,12 @@ if (isset($_SESSION["user_id"])) {
             $years = array_column($userYears, 'year');
             $lowestYear = min($years);
             $highestYear = max($years);
-            $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear, $user['statute_id']);
-
+            $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear, $user['statute_id'], $user['sector_id']);
             $wantedStat = "revenue";
             $wantedStatCalc = "median";
             $wantedYear = 2023;
 
             $year = isset($_POST['year']) ? $_POST['year'] : date("Y", strtotime("-1 year"));
-            // $stats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
 
             $differenceToLastYear = [];
             $currentYearStats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
@@ -56,11 +54,9 @@ if (isset($_SESSION["user_id"])) {
                         $differenceToLastYear[$key] = (($value - $previousYearStats[0][$key]) / $previousYearStats[0][$key]) * 100;
                     }
                 }
-
                 foreach ($differenceToLastYear as $key => $value) {
-                    $differenceToLastYear[$key] = number_format($value, 2);
+                    $differenceToLastYear[$key] = number_format($value);
                 }
-                // var_dump($differenceToLastYear);
             } else {
                 $differenceToLastYear = [
                     "revenue" => 0,
@@ -110,7 +106,6 @@ if (isset($_SESSION["user_id"])) {
                 return $average;
             }
 
-            // $statsData = [];
             $filteredStats = [];
             foreach ($allStats as $stat) {
                 if (in_array($stat['year'], $years)) {
@@ -137,24 +132,15 @@ if (isset($_SESSION["user_id"])) {
                 $calculatedStats[$year] = intval($median);
             }
 
-            // var_dump($medianStats);
-
-            // var_dump($filteredStats);
-
             $i = 1;
             foreach ($allStats as $key => $value) {
                 if ($value['user_id'] == $_SESSION["user_id"]) {
-                    // var_dump(strval($value['year']));
                     $data[$i][0] = strval($value['year']);
                     $data[$i][1] = intval($value[$wantedStat]);
                     $data[$i][2] = intval($calculatedStats[$value['year']]);
                     $i++;
                 }
             }
-
-            // var_dump($data);
-
-            // var_dump($data);
 
             $json_data = json_encode($data);
         } else {
@@ -220,7 +206,7 @@ if (isset($_SESSION["user_id"])) {
                                     <?php foreach ($currentYearStats[0] as $key => $stat): ?>
                                         <div class="element">
                                             <div class="row">
-                                                <img src="./assets/images/<?php echo $key ?>.svg" alt="profit">
+                                                <img src="./assets/images/<?php echo $key ?>.svg" alt="icon">
                                                 <h3>
                                                     <?php echo $statNamesDutch[$key] ?>
                                                 </h3>

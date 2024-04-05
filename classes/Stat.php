@@ -165,14 +165,14 @@ class Stat
         }
     }
 
-    public static function getAllStats(PDO $pdo, $startYear, $endYear, $statute_id)
+    public static function getAllStats(PDO $pdo, $startYear, $endYear, $statute_id, $sector_id)
     {
-        // SELECT stats.* FROM stats, users WHERE stats.year BETWEEN "2019" AND "2023" AND stats.user_id = users.id AND users.statute_id = 1 ORDER BY year ASC
         try {
-            $stmt = $pdo->prepare("SELECT stats.* FROM stats, users WHERE year BETWEEN :startYear AND :endYear AND stats.user_id = users.id AND users.statute_id = :statute_id ORDER BY year ASC");
+            $stmt = $pdo->prepare("SELECT stats.* FROM stats, users WHERE year BETWEEN :startYear AND :endYear AND stats.user_id = users.id AND users.statute_id = :statute_id AND users.sector_id = :sector_id ORDER BY year ASC");
             $stmt->bindParam(':startYear', $startYear);
             $stmt->bindParam(':endYear', $endYear);
             $stmt->bindParam(':statute_id', $statute_id);
+            $stmt->bindParam(':sector_id', $sector_id);
             $stmt->execute();
             $allStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $allStats;
