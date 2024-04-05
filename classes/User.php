@@ -620,16 +620,4 @@ class User
             return null;
         }
     }
-
-    public static function getAllUser(PDO $pdo)
-    {
-        try {
-            $stmt = $pdo->prepare("select * FROM users");
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log('Database error: ' . $e->getMessage());
-            return null;
-        }
-    }
 }

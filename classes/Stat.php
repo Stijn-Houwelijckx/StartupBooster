@@ -195,4 +195,17 @@ class Stat
             throw new Exception('Database error: Unable to retrieve userYears');
         }
     }
+
+    public static function getSectorYears(PDO $pdo)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT DISTINCT year FROM stats ORDER BY year DESC");
+            $stmt->execute();
+            $sectorYears = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $sectorYears;
+        } catch (PDOException $e) {
+            error_log('Database error in getSectorYears(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve sectorYears');
+        }
+    }
 }
