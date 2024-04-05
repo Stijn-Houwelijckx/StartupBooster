@@ -23,7 +23,7 @@ if (isset($_SESSION["user_id"])) {
             $years = array_column($userYears, 'year');
             $lowestYear = min($years);
             $highestYear = max($years);
-            $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear, $user['statute_id'], $user['sector_id']);
+            $allStatsByStatuteSector = Stat::getAllStatsByStatuteSector($pdo, $lowestYear, $highestYear, $user['statute_id'], $user['sector_id']);
             $wantedStat = "revenue";
             $wantedStatCalc = "median";
             $wantedYear = 2023;
@@ -48,7 +48,7 @@ if (isset($_SESSION["user_id"])) {
                 "grossMargin" => "Bruto marge"
             ];
 
-            if (isset($previousYearStats[0]["year"]) && $previousYearStats[0]["year"] > $lowestYear) {
+            if (isset($previousYearStats[0]["year"]) && $previousYearStats[0]["year"] >= $lowestYear) {
                 unset($previousYearStats[0]["year"]);
                 unset($currentYearStats[0]["year"]);
                 foreach ($currentYearStats[0] as $key => $value) {
@@ -87,29 +87,8 @@ if (isset($_SESSION["user_id"])) {
                 ['Year', 'Mijn rapport', 'Rapport ' . $legenda . ' ondernemer'],
             ];
 
-            function calculateMedian($values)
-            {
-                sort($values);
-                $count = count($values);
-                $middle = floor($count / 2);
-                if ($count % 2 == 0) {
-                    $median = ($values[$middle - 1] + $values[$middle]) / 2;
-                } else {
-                    $median = $values[$middle];
-                }
-                return $median;
-            }
-
-            function calculateAverage($values)
-            {
-                $sum = array_sum($values);
-                $count = count($values);
-                $average = $sum / $count;
-                return $average;
-            }
-
             $filteredStats = [];
-            foreach ($allStats as $stat) {
+            foreach ($allStatsByStatuteSector as $stat) {
                 if (in_array($stat['year'], $years)) {
                     $filteredStats[] = $stat;
                 }
@@ -118,24 +97,24 @@ if (isset($_SESSION["user_id"])) {
             $calculatedStats = [];
             foreach ($filteredStats as $stat) {
                 $year = $stat['year'];
-                $revenues = [];
+                $values = [];
                 foreach ($filteredStats as $filteredStat) {
                     if ($filteredStat['year'] == $year) {
-                        $revenues[] = $filteredStat[$wantedStat];
+                        $values[] = $filteredStat[$wantedStat];
                     }
                 }
 
                 if ($wantedStatCalc == "median") {
-                    $median = calculateMedian($revenues);
+                    $median = Stat::calculateMedian($values);
                 } else {
-                    $median = calculateAverage($revenues);
+                    $median = Stat::calculateAverage($values);
                 }
 
                 $calculatedStats[$year] = intval($median);
             }
 
             $i = 1;
-            foreach ($allStats as $key => $value) {
+            foreach ($allStatsByStatuteSector as $key => $value) {
                 if ($value['user_id'] == $_SESSION["user_id"]) {
                     $data[$i][0] = strval($value['year']);
                     $data[$i][1] = intval($value[$wantedStat]);
@@ -147,8 +126,9 @@ if (isset($_SESSION["user_id"])) {
             $json_data = json_encode($data);
 
             // tweede grafiek
-            $wantedStatTwo = "revenue";
-            $wantedStatThree = "costs";
+            $wantedSectorStatX = "revenue";
+            $wantedSectorStatY = "costs";
+            $wantedSectorStatsYear = 2023;
             $sectors = Sector::getPopulatedSector($pdo);
             $sectorYears = array_column(Stat::getSectorYears($pdo), "year");
             $minSectorYear = min($sectorYears);
@@ -156,33 +136,57 @@ if (isset($_SESSION["user_id"])) {
             // var_dump($sectorYears);
             // var_dump($minSectorYear);
             // var_dump($maxSectorYear);
-            $cleanedData = [];
 
-            foreach ($sectors as $sector) {
+            if (isset($_POST["sectorStatsFilterX"])) {
+                $wantedSectorStatX = $_POST["sectorStatsFilterX"];
+                $wantedSectorStatY = $_POST["sectorStatsFilterY"];
+                $wantedSectorStatsYear = $_POST["sectorStatsYear"];
+            }
+
+            // if (isset($_POST["sectorStatsYear"])) {
+            // }
+
+            $sectorData = [];
+
+            $highestXValue = 0;
+            $highestYValue = 0;
+
+            foreach ($sectors as $key => $sector) {
                 $userCount = Sector::getUserCountBySectorId($pdo, $sector['id']);
 
-                $cleanedSector['pointRadius'] = $userCount;
+                $sectorDataX = Stat::getAllStatsByType($pdo, $wantedSectorStatsYear, $wantedSectorStatX, $sector['id']);
+                $sectorDataY = Stat::getAllStatsByType($pdo, $wantedSectorStatsYear, $wantedSectorStatY, $sector['id']);
+
+                if (empty($sectorDataX) || empty($sectorDataY)) {
+                    continue;
+                }
+
+                $sectorDataXAvg = Stat::calculateAverage(array_column($sectorDataX, $wantedSectorStatX));
+                $sectorDataYAvg = Stat::calculateAverage(array_column($sectorDataY, $wantedSectorStatY));
+
+                if ($sectorDataXAvg > $highestXValue) {
+                    $highestXValue = intval($sectorDataXAvg);
+                }
+
+                if ($sectorDataYAvg > $highestYValue) {
+                    $highestYValue = intval($sectorDataYAvg);
+                }
+
+                $sectorData[$key]['pointRadius'] = $userCount * 10;
                 $red = rand(0, 255);
                 $green = rand(0, 255);
                 $blue = rand(0, 255);
                 $alpha = 0.6;
-                $cleanedSector['backgroundColor'] = "rgba($red, $green, $blue, $alpha)";
-                $cleanedSector['label'] = $sector['title'];
-                $cleanedSector['x'] = rand(100, 1000);
-                $cleanedSector['y'] = rand(100, 1000);
-
-                $cleanedData[] = $cleanedSector;
+                $sectorData[$key]['backgroundColor'] = "rgba($red, $green, $blue, $alpha)";
+                $sectorData[$key]['label'] = $sector['title'];
+                // $sectorData[$key]['x'] = rand(100, 1000);
+                // $sectorData[$key]['y'] = rand(100, 1000);
+                $sectorData[$key]['x'] = intval($sectorDataXAvg);
+                $sectorData[$key]['y'] = intval($sectorDataYAvg);
             }
 
-            $jsSectorValuesJSON = json_encode($cleanedData);
+            $jsSectorValuesJSON = json_encode($sectorData);
 
-            if (isset($_POST["statsFilterTwo"])) {
-                $wantedStatTwo = $_POST["statsFilterTwo"];
-            }
-
-            if (isset($_POST["statsFilterThree"])) {
-                $wantedStatThree = $_POST["statsFilterThree"];
-            }
         } else {
             $error = "Geen statistieken gevonden.";
         }
@@ -230,9 +234,7 @@ if (isset($_SESSION["user_id"])) {
                             <form action="" method="POST" id="filter_year_form"> <select name="year" id="filter_year"
                                     onchange="submitYearForm()">
                                     <?php foreach (array_reverse($years) as $year): ?>
-                                        <option value="<?php echo $year; ?>" <?php if ($year == $wantedYear) {
-                                               echo "selected";
-                                           } ?>>
+                                        <option value="<?php echo $year; ?>" <?php if ($year == $wantedYear) {echo "selected";} ?>>
                                             <?php echo $year; ?>
                                         </option>
                                     <?php endforeach; ?>
@@ -279,37 +281,16 @@ if (isset($_SESSION["user_id"])) {
                                         <option value="Zelfstandigen">Zelfstandigen</option>
                                     </select> -->
                                     <select name="calcFilter">
-                                        <option value="median" <?php if ($wantedStatCalc == "median") {
-                                            echo "selected";
-                                        } ?>>
-                                            Mediaan</option>
-                                        <option value="average" <?php if ($wantedStatCalc == "average") {
-                                            echo "selected";
-                                        } ?>>
-                                            Gemiddelde</option>
+                                        <option value="median" <?php if ($wantedStatCalc == "median") {echo "selected";} ?>>Mediaan</option>
+                                        <option value="average" <?php if ($wantedStatCalc == "average") {echo "selected";} ?>>Gemiddelde</option>
                                     </select>
                                     <select name="statsFilter">
-                                        <option value="revenue" <?php if ($wantedStat == "revenue") {
-                                            echo "selected";
-                                        } ?>>Omzet
-                                        </option>
-                                        <option value="costs" <?php if ($wantedStat == "costs") {
-                                            echo "selected";
-                                        } ?>>Kosten
-                                        </option>
-                                        <option value="profit_loss" <?php if ($wantedStat == "profit_loss") {
-                                            echo "selected";
-                                        } ?>>Winst</option>
-                                        <option value="personnel" <?php if ($wantedStat == "personnel") {
-                                            echo "selected";
-                                        } ?>>
-                                            Personeel</option>
-                                        <option value="equityCapital" <?php if ($wantedStat == "equityCapital") {
-                                            echo "selected";
-                                        } ?>>Eigen vermogen</option>
-                                        <option value="grossMargin" <?php if ($wantedStat == "grossMargin") {
-                                            echo "selected";
-                                        } ?>>Bruto marge</option>
+                                        <option value="revenue" <?php if ($wantedStat == "revenue") {echo "selected";} ?>>Omzet</option>
+                                        <option value="costs" <?php if ($wantedStat == "costs") {echo "selected";} ?>>Kosten</option>
+                                        <option value="profit_loss" <?php if ($wantedStat == "profit_loss") {echo "selected";} ?>>Winst</option>
+                                        <option value="personnel" <?php if ($wantedStat == "personnel") {echo "selected";} ?>>Personeel</option>
+                                        <option value="equityCapital" <?php if ($wantedStat == "equityCapital") {echo "selected";} ?>>Eigen vermogen</option>
+                                        <option value="grossMargin" <?php if ($wantedStat == "grossMargin") {echo "selected";} ?>>Bruto marge</option>
                                     </select>
                                 </form>
                             </div>
@@ -319,74 +300,40 @@ if (isset($_SESSION["user_id"])) {
                         </div>
                     </div>
 
-
-
                     <div class="rapport two">
-                        <div class="row">
-                            <h2>Overzicht sectoren</h2>
-                            <form action="" method="POST" id="statsFilter" onchange="submitStatsForm()">
-                                <select name="year">
-                                    <?php foreach ($sectorYears as $sectorYear): ?>
-                                        <option value="<?php echo $sectorYear; ?>">
-                                            <?php echo $sectorYear ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-
-
-                            </form>
-                        </div>
+                        <form action="" id="sectorStastFilter" method="post" onchange="submitSectorStatsForm()">
+                            <div class="row">
+                                <h2>Overzicht sectoren</h2>
+                                    <select name="sectorStatsYear">
+                                        <?php foreach ($sectorYears as $year): ?>
+                                            <option value="<?php echo $year; ?>" <?php if ($year == $wantedSectorStatsYear) {echo "selected";} ?>>
+                                                <?php echo $year; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                            </div>
                         <div class="figure">
-                            <select name="statsFilterTwo">
-                                <option value="revenue" <?php if ($wantedStatTwo == "revenue") {
-                                    echo "selected";
-                                } ?>>Omzet
-                                </option>
-                                <option value="costs" <?php if ($wantedStatTwo == "costs") {
-                                    echo "selected";
-                                } ?>>Kosten
-                                </option>
-                                <option value="profit_loss" <?php if ($wantedStatTwo == "profit_loss") {
-                                    echo "selected";
-                                } ?>>Winst</option>
-                                <option value="personnel" <?php if ($wantedStatTwo == "personnel") {
-                                    echo "selected";
-                                } ?>>
-                                    Personeel</option>
-                                <option value="equityCapital" <?php if ($wantedStatTwo == "equityCapital") {
-                                    echo "selected";
-                                } ?>>Eigen vermogen</option>
-                                <option value="grossMargin" <?php if ($wantedStatTwo == "grossMargin") {
-                                    echo "selected";
-                                } ?>>Bruto marge</option>
+                            <select name="sectorStatsFilterY">
+                                <option value="revenue" <?php if ($wantedSectorStatY == "revenue") {echo "selected";} ?>>Omzet</option>
+                                <option value="costs" <?php if ($wantedSectorStatY == "costs") {echo "selected";} ?>>Kosten</option>
+                                <option value="profit_loss" <?php if ($wantedSectorStatY == "profit_loss") {echo "selected";} ?>>Winst</option>
+                                <option value="personnel" <?php if ($wantedSectorStatY == "personnel") {echo "selected";} ?>>Personeel</option>
+                                <option value="equityCapital" <?php if ($wantedSectorStatY == "equityCapital") {echo "selected";} ?>>Eigen vermogen</option>
+                                <option value="grossMargin" <?php if ($wantedSectorStatY == "grossMargin") {echo "selected";} ?>>Bruto marge</option>
                             </select>
                             <div class="column">
                                 <canvas id="myChart" style="width:100%"></canvas>
-                                <select name="statsFilterThree">
-                                    <option value="revenue" <?php if ($wantedStatThree == "revenue") {
-                                        echo "selected";
-                                    } ?>>Omzet
-                                    </option>
-                                    <option value="costs" <?php if ($wantedStatThree == "costs") {
-                                        echo "selected";
-                                    } ?>>Kosten
-                                    </option>
-                                    <option value="profit_loss" <?php if ($wantedStatThree == "profit_loss") {
-                                        echo "selected";
-                                    } ?>>Winst</option>
-                                    <option value="personnel" <?php if ($wantedStatThree == "personnel") {
-                                        echo "selected";
-                                    } ?>>
-                                        Personeel</option>
-                                    <option value="equityCapital" <?php if ($wantedStatThree == "equityCapital") {
-                                        echo "selected";
-                                    } ?>>Eigen vermogen</option>
-                                    <option value="grossMargin" <?php if ($wantedStatThree == "grossMargin") {
-                                        echo "selected";
-                                    } ?>>Bruto marge</option>
+                                <select name="sectorStatsFilterX">
+                                    <option value="revenue" <?php if ($wantedSectorStatX == "revenue") {echo "selected";} ?>>Omzet</option>
+                                    <option value="costs" <?php if ($wantedSectorStatX == "costs") {echo "selected";} ?>>Kosten</option>
+                                    <option value="profit_loss" <?php if ($wantedSectorStatX == "profit_loss") {echo "selected";} ?>>Winst</option>
+                                    <option value="personnel" <?php if ($wantedSectorStatX == "personnel") {echo "selected";} ?>>Personeel</option>
+                                    <option value="equityCapital" <?php if ($wantedSectorStatX == "equityCapital") {echo "selected";} ?>>Eigen vermogen</option>
+                                    <option value="grossMargin" <?php if ($wantedSectorStatX == "grossMargin") {echo "selected";} ?>>Bruto marge</option>
                                 </select>
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
                 <div class="right">
@@ -423,6 +370,10 @@ if (isset($_SESSION["user_id"])) {
 
         function submitStatsForm() {
             document.getElementById("statsFilter").submit();
+        }
+
+        function submitSectorStatsForm() {
+            document.getElementById("sectorStastFilter").submit();
         }
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -512,8 +463,8 @@ if (isset($_SESSION["user_id"])) {
             options: {
                 legend: { display: true },
                 scales: {
-                    xAxes: [{ ticks: { min: 0, max: 1000 } }],
-                    yAxes: [{ ticks: { min: 0, max: 1000 } }]
+                    xAxes: [{ ticks: { min: 0, max: <?php echo round($highestXValue * 1.5)  ?> } }],
+                    yAxes: [{ ticks: { min: 0, max: <?php echo round($highestYValue * 1.5) ?> } }]
                 }
             }
         });

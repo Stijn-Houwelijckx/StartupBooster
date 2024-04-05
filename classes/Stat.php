@@ -2,6 +2,8 @@
 
 class Stat
 {
+    // ======================== STATISTICS PROPERTIES ========================
+
     private $profit_loss;
     private $equityCapital;
     private $grossMargin;
@@ -9,6 +11,8 @@ class Stat
     private $costs;
     private $personnel;
     private $year;
+
+    // ======================== STATISTICS GETTERS & SETTERS ========================
 
     /**
      * Get the value of profit_loss
@@ -150,6 +154,8 @@ class Stat
         return $this;
     }
 
+    // ======================== STATISTICS DATABASE OPERATIONS ========================
+
     public static function getStats(PDO $pdo, $year, $user_id)
     {
         try {
@@ -165,7 +171,7 @@ class Stat
         }
     }
 
-    public static function getAllStats(PDO $pdo, $startYear, $endYear, $statute_id, $sector_id)
+    public static function getAllStatsByStatuteSector(PDO $pdo, $startYear, $endYear, $statute_id, $sector_id)
     {
         try {
             $stmt = $pdo->prepare("SELECT stats.* FROM stats, users WHERE year BETWEEN :startYear AND :endYear AND stats.user_id = users.id AND users.statute_id = :statute_id AND users.sector_id = :sector_id ORDER BY year ASC");
@@ -177,8 +183,24 @@ class Stat
             $allStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $allStats;
         } catch (PDOException $e) {
-            error_log('Database error in getAllStats(): ' . $e->getMessage());
-            throw new Exception('Database error: Unable to retrieve Allstats');
+            error_log('Database error in getAllStatsByStatuteSector(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve AllStatsByStatuteSector');
+        }
+    }
+
+    public static function getAllStatsByType(PDO $pdo, $year, $stat, $sector_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT stats.$stat FROM stats, users WHERE year = :year AND stats.user_id = users.id AND users.sector_id = :sector_id");
+            // $stmt->bindParam(':stat', $stat);
+            $stmt->bindParam(':year', $year);
+            $stmt->bindParam(':sector_id', $sector_id);
+            $stmt->execute();
+            $allStats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $allStats;
+        } catch (PDOException $e) {
+            error_log('Database error in getAllStatsByType(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve AllStatsByType');
         }
     }
 
@@ -207,5 +229,28 @@ class Stat
             error_log('Database error in getSectorYears(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve sectorYears');
         }
+    }
+
+    // ======================== STATISTICS CALCULATIONS ========================
+
+    public static function calculateMedian($values)
+    {
+        sort($values);
+        $count = count($values);
+        $middle = floor($count / 2);
+        if ($count % 2 == 0) {
+            $median = ($values[$middle - 1] + $values[$middle]) / 2;
+        } else {
+            $median = $values[$middle];
+        }
+        return $median;
+    }
+    
+    public static function calculateAverage($values)
+    {
+        $sum = array_sum($values);
+        $count = count($values);
+        $average = $sum / $count;
+        return $average;
     }
 }
