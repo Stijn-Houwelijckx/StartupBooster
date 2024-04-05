@@ -14,4 +14,17 @@ class Sector
             return null;
         }
     }
+
+    // In your Stat class or a relevant class// In your Stat class or a relevant class
+// In the Sector class or a relevant class
+    public static function getUserCountBySectorId($pdo, $sectorId)
+    {
+        $stmt = $pdo->prepare("SELECT COUNT(*) as user_count FROM users WHERE sector_id = ?");
+        $stmt->execute([$sectorId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['user_count'];
+    }
+
+
+
 }
