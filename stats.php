@@ -2,7 +2,6 @@
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
 include_once (__DIR__ . "/classes/Stat.php");
-include_once (__DIR__ . "/classes/Sector.php");
 
 session_start();
 
@@ -19,27 +18,27 @@ if (isset($_SESSION["user_id"])) {
         $pdo = Db::getInstance();
         $userYears = Stat::getUserYears($pdo, $_SESSION["user_id"]);
         if (!empty($userYears)) {
-            // eerste grafiek
             $years = array_column($userYears, 'year');
             $lowestYear = min($years);
             $highestYear = max($years);
             $allStats = Stat::getAllStats($pdo, $lowestYear, $highestYear, $user['statute_id'], $user['sector_id']);
+            
             $wantedStat = "revenue";
-            $wantedStatTwo = "revenue";
             $wantedStatCalc = "median";
             $wantedYear = 2023;
-
+    
             $year = isset($_POST['year']) ? $_POST['year'] : date("Y", strtotime("-1 year"));
-
+            // $stats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
+    
             $differenceToLastYear = [];
             $currentYearStats = Stat::getStats($pdo, $year, $_SESSION["user_id"]);
             $previousYearStats = Stat::getStats($pdo, $year - 1, $_SESSION["user_id"]);
-
+    
             unset($currentYearStats[0]["id"]);
             unset($currentYearStats[0]["user_id"]);
             unset($previousYearStats[0]["id"]);
             unset($previousYearStats[0]["user_id"]);
-
+    
             $statNamesDutch = [
                 "revenue" => "Omzet",
                 "costs" => "Kosten",
@@ -48,18 +47,20 @@ if (isset($_SESSION["user_id"])) {
                 "equityCapital" => "Eigen vermogen",
                 "grossMargin" => "Bruto marge"
             ];
-
-            if (isset($previousYearStats[0]["year"]) && $previousYearStats[0]["year"] > $lowestYear) {
+    
+            if(isset($previousYearStats[0]["year"]) && $previousYearStats[0]["year"] > $lowestYear) {
                 unset($previousYearStats[0]["year"]);
                 unset($currentYearStats[0]["year"]);
-                foreach ($currentYearStats[0] as $key => $value) {
-                    if (isset($previousYearStats[0][$key])) {
+                foreach($currentYearStats[0] as $key => $value) {
+                    if(isset($previousYearStats[0][$key])) {
                         $differenceToLastYear[$key] = (($value - $previousYearStats[0][$key]) / $previousYearStats[0][$key]) * 100;
                     }
                 }
+    
                 foreach ($differenceToLastYear as $key => $value) {
-                    $differenceToLastYear[$key] = number_format($value);
+                    $differenceToLastYear[$key] = number_format($value, 2);
                 }
+                // var_dump($differenceToLastYear);
             } else {
                 $differenceToLastYear = [
                     "revenue" => 0,
@@ -69,25 +70,25 @@ if (isset($_SESSION["user_id"])) {
                     "equityCapital" => 0,
                     "grossMargin" => 0
                 ];
-
+    
                 unset($currentYearStats[0]["year"]);
             }
-
+    
             if (isset($_POST["statsFilter"])) {
                 $wantedStat = $_POST["statsFilter"];
                 $wantedStatCalc = $_POST["calcFilter"];
             }
-
-            if (isset($_POST["year"])) {
+    
+            if(isset($_POST["year"])) {
                 $wantedYear = $_POST["year"];
             }
-
+    
             $legenda = $wantedStatCalc == "median" ? "mediaan" : "gemiddelde";
-
+    
             $data = [
                 ['Year', 'Mijn rapport', 'Rapport ' . $legenda . ' ondernemer'],
             ];
-
+    
             function calculateMedian($values)
             {
                 sort($values);
@@ -100,7 +101,7 @@ if (isset($_SESSION["user_id"])) {
                 }
                 return $median;
             }
-
+    
             function calculateAverage($values)
             {
                 $sum = array_sum($values);
@@ -108,14 +109,15 @@ if (isset($_SESSION["user_id"])) {
                 $average = $sum / $count;
                 return $average;
             }
-
+    
+            // $statsData = [];
             $filteredStats = [];
             foreach ($allStats as $stat) {
                 if (in_array($stat['year'], $years)) {
                     $filteredStats[] = $stat;
                 }
             }
-
+    
             $calculatedStats = [];
             foreach ($filteredStats as $stat) {
                 $year = $stat['year'];
@@ -125,75 +127,38 @@ if (isset($_SESSION["user_id"])) {
                         $revenues[] = $filteredStat[$wantedStat];
                     }
                 }
-
+    
                 if ($wantedStatCalc == "median") {
                     $median = calculateMedian($revenues);
                 } else {
                     $median = calculateAverage($revenues);
                 }
-
+    
                 $calculatedStats[$year] = intval($median);
             }
-
+    
+            // var_dump($medianStats);
+    
+            // var_dump($filteredStats);
+    
             $i = 1;
             foreach ($allStats as $key => $value) {
                 if ($value['user_id'] == $_SESSION["user_id"]) {
+                    // var_dump(strval($value['year']));
                     $data[$i][0] = strval($value['year']);
                     $data[$i][1] = intval($value[$wantedStat]);
                     $data[$i][2] = intval($calculatedStats[$value['year']]);
                     $i++;
                 }
             }
-
+    
+            // var_dump($data);
+    
+            // var_dump($data);
+    
             $json_data = json_encode($data);
-
-            // tweede grafiek 
-            $wantedStatThree = "costs";
-            $sectors = Sector::getPopulatedSector($pdo);
-            $sectorYears = array_column(Stat::getSectorYears($pdo), "year");
-            $minSectorYear = min($sectorYears);
-            $maxSectorYear = max($sectorYears);
-            // var_dump($sectorYears);
-            // var_dump($minSectorYear);
-            // var_dump($maxSectorYear);
-            $cleanedData = [];
-
-            foreach ($sectors as $sector) {
-                $userCount = Sector::getUserCountBySectorId($pdo, $sector['id']);
-                $cleanedSector = [];
-
-                foreach ($sector as $key => $value) {
-                    if (is_string($value)) {
-                        $cleanedValue = mb_convert_encoding($value, 'UTF-8', 'UTF-8');
-                        $cleanedSector[$key] = $cleanedValue;
-                    } else {
-                        $cleanedSector[$key] = $value;
-                    }
-                }
-
-                $cleanedSector['pointRadius'] = $userCount;
-                $red = rand(0, 255);
-                $green = rand(0, 255);
-                $blue = rand(0, 255);
-                $alpha = 0.6;
-                $cleanedSector['backgroundColor'] = "rgba($red, $green, $blue, $alpha)";
-                $cleanedSector['label'] = $cleanedSector['title'];
-                $cleanedSector['x'] = rand(100, 1000);
-                $cleanedSector['y'] = rand(100, 1000);
-
-                $cleanedData[] = $cleanedSector;
-            }
-
-            $jsSectorValuesJSON = json_encode($cleanedData);
-
-            if (isset($_POST["statsFilterTwo"])) {
-                $wantedStatTwo = $_POST["statsFilterTwo"];
-            }
-
-            if (isset($_POST["statsFilterThree"])) {
-                $wantedStatThree = $_POST["statsFilterThree"];
-            }
-        } else {
+        }
+        else {
             $error = "Geen statistieken gevonden.";
         }
     } catch (Exception $e) {
@@ -223,11 +188,9 @@ if (isset($_SESSION["user_id"])) {
     <?php include_once ('inc/nav.inc.php'); ?>
     <div id="stats">
         <h1>Statistieken</h1>
-        <?php if (isset($error)): ?>
-            <p>
-                <?php echo $error; ?>
-            </p>
-        <?php else: ?>
+        <?php if(isset($error)): ?>
+            <p><?php echo $error; ?></p>
+        <?php else : ?>
             <div class="top">
                 <h2>De gezondheid van uw bedrijf bijhouden</h2>
                 <p>Controleer en analyseer je gegevens op de handigste manier</p>
@@ -240,11 +203,7 @@ if (isset($_SESSION["user_id"])) {
                             <form action="" method="POST" id="filter_year_form"> <select name="year" id="filter_year"
                                     onchange="submitYearForm()">
                                     <?php foreach (array_reverse($years) as $year): ?>
-                                        <option value="<?php echo $year; ?>" <?php if ($year == $wantedYear) {
-                                               echo "selected";
-                                           } ?>>
-                                            <?php echo $year; ?>
-                                        </option>
+                                        <option value="<?php echo $year; ?>" <?php if($year == $wantedYear) {echo "selected";} ?>><?php echo $year; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </form>
@@ -256,19 +215,15 @@ if (isset($_SESSION["user_id"])) {
                                     <?php foreach ($currentYearStats[0] as $key => $stat): ?>
                                         <div class="element">
                                             <div class="row">
-                                                <img src="./assets/images/<?php echo $key ?>.svg" alt="icon">
-                                                <h3>
-                                                    <?php echo $statNamesDutch[$key] ?>
-                                                </h3>
+                                                <img src="./assets/images/<?php echo $key ?>.svg" alt="profit">
+                                                <h3><?php echo $statNamesDutch[$key] ?></h3>
                                             </div>
                                             <p class="price">
-                                                <?php echo $key == "personnel" ? htmlspecialchars($stat) : "€ " . htmlspecialchars($stat); ?>
+                                                <?php echo $key == "personnel"? htmlspecialchars($stat) : "€ " . htmlspecialchars($stat); ?>
                                             </p>
                                             <div class="increaseRow">
                                                 <i class="fa fa-arrow-down increaseIcon"></i>
-                                                <p class="increase">
-                                                    <?php echo htmlspecialchars($differenceToLastYear[$key]); ?>%
-                                                </p>
+                                                <p class="increase"><?php echo htmlspecialchars($differenceToLastYear[$key]); ?>%</p>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
@@ -334,66 +289,25 @@ if (isset($_SESSION["user_id"])) {
                     <div class="rapport two">
                         <div class="row">
                             <h2>Overzicht sectoren</h2>
-                            <form action="" method="POST" id="statsFilter" onchange="submitStatsForm()">
-                                <select name="year">
-                                    <?php foreach ($sectorYears as $sectorYear): ?>
-                                        <option value="<?php echo $sectorYear; ?>">
-                                            <?php echo $sectorYear ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-
-
-                            </form>
+                            <select name="year">
+                                <option value="year">2024</option>
+                                <option value="year">2023</option>
+                                <option value="year">2022</option>
+                                <option value="year">2021</option>
+                            </select>
                         </div>
                         <div class="figure">
-                            <select name="statsFilterTwo">
-                                <option value="revenue" <?php if ($wantedStatTwo == "revenue") {
-                                    echo "selected";
-                                } ?>>Omzet
-                                </option>
-                                <option value="costs" <?php if ($wantedStatTwo == "costs") {
-                                    echo "selected";
-                                } ?>>Kosten
-                                </option>
-                                <option value="profit_loss" <?php if ($wantedStatTwo == "profit_loss") {
-                                    echo "selected";
-                                } ?>>Winst</option>
-                                <option value="personnel" <?php if ($wantedStatTwo == "personnel") {
-                                    echo "selected";
-                                } ?>>
-                                    Personeel</option>
-                                <option value="equityCapital" <?php if ($wantedStatTwo == "equityCapital") {
-                                    echo "selected";
-                                } ?>>Eigen vermogen</option>
-                                <option value="grossMargin" <?php if ($wantedStatTwo == "grossMargin") {
-                                    echo "selected";
-                                } ?>>Bruto marge</option>
+                            <select name="filter">
+                                <option value="revenue">Omzet</option>
+                                <option value="cost">Kosten</option>
+                                <option value="profit">Winst</option>
                             </select>
                             <div class="column">
                                 <canvas id="myChart" style="width:100%"></canvas>
-                                <select name="statsFilterThree">
-                                    <option value="revenue" <?php if ($wantedStatThree == "revenue") {
-                                        echo "selected";
-                                    } ?>>Omzet
-                                    </option>
-                                    <option value="costs" <?php if ($wantedStatThree == "costs") {
-                                        echo "selected";
-                                    } ?>>Kosten
-                                    </option>
-                                    <option value="profit_loss" <?php if ($wantedStatThree == "profit_loss") {
-                                        echo "selected";
-                                    } ?>>Winst</option>
-                                    <option value="personnel" <?php if ($wantedStatThree == "personnel") {
-                                        echo "selected";
-                                    } ?>>
-                                        Personeel</option>
-                                    <option value="equityCapital" <?php if ($wantedStatThree == "equityCapital") {
-                                        echo "selected";
-                                    } ?>>Eigen vermogen</option>
-                                    <option value="grossMargin" <?php if ($wantedStatThree == "grossMargin") {
-                                        echo "selected";
-                                    } ?>>Bruto marge</option>
+                                <select name="filter">
+                                    <option value="revenue">Omzet</option>
+                                    <option value="cost">Kosten</option>
+                                    <option value="profit">Winst</option>
                                 </select>
                             </div>
                         </div>
@@ -421,114 +335,132 @@ if (isset($_SESSION["user_id"])) {
             </div>
         </div>
 
-
-    <?php endif; ?>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script>
-        function submitYearForm() {
-            document.getElementById("filter_year_form").submit();
-        }
-
-        function submitStatsForm() {
-            document.getElementById("statsFilter").submit();
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const prevBtn = document.getElementById("prevBtn");
-            const nextBtn = document.getElementById("nextBtn");
-            const elementsContainer = document.querySelector(".tegels");
-            let currentPosition = 0;
-
-            function scrollLeft() {
-                const elementsContainer = document.querySelector(".tegels");
-                const currentPosition = elementsContainer.scrollLeft;
-                const newPosition = currentPosition - 200;
-                elementsContainer.scrollTo({
-                    left: newPosition,
-                    behavior: 'smooth'
-                });
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+            function submitYearForm() {
+                document.getElementById("filter_year_form").submit();
             }
 
-            function scrollRight() {
-                const elementsContainer = document.querySelector(".tegels");
-                const currentPosition = elementsContainer.scrollLeft;
-                const newPosition = currentPosition + 200;
-                elementsContainer.scrollTo({
-                    left: newPosition,
-                    behavior: 'smooth'
-                });
+            function submitStatsForm() {
+                document.getElementById("statsFilter").submit();
             }
 
-            prevBtn.addEventListener("click", scrollLeft);
-            nextBtn.addEventListener("click", scrollRight);
-        });
+            document.addEventListener("DOMContentLoaded", function () {
+                const prevBtn = document.getElementById("prevBtn");
+                const nextBtn = document.getElementById("nextBtn");
+                const elementsContainer = document.querySelector(".tegels");
+                let currentPosition = 0;
 
-        /* ---- cijfers postief of negatief maken overzicht ---- */
-        window.onload = function () {
-            var increases = document.querySelectorAll('.increase');
+                function scrollLeft() {
+                    const elementsContainer = document.querySelector(".tegels");
+                    const currentPosition = elementsContainer.scrollLeft;
+                    const newPosition = currentPosition - 200; // Adjust scroll amount as needed
+                    elementsContainer.scrollTo({
+                        left: newPosition,
+                        behavior: 'smooth' // Add smooth scrolling behavior
+                    });
+                }
 
-            increases.forEach(function (item) {
-                var increaseText = item.textContent.trim();
-                if (increaseText.includes('-')) {
-                    item.parentElement.classList.add('red');
-                } else if (increaseText === '0%') {
-                    item.parentElement.firstElementChild.style.display = 'none';
-                    item.parentElement.classList.add('green');
+                function scrollRight() {
+                    const elementsContainer = document.querySelector(".tegels");
+                    const currentPosition = elementsContainer.scrollLeft;
+                    const newPosition = currentPosition + 200; // Adjust scroll amount as needed
+                    elementsContainer.scrollTo({
+                        left: newPosition,
+                        behavior: 'smooth' // Add smooth scrolling behavior
+                    });
                 }
-                else {
-                    item.parentElement.classList.add('green');
-                    item.parentElement.firstElementChild.classList.remove('fa-arrow-down');
-                    item.parentElement.firstElementChild.classList.add('fa-arrow-up');
-                }
+
+                prevBtn.addEventListener("click", scrollLeft);
+                nextBtn.addEventListener("click", scrollRight);
             });
-        };
 
-        /* ---- eerste grafiek, vergelijken met gemiddelde ondernemer binnen sector ---- */
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
+            /* ---- cijfers postief of negatief maken overzicht ---- */
+            window.onload = function () {
+                var increases = document.querySelectorAll('.increase');
 
-        function drawChart() {
-            var jsonData = <?php echo $json_data; ?>; // Haal de JSON-data op die door PHP is gegenereerd
-
-            var data = google.visualization.arrayToDataTable(jsonData);
-
-            var options = {
-                curveType: 'function',
-                legend: { position: 'bottom' }
+                increases.forEach(function (item) {
+                    var increaseText = item.textContent.trim();
+                    if (increaseText.includes('-')) {
+                        item.parentElement.classList.add('red');
+                    } else if (increaseText === '0%') {
+                        item.parentElement.firstElementChild.style.display = 'none';
+                        item.parentElement.classList.add('green');
+                    }
+                    else {
+                        item.parentElement.classList.add('green');
+                        item.parentElement.firstElementChild.classList.remove('fa-arrow-down');
+                        item.parentElement.firstElementChild.classList.add('fa-arrow-up');
+                    }
+                });
             };
 
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            /* ---- eerste grafiek, vergelijken met gemiddelde ondernemer binnen sector ---- */
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
 
-            chart.draw(data, options);
-        }
+            function drawChart() {
+                var jsonData = <?php echo $json_data; ?>; // Haal de JSON-data op die door PHP is gegenereerd
 
-        /* ---- 2de grafiek, vergelijken op sector ---- */
-        const xyValues = <?php echo $jsSectorValuesJSON; ?>;
+                var data = google.visualization.arrayToDataTable(jsonData);
 
-        const modifiedXYValues = xyValues.map(value => ({
-            pointRadius: value.pointRadius,
-            backgroundColor: value.backgroundColor,
-            label: value.label,
-            data: [{ x: value.x, y: value.y }]
-        }));
+                var options = {
+                    curveType: 'function',
+                    legend: { position: 'bottom' }
+                };
 
-        new Chart("myChart", {
-            type: "scatter",
-            data: {
-                datasets: modifiedXYValues
-            },
-            options: {
-                legend: { display: true },
-                scales: {
-                    xAxes: [{ ticks: { min: 0, max: 1000 } }],
-                    yAxes: [{ ticks: { min: 0, max: 1000 } }]
-                }
+                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                chart.draw(data, options);
             }
-        });
 
-    </script>
+            /* ---- 2de grafiek, vergelijken op sector ---- */
+            const xyValues = [
+                { name: "Gezondheidszorg en sociale diensten", x: 200, y: 80, pointRadius: 25, backgroundColor: "rgba(255, 0, 0, 0.6)" }, // Rood met 80% opacity
+                { name: "Detailhandel", x: 340, y: 160, pointRadius: 10, backgroundColor: "rgba(0, 0, 255, 0.6)" }, // Blauw met 80% opacity
+                { name: "Industrie", x: 450, y: 580, pointRadius: 40, backgroundColor: "rgba(0, 255, 0, 0.6)" }, // Groen met 80% opacity
+                { name: "Onderwijs", x: 280, y: 480, pointRadius: 55, backgroundColor: "rgba(255, 255, 0, 0.6)" }, // Geel met 80% opacity
+                { name: "ICT en technologie  ", x: 430, y: 120, pointRadius: 30, backgroundColor: "rgba(255, 165, 0, 0.6)" }, // Oranje met 80% opacity
+                { name: "Bouw en vastgoed", x: 320, y: 820, pointRadius: 20, backgroundColor: "rgba(128, 0, 128, 0.6)" }, // Paars met 80% opacity
+                { name: "Horeca en toerisme  ", x: 120, y: 100, pointRadius: 50, backgroundColor: "rgba(0, 255, 255, 0.6)" }, // Cyaan met 80% opacity
+                { name: "Transport en logistiek  ", x: 630, y: 360, pointRadius: 15, backgroundColor: "rgba(255, 0, 255, 0.6)" }, // Magenta met 80% opacity
+                { name: "Consultancy en professionele dienstverlening", x: 520, y: 420, pointRadius: 45, backgroundColor: "rgba(0, 128, 128, 0.6)" }, // Teal met 80% opacity
+                { name: "Landbouw en voedingsindustrie", x: 830, y: 630, pointRadius: 14, backgroundColor: "rgba(0, 0, 128, 0.6)" }, // Navy met 80% opacity
+                { name: "Landbouw en voedingsindustrie", x: 420, y: 630, pointRadius: 24, backgroundColor: "rgba(100, 100, 0, 0.6)" }, // Aangepaste kleur
+                { name: "Landbouw en voedingsindustrie", x: 510, y: 630, pointRadius: 40, backgroundColor: "rgba(200, 200, 0, 0.6)" }, // Aangepaste kleur
+                { name: "Energie en milieu", x: 630, y: 630, pointRadius: 25, backgroundColor: "rgba(0, 128, 128, 0.6)" }, // Teal met 80% opacity
+                { name: "Landbouw en voedingsindustrie", x: 310, y: 630, pointRadius: 35, backgroundColor: "rgba(0, 100, 128, 0.6)" }, // Aangepaste kleur
+                { name: "Media en communicatie", x: 600, y: 630, pointRadius: 44, backgroundColor: "rgba(100, 0, 128, 0.6)" }, // Aangepaste kleur
+                { name: "Automotive sector", x: 100, y: 630, pointRadius: 32, backgroundColor: "rgba(0, 200, 128, 0.6)" }, // Aangepaste kleur
+                { name: "Farmaceutische industrie", x: 780, y: 630, pointRadius: 52, backgroundColor: "rgba(200, 128, 0, 0.6)" }, // Aangepaste kleur
+                { name: "Creatieve industrieën", x: 220, y: 630, pointRadius: 59, backgroundColor: "rgba(128, 200, 0, 0.6)" }, // Aangepaste kleur
+                { name: "Telecommunicatie", x: 180, y: 630, pointRadius: 22, backgroundColor: "rgba(128, 0, 200, 0.6)" }, // Aangepaste kleur
+                { name: "Juridische dienstverlening", x: 800, y: 630, pointRadius: 31, backgroundColor: "rgba(128, 0, 0, 0.6)" }, // Donkerrood met 80% opacity
+            ];
+
+            const datasets = xyValues.map(value => ({
+                pointRadius: value.pointRadius,
+                backgroundColor: value.backgroundColor,
+                label: value.name, // Gebruik de naam uit xyValues als label voor elke dataset
+                data: [value]
+            }));
+
+            new Chart("myChart", {
+                type: "scatter",
+                data: {
+                    datasets: datasets
+                },
+                options: {
+                    legend: { display: true },
+                    scales: {
+                        xAxes: [{ ticks: { min: 0, max: 1000 } }],
+                        yAxes: [{ ticks: { min: 0, max: 1000 } }],
+                    }
+                }
+            });
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>
