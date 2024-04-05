@@ -133,18 +133,12 @@ if (isset($_SESSION["user_id"])) {
             $sectorYears = array_column(Stat::getSectorYears($pdo), "year");
             $minSectorYear = min($sectorYears);
             $maxSectorYear = max($sectorYears);
-            // var_dump($sectorYears);
-            // var_dump($minSectorYear);
-            // var_dump($maxSectorYear);
 
             if (isset($_POST["sectorStatsFilterX"])) {
                 $wantedSectorStatX = $_POST["sectorStatsFilterX"];
                 $wantedSectorStatY = $_POST["sectorStatsFilterY"];
                 $wantedSectorStatsYear = $_POST["sectorStatsYear"];
             }
-
-            // if (isset($_POST["sectorStatsYear"])) {
-            // }
 
             $sectorData = [];
 
@@ -179,8 +173,6 @@ if (isset($_SESSION["user_id"])) {
                 $alpha = 0.6;
                 $sectorData[$key]['backgroundColor'] = "rgba($red, $green, $blue, $alpha)";
                 $sectorData[$key]['label'] = $sector['title'];
-                // $sectorData[$key]['x'] = rand(100, 1000);
-                // $sectorData[$key]['y'] = rand(100, 1000);
                 $sectorData[$key]['x'] = intval($sectorDataXAvg);
                 $sectorData[$key]['y'] = intval($sectorDataYAvg);
             }
