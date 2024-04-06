@@ -1102,7 +1102,8 @@ a.active {
 
 /* ---- subsidies ---- */
 #subsidies,
-#subsidie-details {
+#subsidie-details,
+#addSubsidie {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -1121,6 +1122,29 @@ a.active {
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 16px;
   width: 366px;
+  position: relative; /* Voeg relatieve positionering toe aan .subsidie om absolute positionering binnen .subsidie mogelijk te maken */
+}
+
+#subsidies .subsidies .subsidie .delete {
+  position: absolute;
+  top: 8px; /* Plaats de .delete 8px vanaf de bovenkant */
+  right: 8px; /* Plaats de .delete 8px vanaf de rechterkant */
+  z-index: 999; /* Zorg ervoor dat de delete-klasse bovenop staat */
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 8px;
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+#subsidies .subsidies .subsidie .delete i {
+  font-size: 24px;
+  color: var(--black);
 }
 
 #subsidies .subsidies .subsidie .image {
@@ -1173,6 +1197,28 @@ a.active {
   border-radius: 16px;
 }
 
+#addSubsidie form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+#addSubsidie form .row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#addSubsidie form .row .column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
 /* ---- helpdesk ---- */
 #helpdesk {
   display: flex;
@@ -1189,7 +1235,8 @@ a.active {
   gap: 24px;
 }
 
-#helpdesk .FAQ .top {
+#helpdesk .FAQ .top,
+#subsidies .top {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -1587,6 +1634,12 @@ a.active {
     width: 48%;
   }
 
+  #addSubsidie form .row .column,
+  #addSubsidie form .row .column {
+    width: 49%;
+  }
+
+  /* ---- roadmap ---- */
   #roadmap {
     /* width: fit-content;
     display: flex;
@@ -1742,6 +1795,7 @@ a.active {
   #stats,
   #subsidies,
   #subsidie-details,
+  #addSubsidie,
   #task-details,
   #helpdesk,
   #settings {

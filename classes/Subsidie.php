@@ -155,4 +155,37 @@ class Subsidie
             return null;
         }
     }
+
+    public static function addSubsidie(PDO $pdo, $name, $description, $who, $what, $amount, $link)
+    {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO subsidies (name, description, who, what, amount, link) VALUES (:name, :description, :who, :what, :amount, :link)");
+            $stmt->execute(
+                array(
+                    ':name' => $name,
+                    ':description' => $description,
+                    ':who' => $who,
+                    ':what' => $what,
+                    ':amount' => $amount,
+                    ':link' => $link
+                )
+            );
+            return true;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteSubsidie(PDO $pdo, $name)
+    {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM subsidies WHERE name = :name");
+            $stmt->bindParam(':name', $name);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
 }
