@@ -1,6 +1,6 @@
 <?php
-include_once (__DIR__ . "/classes/Subsidie.php");
-include_once (__DIR__ . "/classes/Db.php");
+include_once (__DIR__ . "../../classes/Subsidie.php");
+include_once (__DIR__ . "../../classes/Db.php");
 session_start();
 
 $subsidie_name = isset($_GET['name']) ? $_GET['name'] : '';
@@ -35,11 +35,11 @@ $current_page = 'subsidie_details';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subsidie Details</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
-    <?php include_once ('inc/nav.inc.php'); ?>
+    <?php include_once ('../inc/navAdmin.inc.php'); ?>
     <div id="subsidie-details">
         <h1>Subsidie Details</h1>
         <div class="text">
@@ -71,7 +71,7 @@ $current_page = 'subsidie_details';
             </div>
         </div>
         <div class="image"
-            style="background-image: url('./assets/images/subsidies/tegel<?php echo htmlspecialchars($subsidie["id"]); ?>.jpg')">
+            style="background-image: url('.././assets/images/subsidies/tegel<?php echo htmlspecialchars($subsidie["id"]); ?>.jpg')">
         </div>
     </div>
 </body>

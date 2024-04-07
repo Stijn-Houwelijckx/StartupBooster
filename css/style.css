@@ -684,7 +684,7 @@ a.active {
 }
 
 .steps .step:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--blue);
 }
 
 .steps .step:nth-child(even) p,
@@ -1743,7 +1743,8 @@ a.active {
   }
 
   /* ---- roadmap ---- */
-  #roadmap {
+  #roadmap,
+  #roadmapAdmin {
     /* width: fit-content;
     display: flex;
     flex-direction: column;
@@ -1976,7 +1977,7 @@ a.active {
   }
 
   #roadmapAdmin .topLabel {
-    width: 8%;
+    width: 7%;
   }
 
   #roadmapAdmin .label {
@@ -1984,7 +1985,7 @@ a.active {
   }
 
   #roadmapAdmin .topQuestion {
-    width: 39%;
+    width: 38%;
   }
 
   #roadmapAdmin .question {

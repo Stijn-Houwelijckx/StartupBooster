@@ -1,23 +1,36 @@
 <?php
-include_once (__DIR__ . "../../classes/User.php");
 include_once (__DIR__ . "../../classes/Db.php");
+include_once (__DIR__ . "../../classes/User.php");
 include_once (__DIR__ . "../../classes/Task.php");
 session_start();
-$current_page = 'dashboard';
 
 if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
-
-    try {
-        $steps = Task::getTasks($pdo, $_SESSION["user_id"]);
-    } catch (Exception $e) {
-        error_log('Database error: ' . $e->getMessage());
-    }
+    $current_page = 'roadmap';
 } else {
     header("Location: login.php?error=notLoggedIn");
     exit();
 }
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["question"])) {
+        try {
+            $pdo = Db::getInstance();
+            $question = $_POST["question"];
+            var_dump($question);
+            $delete = Task::deleteTask($pdo, $question);
+
+            var_dump($delete);
+
+        } catch (Exception $e) {
+            error_log('Database error: ' . $e->getMessage());
+        }
+    }
+}
+
+$steps = Task::getTasks($pdo, $_SESSION["user_id"]);
 ?>
 
 <!DOCTYPE html>
@@ -62,13 +75,12 @@ if (isset($_SESSION["user_id"])) {
                     </div>
                     <div class="icons">
                         <form method="post" action="addSubsidie.php">
-                            <input type="hidden" name="edit_subsidie_name"
-                                value="<?php echo htmlspecialchars($subsidie["name"]); ?>">
+                            <input type="hidden" name="edit_task_question"
+                                value="<?php echo htmlspecialchars($step["question"]); ?>">
                             <button type="submit" class="edit"><i class="fa fa-edit"></i></button>
                         </form>
                         <form method="post">
-                            <input type="hidden" name="subsidie_name"
-                                value="<?php echo htmlspecialchars($subsidie["name"]); ?>">
+                            <input type="hidden" name="question" value="<?php echo htmlspecialchars($step["question"]); ?>">
                             <button type="submit" class="delete"><i class="fa fa-trash"></i></button>
                         </form>
                     </div>

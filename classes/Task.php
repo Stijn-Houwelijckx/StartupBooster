@@ -165,5 +165,17 @@ class Task
         }
     }
 
+    public static function deleteTask(PDO $pdo, $question)
+    {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM tasks WHERE question = :question");
+            $stmt->bindParam(':question', $question);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            error_log('Database error in deleteTask(): ' . $e->getMessage());
+            return false;
+        }
+    }
 
 }
