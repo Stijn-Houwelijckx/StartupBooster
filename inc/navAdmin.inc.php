@@ -12,7 +12,7 @@
                     <p>Home</p>
                 </div>
             </a>
-            <a href="./roadmap.php">
+            <a href="./tasks.php">
                 <div>
                     <img class="<?php echo ($current_page == 'roadmap') ? 'roadmapItem active' : 'roadmapItem'; ?>"
                         src="../assets/images/Process.svg" alt="roadmapIcon">

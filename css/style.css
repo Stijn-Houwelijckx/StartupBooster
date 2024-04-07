@@ -655,10 +655,95 @@ a.active {
   border-left: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-#roadmap .tasks {
+#roadmapAdmin {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding: 24px;
+  padding-left: 80px;
+}
+
+#roadmapAdmin .top {
+  display: none;
+  flex-direction: row;
+  width: 100%;
+  padding: 0 24px;
+}
+
+#roadmapAdmin .steps {
+  background-color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-radius: 24px;
+}
+
+#roadmapAdmin .steps h2 {
+  padding-top: 24px;
+  padding-left: 24px;
+}
+
+.steps .step:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.steps .step:nth-child(even) p,
+#roadmapAdmin .steps .step:nth-child(even) .icons .fa-edit {
+  color: #fff;
+}
+
+#roadmapAdmin .stepID {
+  width: 28%;
+}
+
+#roadmapAdmin .label {
+  max-width: 24%;
+}
+
+#roadmapAdmin .question {
+  width: 100%;
+}
+
+#roadmapAdmin .answer {
+  width: 100%;
+}
+
+#roadmapAdmin .steps .step {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 16px 24px;
+}
+
+#roadmapAdmin .steps .step .text {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+
+#roadmapAdmin .steps .step .icons {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+#roadmapAdmin .steps .step .icons button {
+  background-color: transparent;
+  border: none;
+}
+
+#roadmapAdmin .steps .step .icons i {
+  font-size: 24px;
+}
+
+#roadmapAdmin .steps .step .icons .fa-edit {
+  color: var(--blue);
+}
+
+#roadmapAdmin .steps .step .icons .fa-trash {
+  color: red;
 }
 
 #roadmap .tasks .task:before {
@@ -1142,7 +1227,25 @@ a.active {
   border: none;
 }
 
-#subsidies .subsidies .subsidie .delete i {
+#subsidies .subsidies .subsidie .edit {
+  position: absolute;
+  top: 8px; /* Plaats de .delete 8px vanaf de bovenkant */
+  right: 56px; /* Plaats de .delete 8px vanaf de rechterkant */
+  z-index: 999; /* Zorg ervoor dat de delete-klasse bovenop staat */
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 8px;
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+#subsidies .subsidies .subsidie .delete i,
+#subsidies .subsidies .subsidie .edit i {
   font-size: 24px;
   color: var(--black);
 }
@@ -1690,6 +1793,42 @@ a.active {
     background-color: var(--blue);
   }
 
+  #roadmapAdmin .top {
+    display: flex;
+  }
+
+  #roadmapAdmin .topStepID {
+    width: 10%;
+  }
+
+  #roadmapAdmin .stepID {
+    width: 9%;
+  }
+
+  #roadmapAdmin .topLabel {
+    width: 15%;
+  }
+
+  #roadmapAdmin .label {
+    width: 14%;
+  }
+
+  #roadmapAdmin .topQuestion {
+    width: 32%;
+  }
+
+  #roadmapAdmin .question {
+    width: 32%;
+  }
+
+  #roadmapAdmin .topAnswer {
+    width: 35.5%;
+  }
+
+  #roadmapAdmin .answer {
+    width: 32%;
+  }
+
   /* #roadmap .tasks .task:before {
     content: "";
     position: absolute;
@@ -1792,6 +1931,7 @@ a.active {
   /* ---- helpdesk ---- */
   #dashboard,
   #roadmap,
+  #roadmapAdmin,
   #stats,
   #subsidies,
   #subsidie-details,
@@ -1821,9 +1961,42 @@ a.active {
     height: 320px;
   }
 
+  /* ---- roadmap ---- */
   #roadmap {
     padding-left: calc(28px + 120px);
     padding-right: 28px;
+  }
+
+  #roadmapAdmin .topStepID {
+    width: 6%;
+  }
+
+  #roadmapAdmin .stepID {
+    width: 5%;
+  }
+
+  #roadmapAdmin .topLabel {
+    width: 8%;
+  }
+
+  #roadmapAdmin .label {
+    width: 7%;
+  }
+
+  #roadmapAdmin .topQuestion {
+    width: 39%;
+  }
+
+  #roadmapAdmin .question {
+    width: 40%;
+  }
+
+  #roadmapAdmin .topAnswer {
+    width: 31.8%;
+  }
+
+  #roadmapAdmin .answer {
+    width: 40%;
   }
 }
 

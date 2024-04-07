@@ -68,6 +68,11 @@ $subsidies = Subsidie::getSubsidies($pdo);
                                 value="<?php echo htmlspecialchars($subsidie["name"]); ?>">
                             <button type="submit" class="delete"><i class="fa fa-trash"></i></button>
                         </form>
+                        <form method="post" action="addSubsidie.php">
+                            <input type="hidden" name="edit_subsidie_name"
+                                value="<?php echo htmlspecialchars($subsidie["name"]); ?>">
+                            <button type="submit" class="edit"><i class="fa fa-edit"></i></button>
+                        </form>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
