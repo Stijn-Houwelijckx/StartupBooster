@@ -958,13 +958,11 @@ a.active {
   justify-content: space-between;
 }
 
-#stats .sectors input {
+#stats .sectors .sector input {
   background-color: transparent;
   border: 1px solid var(--black);
-}
-
-#stats .sectors input::placeholder {
-  padding: 8px;
+  padding: 4px 8px;
+  width: 332px;
 }
 
 #stats .top,

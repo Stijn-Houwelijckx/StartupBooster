@@ -86,4 +86,17 @@ class Sector
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['user_count'];
     }
+
+    public static function updateSectors(PDO $pdo, $old_title, $new_title)
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE sectors SET title = :new_title WHERE title = :old_title");
+            $stmt->bindParam(':new_title', $new_title);
+            $stmt->bindParam(':old_title', $old_title);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error in updateSectors(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update sectors');
+        }
+    }
 }

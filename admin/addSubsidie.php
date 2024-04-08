@@ -33,6 +33,13 @@ if (isset($_SESSION["user_id"])) {
 }
 
 $subsidies = Subsidie::getSubsidies($pdo);
+
+$nameValue = $subsidie->getName();
+$whoValue = $subsidie->getWho();
+$descriptionValue = $subsidie->getDescription();
+$whatValue = $subsidie->getWhat();
+$amountValue = $subsidie->getAmount();
+$linkValue = $subsidie->getLink();
 ?>
 
 <!DOCTYPE html>
@@ -55,31 +62,34 @@ $subsidies = Subsidie::getSubsidies($pdo);
             <div class="row">
                 <div class="column">
                     <label for="name">Naam van subsidie</label>
-                    <input type="text" name="name" id="name">
+                    <input type="text" name="name" id="name" placeholder="<?php echo htmlspecialchars($nameValue); ?>">
                 </div>
                 <div class="column">
                     <label for="who">Voor wie is de subsidie?</label>
-                    <input type="text" name="who" id="who">
+                    <input type="text" name="who" id="who" placeholder="<?php echo htmlspecialchars($whoValue); ?>">
                 </div>
             </div>
             <div class="row">
                 <div class="column">
                     <label for="description">Beschrijving van subsidie</label>
-                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                    <textarea name="description" id="description" cols="30" rows="10"
+                        placeholder="<?php echo htmlspecialchars($descriptionValue); ?>"></textarea>
                 </div>
                 <div class="column">
                     <label for="what">Vat de subsidie kort samen</label>
-                    <textarea name="what" id="what" cols="30" rows="10"></textarea>
+                    <textarea name="what" id="what" cols="30" rows="10"
+                        placeholder="<?php echo htmlspecialchars($whatValue); ?>"></textarea>
                 </div>
             </div>
             <div class="row">
                 <div class="column">
                     <label for="amount">Hoeveel geld krijg ik met de subsidie?</label>
-                    <input type="text" name="amount" id="amount">
+                    <input type="text" name="amount" id="amount"
+                        placeholder="<?php echo htmlspecialchars($amountValue); ?>">
                 </div>
                 <div class="column">
                     <label for="link">Link naar aanvraag subsidie</label>
-                    <input type="text" name="link" id="link">
+                    <input type="text" name="link" id="link" placeholder="<?php echo htmlspecialchars($linkValue); ?>">
                 </div>
             </div>
             <button type="submit" class="btn">Toevoegen</button>

@@ -23,6 +23,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             error_log('Database error: ' . $e->getMessage());
         }
     }
+
+    if (isset($_POST['updatedSectors'])) {
+        $updatedSectors = $_POST['updatedSectors'];
+        foreach ($updatedSectors as $sector) {
+            try {
+                Sector::updateSectors($pdo, $sector['oldTitle'], $sector['newTitle']);
+            } catch (Exception $e) {
+                error_log('Database error: ' . $e->getMessage());
+            }
+        }
+    }
 }
 
 $sectors = Sector::getAll($pdo);
@@ -46,30 +57,28 @@ $sectors = Sector::getAll($pdo);
         <div class="top">
             <h1>Statistieken</h1>
         </div>
-        <div class="sectors">
-            <div class="top">
-                <h2>Sectoren</h2>
-                <a href="addSector.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
-            </div>
-            <?php foreach ($sectors as $sector): ?>
-                <div class="sector">
-                    <p>
-                        <?php echo $sector["title"] ?>
-                    </p>
-                    <div class="icons">
-                        <form method="post" action="addSector.php">
-                            <input type="hidden" name="edit_task_question"
-                                value="<?php echo htmlspecialchars($sector["title"]); ?>">
-                            <button type="submit" class="edit"><i class="fa fa-edit"></i></button>
-                        </form>
-                        <form method="post">
-                            <input type="hidden" name="title" value="<?php echo $sector["title"]; ?>">
-                            <button type="submit" class="delete"><i class="fa fa-trash"></i></button>
-                        </form>
-                    </div>
-                </div>
-            <?php endforeach ?>
+        <div class="top">
+            <h2>Sectoren</h2>
+            <a href="addSector.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
         </div>
+        <form action="" method="post">
+            <div class="sectors">
+                <?php foreach ($sectors as $sector): ?>
+                    <div class="sector">
+                        <input type="hidden" name="updatedSectors[<?php echo $sector["title"]; ?>][oldTitle]"
+                            value="<?php echo $sector["title"]; ?>">
+                        <input name="updatedSectors[<?php echo $sector["title"]; ?>][newTitle]"
+                            value="<?php echo $sector["title"]; ?>">
+
+                        <div class="icons">
+                            <button type="submit" class="delete" name="deleteSector"
+                                value="<?php echo $sector["title"]; ?>"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                <?php endforeach ?>
+                <button type="submit" class="btn" name="saveChanges">Opslaan</button>
+            </div>
+        </form>
     </div>
 </body>
 
