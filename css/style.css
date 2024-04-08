@@ -1216,7 +1216,8 @@ a.active {
 #subsidie-details,
 #addSubsidie,
 #addSector,
-#addTask {
+#addTask,
+#users {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -2007,6 +2008,7 @@ a.active {
   #addSubsidie,
   #addSector,
   #addTask,
+  #users,
   #task-details,
   #helpdesk,
   #settings {

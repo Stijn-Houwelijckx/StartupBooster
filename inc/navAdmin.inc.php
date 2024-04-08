@@ -33,6 +33,13 @@
                     <p>Subsidies</p>
                 </div>
             </a>
+            <a href="./users.php">
+                <div>
+                    <img class="<?php echo ($current_page == 'users') ? 'usersItem active' : 'usersItem'; ?>"
+                        src="../assets/images/users.svg" alt="usersIcon">
+                    <p>Subsidies</p>
+                </div>
+            </a>
         </div>
         <div class="settings">
             <a href="logout.php">
