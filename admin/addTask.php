@@ -47,25 +47,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="addTask">
         <h2>Voeg een subsidie toe</h2>
         <form action="" method="POST">
-            <div class="row">
-                <div class="column">
-                    <label for="label">Label</label>
-                    <select name="label">
-                        <option value="Start">Start</option>
-                        <option value="Aanvragen">Aanvragen
-                        </option>
-                    </select>
-                </div>
+            <div class="column">
+                <label for="label">Label</label>
+                <select name="label">
+                    <option value="Start">Start</option>
+                    <option value="Aanvragen">Aanvragen
+                    </option>
+                </select>
                 <div class="column">
                     <label for="question">Vraag</label>
                     <input type="text" name="question" id="question">
                 </div>
             </div>
-            <div class="row">
-                <div class="column">
-                    <label for="answer">Antwoord op vraag</label>
-                    <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
-                </div>
+            <div class="column">
+                <label for="answer">Antwoord op vraag</label>
+                <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
             </div>
             <button type="submit" class="btn">Toevoegen</button>
         </form>

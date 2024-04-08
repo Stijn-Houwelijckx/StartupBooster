@@ -89,7 +89,7 @@ $steps = Task::getAllTasks($pdo);
                                 value="<?php echo $step["answer"] ?>" class="answer">
                         </div>
                         <div class="icons">
-                            <input type="hidden" name="question" value="<?php echo $step["question"]; ?>">
+                            <input type="hidden" name="question" value="<?php echo $step["id"]; ?>">
                             <button type="submit" class="delete"><i class="fa fa-trash"></i></button>
                         </div>
                     </div>

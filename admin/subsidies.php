@@ -17,20 +17,28 @@ if (isset($_SESSION["user_id"])) {
 $selectedSubsidie = Subsidie::getSubsidieById($pdo, 0);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // if (isset($_POST["subsidie_name"])) {
-    //     try {
-    //         $name = $_POST["subsidie_name"];
-    //         $delete = Subsidie::deleteSubsidie($pdo, $name);
-    //     } catch (Exception $e) {
-    //         error_log('Database error: ' . $e->getMessage());
-    //     }
-    // }
+    if (isset($_POST["id"])) {
+        try {
+            Subsidie::deleteSubsidie($pdo, $_POST["id"]);
+        } catch (Exception $e) {
+            error_log('Database error: ' . $e->getMessage());
+        }
+    }
 
     if (isset($_POST["subsidie"])) {
         try {
             $subsidie_id = $_POST["subsidie"];
             $selectedSubsidie = Subsidie::getSubsidieById($pdo, $subsidie_id);
 
+        } catch (Exception $e) {
+            error_log('Database error: ' . $e->getMessage());
+        }
+    }
+
+    if (isset($_POST["name"])) {
+        try {
+            Subsidie::updateSubsidie($pdo, $_POST['name'], $_POST['description'], $_POST['who'], $_POST['what'], $_POST['amount'], $_POST['link'], $_POST['id']);
+            $selectedSubsidie = Subsidie::getSubsidieById($pdo, $_POST["id"]);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -60,7 +68,7 @@ $subsidies = Subsidie::getSubsidies($pdo);
             <a href="addSubsidie.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
         </div>
         <form action="" id="subsidieSelector" onchange="submitSubsidieForm()" method="post">
-            <select name="subsidie" id="subsidie">
+            <select name="subsidie">
                 <?php foreach ($subsidies as $subsidie): ?>
                     <option value="<?php echo $subsidie["id"] ?>">
                         <?php echo htmlspecialchars($subsidie["name"]) ?>
@@ -71,23 +79,30 @@ $subsidies = Subsidie::getSubsidies($pdo);
 
         <div class="subsidies">
             <?php if (!empty($subsidies)): ?>
-                <div class="subsidie">
-                    <div class="text">
-                        <input type="text" name="name" value="<?php echo htmlspecialchars($selectedSubsidie["name"]); ?>">
-                        </input>
-                        <textarea name="description" cols="30"
-                            rows="10"><?php echo htmlspecialchars($selectedSubsidie["description"]); ?></textarea>
-                        <input type="text" value=" <?php echo htmlspecialchars($selectedSubsidie["who"]); ?>">
-                        </input>
-                        <input type="text" value="<?php echo htmlspecialchars($selectedSubsidie["what"]); ?>">
-                        </input>
-                        <input type="text" value="<?php echo htmlspecialchars($selectedSubsidie["amount"]); ?>">
-                        </input>
-                        <input type="text" value="<?php echo htmlspecialchars($selectedSubsidie["link"]); ?>">
-                        </input>
-                        <input type="text" hidden value="<?php echo htmlspecialchars($selectedSubsidie["id"]); ?>">
+                <form action="" method="post">
+                    <div class="subsidie">
+                        <div class="text">
+                            <input type="text" name="name"
+                                value="<?php echo htmlspecialchars($selectedSubsidie["name"]); ?>">
+                            <textarea name="description" cols="30"
+                                rows="10"><?php echo htmlspecialchars($selectedSubsidie["description"]); ?></textarea>
+                            <input type="text" name="who" value="<?php echo htmlspecialchars($selectedSubsidie["who"]); ?>">
+                            <input type="text" name="what"
+                                value="<?php echo htmlspecialchars($selectedSubsidie["what"]); ?>">
+                            <input type="text" name="amount"
+                                value="<?php echo htmlspecialchars($selectedSubsidie["amount"]); ?>">
+                            <input type="text" name="link"
+                                value="<?php echo htmlspecialchars($selectedSubsidie["link"]); ?>">
+                            <input type="text" name="id" hidden
+                                value="<?php echo htmlspecialchars($selectedSubsidie["id"]); ?>">
+                        </div>
                     </div>
-                </div>
+                    <div class="buttons">
+                        <button type="submit" class="btn">Toevoegen</button>
+                        <input type="hidden" name="question" value="<?php echo $selectedSubsidie["id"]; ?>">
+                        <button type="submit" class="btn remove">Verwijderen</button>
+                    </div>
+                </form>
             <?php else: ?>
                 <p>No subsidies found.</p>
             <?php endif; ?>

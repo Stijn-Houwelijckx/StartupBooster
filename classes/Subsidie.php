@@ -132,7 +132,7 @@ class Subsidie
     public static function getSubsidies(PDO $pdo)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM subsidies");
+            $stmt = $pdo->prepare("SELECT * FROM subsidies WHERE status = 1");
             $stmt->execute();
             $subsidies = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $subsidies ?: [];
@@ -146,9 +146,9 @@ class Subsidie
     {
         try {
             if ($id == 0) {
-                $stmt = $pdo->prepare("SELECT * FROM subsidies LIMIT 1");
+                $stmt = $pdo->prepare("SELECT * FROM subsidies WHERE status = 1 LIMIT 1");
             } else {
-                $stmt = $pdo->prepare("SELECT * FROM subsidies WHERE id = :id");
+                $stmt = $pdo->prepare("SELECT * FROM subsidies WHERE id = :id AND status = 1");
                 $stmt->bindParam(':id', $id);
             }
             $stmt->execute();
@@ -157,6 +157,24 @@ class Subsidie
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return null;
+        }
+    }
+
+    public static function updateSubsidie(PDO $pdo, $name, $description, $who, $what, $amount, $link, $id)
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE subsidies SET name = :name, description = :description, who = :who, what = :what, amount = :amount, link = :link WHERE id = :id");
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':who', $who);
+            $stmt->bindParam(':what', $what);
+            $stmt->bindParam(':amount', $amount);
+            $stmt->bindParam(':link', $link);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error in updateSubsidies(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update subsidies');
         }
     }
 
@@ -181,15 +199,15 @@ class Subsidie
         }
     }
 
-    public static function deleteSubsidie(PDO $pdo, $name)
+    public static function deleteSubsidie(PDO $pdo, $id)
     {
         try {
-            $stmt = $pdo->prepare("DELETE FROM subsidies WHERE name = :name");
-            $stmt->bindParam(':name', $name);
+            $stmt = $pdo->prepare("UPDATE subsidies SET status = 0 WHERE id = :id");
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
         } catch (PDOException $e) {
-            error_log('Database error: ' . $e->getMessage());
-            return false;
+            error_log('Database error in updateRead(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update read status');
         }
     }
 }

@@ -1238,16 +1238,24 @@ a.active {
   gap: 24px;
 }
 
+#subsidies.admin .subsidies {
+  display: inline;
+}
+
+#subsidies.admin .subsidies button,
+.steps button {
+  margin-top: 16px;
+}
+
+#subsidieSelector select {
+  width: 100%;
+}
+
 #subsidies .subsidies .subsidie {
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 16px;
   width: 366px;
   position: relative; /* Voeg relatieve positionering toe aan .subsidie om absolute positionering binnen .subsidie mogelijk te maken */
-}
-
-#subsidies.admin .subsidies {
-  display: flex;
-  gap: 0px;
 }
 
 #subsidies.admin .subsidies .subsidie {
@@ -1259,6 +1267,7 @@ a.active {
 #subsidies.admin .subsidies .subsidie input,
 #subsidies.admin .subsidies .subsidie textarea {
   color: var(--black);
+  padding: 4px 8px;
 }
 
 #subsidies .subsidies .subsidie .delete {
@@ -1351,19 +1360,17 @@ a.active {
   border-radius: 16px;
 }
 
-#addSubsidie form {
+#addSubsidie form,
+#addTask form {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 16px;
 }
 
-#addSubsidie form .row {
+#addTask form .column {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  width: 100%;
+  flex-direction: column;
+  gap: 8px;
 }
 
 #addSubsidie form .row .column {
@@ -1371,6 +1378,13 @@ a.active {
   flex-direction: column;
   gap: 8px;
   width: 100%;
+}
+
+.subsidies .buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 /* ---- helpdesk ---- */
@@ -1677,7 +1691,8 @@ a.active {
 }
 
 #settings .option .account .row .btn.red,
-#settings .elements .option .btn.red {
+#settings .elements .option .btn.red,
+.subsidies .remove {
   color: #d34848;
   border: 1px solid #d34848;
   background-color: rgba(211, 72, 72, 0.2);
