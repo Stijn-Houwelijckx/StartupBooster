@@ -1,29 +1,24 @@
 <?php
-include_once (__DIR__ . "../../classes/Db.php");
-include_once (__DIR__ . "../../classes/User.php");
-include_once (__DIR__ . "../../classes/Task.php");
 session_start();
 
-if (isset($_SESSION["user_id"])) {
-    $pdo = Db::getInstance();
-    $user = User::getUserById($pdo, $_SESSION["user_id"]);
-    $current_page = 'roadmap';
-} else {
+include_once (__DIR__ . "/../classes/Db.php");
+include_once (__DIR__ . "/../classes/User.php");
+include_once (__DIR__ . "/../classes/Task.php");
+
+if (!isset($_SESSION["user_id"])) {
     header("Location: login.php?error=notLoggedIn");
     exit();
 }
 
+$pdo = Db::getInstance();
+$user = User::getUserById($pdo, $_SESSION["user_id"]);
+$current_page = 'roadmap';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["question"])) {
+    if (isset($_POST['question'])) {
         try {
-            $pdo = Db::getInstance();
             $question = $_POST["question"];
-            var_dump($question);
-            $delete = Task::deleteTask($pdo, $question);
-
-            var_dump($delete);
-
+            $delete = Task::updateTask($pdo, $question);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -80,7 +75,7 @@ $steps = Task::getTasks($pdo, $_SESSION["user_id"]);
                             <button type="submit" class="edit"><i class="fa fa-edit"></i></button>
                         </form>
                         <form method="post">
-                            <input type="hidden" name="question" value="<?php echo htmlspecialchars($step["question"]); ?>">
+                            <input type="hidden" name="question" value="<?php echo $step["question"]; ?>">
                             <button type="submit" class="delete"><i class="fa fa-trash"></i></button>
                         </form>
                     </div>

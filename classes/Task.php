@@ -4,6 +4,7 @@ class Task
     private $label;
     private $question;
     private $answer;
+    private $status;
 
     /**
      * Get the value of label
@@ -65,6 +66,26 @@ class Task
         return $this;
     }
 
+    /**
+     * Get the value of status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the value of status
+     *
+     * @return  self
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public static function linkTasksToUser(PDO $pdo, $user_id)
     {
         try {
@@ -86,7 +107,7 @@ class Task
     public static function getTasks(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, user_tasks.is_complete FROM tasks, user_tasks WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id");
+            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id AND tasks.status = 1");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -165,17 +186,15 @@ class Task
         }
     }
 
-    public static function deleteTask(PDO $pdo, $question)
+    public static function updateTask(PDO $pdo, $question)
     {
         try {
-            $stmt = $pdo->prepare("DELETE FROM tasks WHERE question = :question");
+            $stmt = $pdo->prepare("UPDATE tasks SET status = 0 WHERE tasks.question = :question");
             $stmt->bindParam(':question', $question);
             $stmt->execute();
-            return true;
         } catch (PDOException $e) {
-            error_log('Database error in deleteTask(): ' . $e->getMessage());
-            return false;
+            error_log('Database error in updateRead(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update read status');
         }
     }
-
 }
