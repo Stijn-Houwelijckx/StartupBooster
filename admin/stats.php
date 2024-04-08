@@ -71,14 +71,14 @@ $sectors = Sector::getAll($pdo);
                             value="<?php echo $sector["title"]; ?>">
 
                         <div class="icons">
-                            <button type="submit" class="delete" name="deleteSector"
-                                value="<?php echo $sector["title"]; ?>"><i class="fa fa-trash"></i></button>
+                            <button type="submit" class="delete" name="title" value="<?php echo $sector["title"]; ?>"><i
+                                    class="fa fa-trash"></i></button>
                         </div>
                     </div>
                 <?php endforeach ?>
                 <button type="submit" class="btn" name="saveChanges">Opslaan</button>
-            </div>
         </form>
+    </div>
     </div>
 </body>
 

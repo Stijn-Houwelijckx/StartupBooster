@@ -1223,6 +1223,13 @@ a.active {
   padding-left: 80px;
 }
 
+#addSector form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
 #subsidies .subsidies {
   display: flex;
   flex-direction: row;
