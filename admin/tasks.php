@@ -75,8 +75,14 @@ $steps = Task::getAllTasks($pdo);
                             <p class="stepID">Stap
                                 <?php echo $step["id"] ?>
                             </p>
-                            <input type="text" name="steps[<?php echo $step["id"] ?>][label]"
-                                value="<?php echo $step["label"] ?>" class="label">
+                            <select name="steps[<?php echo $step["id"] ?>][label]" class="label">
+                                <option value="Start" <?php if ($step["label"] == "Start") {
+                                    echo "selected";
+                                } ?>>Start</option>
+                                <option value="Aanvragen" <?php if ($step["label"] == "Aanvragen") {
+                                    echo "selected";
+                                } ?>>Aanvragen</option>
+                            </select>
                             <input type="text" name="steps[<?php echo $step["id"] ?>][question]"
                                 value="<?php echo $step["question"] ?>" class="question">
                             <input type="text" name="steps[<?php echo $step["id"] ?>][answer]"
