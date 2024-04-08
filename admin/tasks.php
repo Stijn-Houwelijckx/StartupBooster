@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['question'])) {
         try {
             $question = $_POST["question"];
-            $delete = Task::updateTask($pdo, $question);
+            $delete = Task::deleteTask($pdo, $question);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -45,7 +45,7 @@ $steps = Task::getAllTasks($pdo);
     <div id="roadmapAdmin">
         <div class="top">
             <h1>Stappenplan</h1>
-            <a href="addTask.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> toevoegen</a>
+            <a href="addTask.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
         </div>
         <div class="steps">
             <h2>Stappen</h2>

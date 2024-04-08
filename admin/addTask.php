@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <?php include_once ('../inc/navAdmin.inc.php'); ?>
-    <div id="addSubsidie">
+    <div id="addTask">
         <h2>Voeg een subsidie toe</h2>
         <form action="" method="POST">
             <div class="row">

@@ -19,6 +19,13 @@
                     <p>Stappenplan</p>
                 </div>
             </a>
+            <a href="./stats.php">
+                <div>
+                    <img class="<?php echo ($current_page == 'stats') ? 'statsItem active' : 'statsItem'; ?>"
+                        src="../assets/images/Stats.svg" alt="statsIcon">
+                    <p>Statistieken</p>
+                </div>
+            </a>
             <a href="./subsidies.php">
                 <div>
                     <img class="<?php echo ($current_page == 'subsidies') ? 'subsidiesItem active' : 'subsidiesItem'; ?>"

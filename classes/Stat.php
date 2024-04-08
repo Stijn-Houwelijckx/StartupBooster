@@ -244,7 +244,7 @@ class Stat
         }
         return $median;
     }
-    
+
     public static function calculateAverage($values)
     {
         $sum = array_sum($values);

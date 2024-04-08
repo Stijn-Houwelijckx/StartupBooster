@@ -45,7 +45,7 @@ $subsidies = Subsidie::getSubsidies($pdo);
     <div id="subsidies">
         <div class="top">
             <h1>Subsidies</h1>
-            <a href="addSubsidie.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> toevoegen</a>
+            <a href="addSubsidie.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
         </div>
 
         <div class=" subsidies">

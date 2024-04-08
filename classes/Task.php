@@ -218,7 +218,7 @@ class Task
         }
     }
 
-    public static function updateTask(PDO $pdo, $question)
+    public static function deleteTask(PDO $pdo, $question)
     {
         try {
             $stmt = $pdo->prepare("UPDATE tasks SET status = 0 WHERE tasks.question = :question");
