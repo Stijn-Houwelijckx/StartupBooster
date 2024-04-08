@@ -28,10 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             error_log('Database error: ' . $e->getMessage());
         }
     }
-}
-
-$tasks = Task::getTasks($pdo, $_SESSION["user_id"]);
-?>
+} ?>
 
 <!DOCTYPE html>
 <html lang="en">

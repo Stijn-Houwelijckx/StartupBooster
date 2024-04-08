@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$steps = Task::getTasks($pdo, $_SESSION["user_id"]);
+$steps = Task::getAllTasks($pdo);
 ?>
 
 <!DOCTYPE html>

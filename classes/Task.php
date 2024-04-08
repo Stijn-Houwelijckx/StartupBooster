@@ -118,6 +118,19 @@ class Task
         }
     }
 
+    public static function getAllTasks(PDO $pdo)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE status = 1");
+            $stmt->execute();
+            $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $tasks ?: [];
+        } catch (PDOException $e) {
+            error_log('Database error in getTasks(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve tasks');
+        }
+    }
+
     public static function addTask(PDO $pdo, $label, $question, $answer, $status)
     {
         try {
