@@ -5,6 +5,7 @@ class User
 {
     private $firstname;
     private $lastname;
+    private $isAdmin;
     private $email;
     private int $statute;
     private int $sector;
@@ -79,6 +80,26 @@ class User
 
         $_SESSION["lastname"] = $lastname;
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of isAdmin
+     */
+    public function getisAdmin()
+    {
+        return $this->isAdmin;
+    }
+
+    /**
+     * Set the value of isAdmin
+     *
+     * @return  self
+     */
+    public function setisAdmin($isAdmin)
+    {
+        $this->isAdmin = $isAdmin;
 
         return $this;
     }
@@ -489,9 +510,10 @@ class User
     public function updateUser(PDO $pdo, $user_id): bool
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, statute_id = :statute_id, sector_id = :sector_id, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, phoneNumber = :phoneNumber WHERE id = :user_id");
+            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, isAdmin = :isAdmin, statute_id = :statute_id, sector_id = :sector_id, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city, phoneNumber = :phoneNumber WHERE id = :user_id");
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
+            $stmt->bindParam(':isAdmin', $this->isAdmin);
             $stmt->bindParam(':statute_id', $this->statute);
             $stmt->bindParam(':sector_id', $this->sector);
             $stmt->bindParam(':phoneNumber', $this->phoneNumber);
@@ -510,6 +532,29 @@ class User
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return false;
+        }
+    }
+
+    public static function updateUserAdmin(PDO $pdo, $firstname, $lastname, $isAdmin, $statute_id, $sector_id, $email, $phoneNumber, $street, $houseNumber, $zipCode, $city, $id)
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, isAdmin = :isAdmin, statute_id = :statute_id, sector_id = :sector_id, email = :email, phoneNumber = :phoneNumber, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city WHERE id = :id");
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':isAdmin', $isAdmin);
+            $stmt->bindParam(':statute_id', $statute_id);
+            $stmt->bindParam(':sector_id', $sector_id);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':phoneNumber', $phoneNumber);
+            $stmt->bindParam(':street', $street);
+            $stmt->bindParam(':houseNumber', $houseNumber);
+            $stmt->bindParam(':zipCode', $zipCode);
+            $stmt->bindParam(':city', $city);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error in updateUsers(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update users');
         }
     }
 
@@ -595,13 +640,13 @@ class User
         }
     }
 
-    public static function getUserById(PDO $pdo, int $id)
+    public static function getUserById(PDO $pdo, $id)
     {
         try {
             if ($id == 0) {
-                $stmt = $pdo->prepare("SELECT * FROM users LIMIT 1");
+                $stmt = $pdo->prepare("SELECT * FROM users WHERE status = 1 LIMIT 1");
             } else {
-                $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+                $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id AND status = 1");
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             }
             $stmt->execute();
@@ -612,23 +657,22 @@ class User
         }
     }
 
-    public static function deleteUser(PDO $pdo, int $user_id)
+    public static function deleteUser(PDO $pdo, $id)
     {
         try {
-            $stmt = $pdo->prepare("DELETE FROM users WHERE id = :user_id;");
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt = $pdo->prepare("UPDATE users SET status = 0 WHERE id = :id");
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log('Database error: ' . $e->getMessage());
-            return null;
+            error_log('Database error in deleteUser(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update read status');
         }
     }
 
     public static function getAll(PDO $pdo)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM users");
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE status = 1");
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $users ?: [];

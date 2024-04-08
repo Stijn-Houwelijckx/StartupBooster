@@ -17,12 +17,41 @@ if (isset($_SESSION["user_id"])) {
 $selectedUser = User::getUserById($pdo, 0);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["id"])) {
+        try {
+            User::deleteUser($pdo, $_POST["id"]);
+            $selectedUser = User::getUserById($pdo, 0);
+        } catch (Exception $e) {
+            error_log('Database error: ' . $e->getMessage());
+        }
+    }
+
     if (isset($_POST["user_id"])) {
         try {
             $user_id = $_POST["user_id"];
-            var_dump($user_id);
             $selectedUser = User::getUserById($pdo, $user_id);
 
+        } catch (Exception $e) {
+            error_log('Database error: ' . $e->getMessage());
+        }
+    }
+
+    if (isset($_POST["firstname"])) {
+        try {
+            $user = new User();
+            $user->setFirstname($_POST['firstname']);
+            $user->setLastname($_POST['lastname']);
+            $user->setIsAdmin($_POST['isAdmin']);
+            $user->setEmail($_POST['email']);
+            $user->setStatute($_POST['statute']);
+            $user->setSector($_POST['sector']);
+            $user->setStreet($_POST['street']);
+            $user->setHouseNumber($_POST['houseNumber']);
+            $user->setZipCode($_POST['zipCode']);
+            $user->setCity($_POST['city']);
+            $user->updateUser($pdo, $_POST["user_id"]);
+            // User::updateUserAdmin($pdo, $_POST['firstname'], $_POST['lastname'], $_POST['isAdmin'], $_POST['statute_id'], $_POST['sector_id'], $_POST['email'], $_POST['phoneNumber'], $_POST['street'], $_POST['houseNumber'], $_POST['zipCode'], $_POST['city'], $_POST['id']);
+            $selectedUser = User::getUserById($pdo, $_POST["user_id"]);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -66,9 +95,9 @@ $users = User::getAll($pdo);
                                 value="<?php echo htmlspecialchars($selectedUser["firstname"]); ?>">
                             <input type="text" name="lastname"
                                 value="<?php echo htmlspecialchars($selectedUser["lastname"]); ?>">
-                            <input type="text" name="statue_id"
+                            <input type="text" name="statute"
                                 value="<?php echo htmlspecialchars($selectedUser["statute_id"]); ?>">
-                            <input type="text" name="sector_id"
+                            <input type="text" name="sector"
                                 value="<?php echo htmlspecialchars($selectedUser["sector_id"]); ?>">
                             <input type="text" name="email" value="<?php echo htmlspecialchars($selectedUser["email"]); ?>">
                             <input type="text" name="phoneNumber"
@@ -80,20 +109,24 @@ $users = User::getAll($pdo);
                             <input type="text" name="zipCode"
                                 value="<?php echo htmlspecialchars($selectedUser["zipCode"]); ?>">
                             <input type="text" name="city" value="<?php echo htmlspecialchars($selectedUser["city"]); ?>">
-                            <input type="text" name="signupDate"
-                                value="<?php echo htmlspecialchars($selectedUser["signupDate"]); ?>">
-                            <input type="text" name="id" hidden
+                            <input type="text" name="user_id" hidden
                                 value="<?php echo htmlspecialchars($selectedUser["id"]); ?>">
+                            <div class="row">
+                                <input type="hidden" name="isAdmin" value="off">
+                                <label for="isAdmin">isAdmin</label>
+                                <input type="checkbox" name="isAdmin" <?php if ($selectedUser["isAdmin"] == "on")
+                                    echo "checked"; ?>>
+                            </div>
                         </div>
                     </div>
                     <div class="buttons">
-                        <button type="submit" class="btn">Toevoegen</button>
-                        <input type="hidden" name="question" value="<?php echo $selectedUser["id"]; ?>">
-                        <button type="submit" class="btn remove">Verwijderen</button>
+                        <button type="submit" class="btn">Opslaan</button>
                     </div>
                 </form>
-            <?php else: ?>
-                <p>No subsidies found.</p>
+                <form action="" method="post">
+                    <input type="hidden" name="id" value="<?php echo $selectedUser["id"]; ?>">
+                    <button type="submit" class="btn remove">Verwijderen</button>
+                </form>
             <?php endif; ?>
         </div>
     </div>

@@ -1327,6 +1327,27 @@ a.active {
   padding: 16px;
 }
 
+#users .users .user .text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+#users .users .user .text .row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+#users .users .user .text input {
+  width: 100%;
+}
+
+#users .users .buttons {
+  margin-top: 16px;
+}
+
 #subsidies .subsidies .subsidie p {
   opacity: 0.8;
   text-decoration: underline;
@@ -1693,10 +1714,15 @@ a.active {
 
 #settings .option .account .row .btn.red,
 #settings .elements .option .btn.red,
-.subsidies .remove {
+.subsidies .remove,
+.users .remove {
   color: #d34848;
   border: 1px solid #d34848;
   background-color: rgba(211, 72, 72, 0.2);
+}
+
+.users .remove {
+  margin-top: 16px;
 }
 
 #settings .option .field {
