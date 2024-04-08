@@ -663,7 +663,7 @@ a.active {
   padding-left: 80px;
 }
 
-#roadmapAdmin .top {
+#roadmapAdmin .nav {
   display: none;
   flex-direction: row;
   width: 100%;
@@ -1339,7 +1339,8 @@ a.active {
 }
 
 #helpdesk .FAQ .top,
-#subsidies .top {
+#subsidies .top,
+#roadmapAdmin .top {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -1794,7 +1795,7 @@ a.active {
     background-color: var(--blue);
   }
 
-  #roadmapAdmin .top {
+  #roadmapAdmin .nav {
     display: flex;
   }
 

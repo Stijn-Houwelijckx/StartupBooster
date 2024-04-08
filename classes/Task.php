@@ -118,6 +118,25 @@ class Task
         }
     }
 
+    public static function addTask(PDO $pdo, $label, $question, $answer, $status)
+    {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO tasks (label, question, answer, status) VALUES (:label, :question, :answer, :status)");
+            $stmt->execute(
+                array(
+                    ':label' => $label,
+                    ':question' => $question,
+                    ':answer' => $answer,
+                    ':status' => $status,
+                )
+            );
+            return true;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
     public static function getActiveTask(PDO $pdo, $user_id)
     {
         try {

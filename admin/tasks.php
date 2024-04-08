@@ -43,10 +43,13 @@ $steps = Task::getTasks($pdo, $_SESSION["user_id"]);
 <body>
     <?php include_once ('../inc/navAdmin.inc.php'); ?>
     <div id="roadmapAdmin">
-        <h1>Stappenplan</h1>
+        <div class="top">
+            <h1>Stappenplan</h1>
+            <a href="addTask.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> toevoegen</a>
+        </div>
         <div class="steps">
             <h2>Stappen</h2>
-            <div class="top">
+            <div class="nav">
                 <h3 class="topStepID">Stap</h3>
                 <h3 class="topLabel">Label</h3>
                 <h3 class="topQuestion">Vraag</h3>
