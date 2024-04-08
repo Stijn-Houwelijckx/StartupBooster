@@ -723,26 +723,31 @@ a.active {
   width: 100%;
 }
 
-#roadmapAdmin .steps .step .icons {
+#roadmapAdmin .steps .step .icons,
+#stats .sectors .sector .icons {
   display: flex;
   flex-direction: row;
   gap: 8px;
 }
 
-#roadmapAdmin .steps .step .icons button {
+#roadmapAdmin .steps .step .icons button,
+#stats .sectors .sector .icons button {
   background-color: transparent;
   border: none;
 }
 
-#roadmapAdmin .steps .step .icons i {
+#roadmapAdmin .steps .step .icons i,
+#stats .sectors .sector .icons i {
   font-size: 24px;
 }
 
-#roadmapAdmin .steps .step .icons .fa-edit {
+#roadmapAdmin .steps .step .icons .fa-edit,
+#stats .sectors .sector .icons .fa-edit {
   color: var(--blue);
 }
 
-#roadmapAdmin .steps .step .icons .fa-trash {
+#roadmapAdmin .steps .step .icons .fa-trash,
+#stats .sectors .sector .icons .fa-trash {
   color: red;
 }
 
@@ -944,6 +949,13 @@ a.active {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+#stats .sectors .sector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 #stats .sectors input {
