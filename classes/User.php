@@ -598,8 +598,12 @@ class User
     public static function getUserById(PDO $pdo, int $id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            if ($id == 0) {
+                $stmt = $pdo->prepare("SELECT * FROM users LIMIT 1");
+            } else {
+                $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            }
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -618,6 +622,19 @@ class User
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return null;
+        }
+    }
+
+    public static function getAll(PDO $pdo)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM users");
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $users ?: [];
+        } catch (PDOException $e) {
+            error_log('Database error in getUsers(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve users');
         }
     }
 }
