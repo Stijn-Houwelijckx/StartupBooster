@@ -15,12 +15,23 @@ $user = User::getUserById($pdo, $_SESSION["user_id"]);
 $current_page = 'roadmap';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['question'])) {
+    if (isset($_POST['id'])) {
         try {
-            $question = $_POST["question"];
-            $delete = Task::deleteTask($pdo, $question);
+            $id = $_POST["id"];
+            $delete = Task::deleteTask($pdo, $id);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
+        }
+    }
+
+    if (isset($_POST['steps'])) {
+        $steps = $_POST['steps'];
+        foreach ($steps as $step) {
+            try {
+                Task::updateTasks($pdo, $step['id'], $step['label'], $step['question'], $step['answer']);
+            } catch (Exception $e) {
+                error_log('Database error: ' . $e->getMessage());
+            }
         }
     }
 }
@@ -55,35 +66,30 @@ $steps = Task::getAllTasks($pdo);
                 <h3 class="topQuestion">Vraag</h3>
                 <h3 class="topAnswer">Antwoord</h3>
             </div>
-            <?php foreach ($steps as $step): ?>
-                <div class="step">
-                    <div class="text">
-                        <p class="stepID">Stap
-                            <?php echo $step["id"] ?>
-                        </p>
-                        <p class="label">
-                            <?php echo $step["label"] ?>
-                        </p>
-                        <p class="question">
-                            <?php echo $step["question"] ?>
-                        </p>
-                        <p class="answer">
-                            <?php echo $step["answer"] ?>
-                        </p>
-                    </div>
-                    <div class="icons">
-                        <form method="post" action="addSubsidie.php">
-                            <input type="hidden" name="edit_task_question"
-                                value="<?php echo htmlspecialchars($step["question"]); ?>">
-                            <button type="submit" class="edit"><i class="fa fa-edit"></i></button>
-                        </form>
-                        <form method="post">
+            <form action="" method="post">
+                <?php foreach ($steps as $step): ?>
+                    <div class="step">
+                        <div class="text">
+                            <input type="text" name="steps[<?php echo $step["id"] ?>][id]" hidden
+                                value="<?php echo $step["id"] ?>">
+                            <p class="stepID">Stap
+                                <?php echo $step["id"] ?>
+                            </p>
+                            <input type="text" name="steps[<?php echo $step["id"] ?>][label]"
+                                value="<?php echo $step["label"] ?>" class="label">
+                            <input type="text" name="steps[<?php echo $step["id"] ?>][question]"
+                                value="<?php echo $step["question"] ?>" class="question">
+                            <input type="text" name="steps[<?php echo $step["id"] ?>][answer]"
+                                value="<?php echo $step["answer"] ?>" class="answer">
+                        </div>
+                        <div class="icons">
                             <input type="hidden" name="question" value="<?php echo $step["question"]; ?>">
                             <button type="submit" class="delete"><i class="fa fa-trash"></i></button>
-                        </form>
+                        </div>
                     </div>
-                </div>
-            <?php endforeach ?>
+                <?php endforeach ?>
+                <button type="submit" class="btn" name="saveChanges">Opslaan</button>
+            </form>
         </div>
     </div>
 </body>

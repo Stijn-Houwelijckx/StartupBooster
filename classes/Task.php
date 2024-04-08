@@ -218,11 +218,26 @@ class Task
         }
     }
 
-    public static function deleteTask(PDO $pdo, $question)
+    public static function updateTasks(PDO $pdo, $id, $label, $question, $answer)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE tasks SET status = 0 WHERE tasks.question = :question");
+            $stmt = $pdo->prepare("UPDATE tasks SET label = :label, question = :question, answer = :answer WHERE id = :id");
+            $stmt->bindParam(':label', $label);
             $stmt->bindParam(':question', $question);
+            $stmt->bindParam(':answer', $answer);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error in updateTasks(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to update tasks');
+        }
+    }
+
+    public static function deleteTask(PDO $pdo, $id)
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE tasks SET status = 0 WHERE tasks.id = :id");
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
         } catch (PDOException $e) {
             error_log('Database error in updateRead(): ' . $e->getMessage());
