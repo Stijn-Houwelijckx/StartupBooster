@@ -3,17 +3,17 @@ include_once (__DIR__ . "/classes/Subsidie.php");
 include_once (__DIR__ . "/classes/Db.php");
 session_start();
 
-$subsidie_name = isset ($_GET['name']) ? $_GET['name'] : '';
+$subsidie_id = isset($_GET['name']) ? $_GET['name'] : '';
 
-if (empty ($subsidie_name)) {
+if (empty($subsidie_id)) {
     echo "Ongeldige subsidienaam.";
     exit;
 }
 
-if (isset ($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
 
-    $subsidie = Subsidie::getSubsidieByName($pdo, $subsidie_name);
+    $subsidie = Subsidie::getSubsidieById($pdo, $subsidie_id);
 
     if (!$subsidie) {
         echo "Subsidie niet gevonden";

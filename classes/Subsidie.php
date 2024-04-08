@@ -142,11 +142,15 @@ class Subsidie
         }
     }
 
-    public static function getSubsidieByName(PDO $pdo, $name)
+    public static function getSubsidieById(PDO $pdo, $id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM subsidies WHERE name = :name");
-            $stmt->bindParam(':name', $name);
+            if ($id == 0) {
+                $stmt = $pdo->prepare("SELECT * FROM subsidies LIMIT 1");
+            } else {
+                $stmt = $pdo->prepare("SELECT * FROM subsidies WHERE id = :id");
+                $stmt->bindParam(':id', $id);
+            }
             $stmt->execute();
             $subsidie = $stmt->fetch(PDO::FETCH_ASSOC);
             return $subsidie ? $subsidie : null;

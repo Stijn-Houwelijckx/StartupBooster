@@ -5,7 +5,7 @@ include_once (__DIR__ . "/classes/User.php");
 session_start();
 $current_page = 'account';
 
-if (isset ($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"])) {
 
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);

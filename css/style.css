@@ -683,7 +683,8 @@ a.active {
   padding-left: 24px;
 }
 
-.steps .step:nth-child(even) {
+.steps .step:nth-child(even),
+#subsidies.admin .subsidies .subsidie:nth-child(even) {
   background-color: var(--blue);
 }
 
@@ -1242,6 +1243,22 @@ a.active {
   border-radius: 16px;
   width: 366px;
   position: relative; /* Voeg relatieve positionering toe aan .subsidie om absolute positionering binnen .subsidie mogelijk te maken */
+}
+
+#subsidies.admin .subsidies {
+  display: flex;
+  gap: 0px;
+}
+
+#subsidies.admin .subsidies .subsidie {
+  flex-direction: row;
+  width: 100%;
+  border-radius: 0px;
+}
+
+#subsidies.admin .subsidies .subsidie input,
+#subsidies.admin .subsidies .subsidie textarea {
+  color: var(--black);
 }
 
 #subsidies .subsidies .subsidie .delete {
