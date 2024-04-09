@@ -1770,7 +1770,8 @@ a.active {
   background-color: var(--lightBlue);
 }
 
-.popup {
+.popup,
+.popupIsAdmin {
   display: none;
   flex-direction: column;
   gap: 16px;
@@ -1783,7 +1784,8 @@ a.active {
   background-color: rgba(255, 255, 255, 0.6);
 }
 
-.popup .btns {
+.popup .btns,
+.popupIsAdmin .btns {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

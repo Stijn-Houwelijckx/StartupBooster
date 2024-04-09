@@ -113,7 +113,7 @@ $users = User::getAll($pdo);
                             <div class="row">
                                 <input type="hidden" name="isAdmin" value="off">
                                 <label for="isAdmin">isAdmin</label>
-                                <input type="checkbox" name="isAdmin" <?php if ($selectedUser["isAdmin"] == "on")
+                                <input type="checkbox" name="isAdmin" id="checkboxIsAdmin" <?php if ($selectedUser["isAdmin"] == "on")
                                     echo "checked"; ?>>
                             </div>
                         </div>
@@ -126,15 +126,21 @@ $users = User::getAll($pdo);
                         <p>Weet je zeker dat je deze gebruiker wilt verwijderen?</p>
                         <div class="btns">
                             <a href="#" class="close">Nee</a>
+                            <button type="submit" class="btn">Ja</button>
+                        </div>
+                    </div>
+
+                    <div class="popupIsAdmin">
+                        <p>Weet je zeker dat je deze gebruiker admin wilt maken?</p>
+                        <div class="btns">
+                            <a href="#" class="close">Nee</a>
                             <form action="" method="post">
-                                <input type="hidden" name="id" value="<?php echo $selectedUser["id"]; ?>">
-                                <button type="submit" class="btn remove">Ja</button>
+                                <button type="submit" class="btn">Ja</button>
                             </form>
                         </div>
                     </div>
                 </form>
                 <button class="btn remove">Verwijderen</button>
-                </form>
             <?php endif; ?>
         </div>
     </div>
@@ -150,6 +156,15 @@ $users = User::getAll($pdo);
             document.querySelector(".popup .close").addEventListener("click", function (e) {
                 document.querySelector(".popup").style.display = "none";
             });
+        });
+
+        document.querySelector("#checkboxIsAdmin").addEventListener("change", function (e) {
+            if (this.checked) {
+                document.querySelector(".popupIsAdmin").style.display = "flex";
+                document.querySelector(".popupIsAdmin .close").addEventListener("click", function (e) {
+                    document.querySelector(".popupIsAdmin").style.display = "none";
+                });
+            }
         });
     </script>
 </body>
