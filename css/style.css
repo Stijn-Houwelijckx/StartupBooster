@@ -127,6 +127,14 @@ a.active {
   padding: 24px 0;
 }
 
+.mobilemenu .top .fa-plus {
+  font-size: 24px;
+  color: var(--white);
+  padding-left: 24px;
+  transform: rotate(-45deg);
+  margin-top: 16px;
+}
+
 .mobilemenu .menu {
   display: flex;
   flex-direction: column;

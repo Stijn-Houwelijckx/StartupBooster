@@ -5,7 +5,7 @@
 
 <div class="mobilemenu">
     <div class="top">
-        <div class="hamburger"></div>
+        <i class="fa fa-plus"></i>
         <div class="profilePicture"></div>
     </div>
     <div class="menu">
@@ -120,6 +120,10 @@
     hamburger.addEventListener("click", function (e) {
         document.querySelector(".mobileNav").style.display = "none";
         mobilemenu.style.display = "flex";
+        document.querySelector(".mobilemenu .fa-plus").addEventListener("click", function (e) {
+            mobilemenu.style.display = "none";
+            document.querySelector(".mobileNav").style.display = "flex";
+        });
     });
 
     for (let i = 0; i < mobilemenuItems.length; i++) {
