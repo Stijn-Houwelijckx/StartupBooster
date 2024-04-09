@@ -58,7 +58,7 @@ $subsidies = Subsidie::getSubsidies($pdo);
     <title>StartupBooster - helpdesk</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
+    <link rel="icon" type="image/x-icon" href="../assets/images/Favicon.svg">
 </head>
 
 <body>
@@ -99,7 +99,7 @@ $subsidies = Subsidie::getSubsidies($pdo);
                         </div>
                     </div>
                     <div class="buttons">
-                        <button type="submit" class="btn">Toevoegen</button>
+                        <button type="submit" class="btn">Opslaan</button>
                         <button type="submit" class="btn remove">Verwijderen</button>
                     </div>
                 </form>

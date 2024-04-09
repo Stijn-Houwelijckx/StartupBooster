@@ -1,3 +1,52 @@
+<nav class="mobileNav">
+    <div class="hamburger"></div>
+    <div class="profilePicture"></div>
+</nav>
+
+<div class="mobilemenu">
+    <div class="top">
+        <div class="hamburger"></div>
+        <div class="profilePicture"></div>
+    </div>
+    <div class="menu">
+        <a href="./dashboard.php">
+            <div>
+                <img class="<?php echo ($current_page == 'dashboard') ? 'dashboardItem active' : 'dashboardItem'; ?>"
+                    src="../assets/images/Dashboard.svg" alt="dashboardIcon">
+                <p>Home</p>
+            </div>
+        </a>
+        <a href="./tasks.php">
+            <div>
+                <img class="<?php echo ($current_page == 'roadmap') ? 'roadmapItem active' : 'roadmapItem'; ?>"
+                    src="../assets/images/Process.svg" alt="roadmapIcon">
+                <p>Stappenplan</p>
+            </div>
+        </a>
+        <a href="./stats.php">
+            <div>
+                <img class="<?php echo ($current_page == 'stats') ? 'statsItem active' : 'statsItem'; ?>"
+                    src="../assets/images/Stats.svg" alt="statsIcon">
+                <p>Statistieken</p>
+            </div>
+        </a>
+        <a href="./subsidies.php">
+            <div>
+                <img class="<?php echo ($current_page == 'subsidies') ? 'subsidiesItem active' : 'subsidiesItem'; ?>"
+                    src="../assets/images/subsidiesItem.svg" alt="subsidiesIcon">
+                <p>Subsidies</p>
+            </div>
+        </a>
+        <a href="./users.php">
+            <div>
+                <img class="<?php echo ($current_page == 'users') ? 'usersItem active' : 'usersItem'; ?>"
+                    src="../assets/images/users.svg" alt="usersIcon">
+                <p>Users</p>
+            </div>
+        </a>
+    </div>
+</div>
+
 <nav class="desktopNav">
     <div class="column">
         <div class="top">
@@ -37,7 +86,7 @@
                 <div>
                     <img class="<?php echo ($current_page == 'users') ? 'usersItem active' : 'usersItem'; ?>"
                         src="../assets/images/users.svg" alt="usersIcon">
-                    <p>Subsidies</p>
+                    <p>Users</p>
                 </div>
             </a>
         </div>
@@ -57,6 +106,21 @@
     </div>
 </nav>
 <script>
+    let hamburger = document.querySelector(".mobileNav .hamburger");
+    let mobilemenu = document.querySelector(".mobilemenu");
+    let mobilemenuItems = document.querySelectorAll(".mobilemenu a");
+
+    hamburger.addEventListener("click", function (e) {
+        document.querySelector(".mobileNav").style.display = "none";
+        mobilemenu.style.display = "flex";
+    });
+
+    for (let i = 0; i < mobilemenuItems.length; i++) {
+        mobilemenuItems[i].addEventListener("click", function (e) {
+            mobilemenu.style.display = "none";
+        });
+    }
+
     function executeOnMaxWidth1200(callback) {
         const maxWidthQuery = window.matchMedia("(max-width: 1200px)");
         if (maxWidthQuery.matches) {
@@ -122,7 +186,4 @@
             isOpen = !isOpen;
         });
     });
-
-
-
 </script>

@@ -69,13 +69,94 @@ a.active {
   color: var(--blue);
 }
 
-/* ---- desktopNav ---- */
-.desktopNav {
+/* ---- mobileNav ---- */
+.mobileNav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: var(--blue);
+  padding: 24px 0;
+  position: fixed;
+  z-index: 999;
+}
+
+.mobileNav .hamburger,
+.mobilemenu .top .hamburger {
+  background-image: url("../assets/images/hamburger.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 24px;
+  height: 24px;
+  margin-left: 24px;
+}
+
+.mobileNav .profilePicture,
+.mobilemenu .top .profilePicture {
+  background-image: url("../assets/images/Tom.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--white);
+  border-radius: 50%;
+  margin-right: 24px;
+}
+
+.mobilemenu {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+  height: 100vh;
+  background-color: var(--blue);
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+}
+
+.mobilemenu .top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: var(--blue);
+  padding: 24px 0;
+}
+
+.mobilemenu .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  height: 93.7vh;
+  padding-left: 24px;
+}
+
+.mobilemenu .menu div {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  background-color: #0e3f6a;
+}
+
+.mobilemenu .menu div img {
+  width: 24px;
+}
+
+.mobilemenu .menu div p {
+  color: var(--white);
+}
+
+/* ---- desktopNav ---- */
+.desktopNav {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--blue);
   width: 120px;
   height: 100vh;
   overflow: hidden;
@@ -445,13 +526,12 @@ a.active {
 }
 
 /* ---- dashboard ---- */
-#dashboard {
+/* #dashboard {
   display: flex;
   flex-direction: column;
   gap: 24px;
   padding: 24px;
-  padding-left: 80px;
-}
+} */
 
 #dashboard .notifications {
   display: flex;
@@ -629,15 +709,6 @@ a.active {
 }
 
 /* ---- roadmap ---- */
-#roadmap {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 24px;
-  padding: 24px;
-  padding-left: 80px;
-}
-
 #roadmap h1 {
   width: 100%;
   text-align: left;
@@ -653,14 +724,6 @@ a.active {
   width: 2px;
   height: 100%;
   border-left: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-#roadmapAdmin {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 24px;
-  padding-left: 80px;
 }
 
 #roadmapAdmin .nav {
@@ -761,7 +824,7 @@ a.active {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  z-index: 999;
+  z-index: 998;
   background-color: #dadada;
 }
 
@@ -931,12 +994,22 @@ a.active {
 }
 
 /* ---- stats ---- */
-#stats {
+#dashboard,
+#stats,
+#roadmap,
+#roadmapAdmin,
+#subsidies,
+#subsidie-details,
+#addSubsidie,
+#addSector,
+#addTask,
+#users,
+#helpdesk {
   display: flex;
   flex-direction: column;
   gap: 24px;
   padding: 24px;
-  padding-left: 80px;
+  padding-top: 104px;
 }
 
 #stats .elements {
@@ -1212,19 +1285,6 @@ a.active {
 }
 
 /* ---- subsidies ---- */
-#subsidies,
-#subsidie-details,
-#addSubsidie,
-#addSector,
-#addTask,
-#users {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 24px;
-  padding-left: 80px;
-}
-
 #addSector form {
   display: flex;
   flex-direction: column;
@@ -1410,13 +1470,6 @@ a.active {
 }
 
 /* ---- helpdesk ---- */
-#helpdesk {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 24px;
-  padding-left: 80px;
-}
 
 #helpdesk .FAQ,
 #helpdesk .contactUs {
@@ -1793,6 +1846,28 @@ a.active {
 }
 
 @media (min-width: 800px) {
+  .mobileNav {
+    display: none;
+  }
+
+  .desktopNav {
+    display: flex;
+  }
+
+  #dashboard,
+  #stats,
+  #roadmap,
+  #roadmapAdmin,
+  #subsidies,
+  #subsidie-details,
+  #addSubsidie,
+  #addSector,
+  #addTask,
+  #users,
+  #helpdesk {
+    padding: 24px;
+  }
+
   #login {
     height: 95.9vh;
   }
