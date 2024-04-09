@@ -87,7 +87,7 @@ $users = User::getAll($pdo);
         </form>
         <div class="users">
             <?php if (!empty($users)): ?>
-                <form action="" method="post">
+                <form action="" method="post" id="userForm">
                     <div class="user">
                         <div class="text">
                             <input type="text" name="firstname"
@@ -134,11 +134,10 @@ $users = User::getAll($pdo);
                         <p>Weet je zeker dat je deze gebruiker admin wilt maken?</p>
                         <div class="btns">
                             <a href="#" class="close">Nee</a>
-                            <form action="" method="post">
-                                <button type="submit" class="btn">Ja</button>
-                            </form>
+                            <button type="button" class="btn confirm-admin">Ja</button>
                         </div>
                     </div>
+
                 </form>
                 <button class="btn remove">Verwijderen</button>
             <?php endif; ?>
@@ -163,10 +162,19 @@ $users = User::getAll($pdo);
                 document.querySelector(".popupIsAdmin").style.display = "flex";
                 document.querySelector(".popupIsAdmin .close").addEventListener("click", function (e) {
                     document.querySelector(".popupIsAdmin").style.display = "none";
+                    document.querySelector("#checkboxIsAdmin").checked = false;
                 });
+
+                e.preventDefault();
             }
         });
+
+        document.querySelector(".confirm-admin").addEventListener("click", function (e) {
+            document.querySelector("#userForm").submit();
+        });
+
     </script>
+
 </body>
 
 </html>
