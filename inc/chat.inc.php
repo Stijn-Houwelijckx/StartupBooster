@@ -68,5 +68,8 @@ try {
 <script>
     document.querySelector(".chatButton").addEventListener("click", function (e) {
         document.querySelector(".chat").style.display = "flex";
+        document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
+            document.querySelector(".chat").style.display = "none";
+        });
     })
 </script>

@@ -1851,7 +1851,7 @@ a.active {
   flex-direction: row;
   gap: 8px;
   align-items: center;
-  padding: 4px 8px;
+  padding: 8px 16px;
   border-radius: 16px;
   background-color: var(--blue);
   width: fit-content;
@@ -1863,7 +1863,7 @@ a.active {
 }
 
 .chat {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   border-radius: 8px;
@@ -1939,6 +1939,8 @@ a.active {
   gap: 16px;
   background-color: var(--offWhite);
   padding: 16px 0;
+  overflow-y: auto;
+  max-height: 200px;
 }
 
 .chat .center .row {
