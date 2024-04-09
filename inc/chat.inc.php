@@ -5,13 +5,22 @@ include_once (__DIR__ . "../../classes/Message.php");
 
 $pdo = Db::getInstance();
 
-try {
-    $pdo = Db::getInstance();
-    $messages = Message::getAll($pdo);
-} catch (Exception $e) {
-    error_log('Database error: ' . $e->getMessage());
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["message"])) {
+        try {
+            $messageContent = $_POST["message"];
+            $message = new Message;
+            $message->setSender_id($_SESSION["user_id"]);
+            $message->setMessage($messageContent);
+            $message->addMessage($pdo);
+            $pdo = Db::getInstance();
+        } catch (Exception $e) {
+            error_log('Database error: ' . $e->getMessage());
+        }
+    }
 }
 
+$messages = Message::getAll($pdo, $_SESSION["user_id"]);
 ?>
 
 <div class="chatButton">
@@ -33,35 +42,36 @@ try {
     <div class="center">
         <p>Vandaag 18:34</p>
         <div class="row admin">
-            <div class="profilePicture" style="background-image: url('../assets/images/Tom.jpg')"></div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias veniam nisi earum, itaque,
-                aut commodi voluptatibus non natus alias enim provident. Totam sunt maxime sequi repellat unde quae
-                eius.</p>
+            <div class="profilePicture" style="background-image: url('assets/images/Tom.jpg')">
+            </div>
+            <p>Hey, hallo! Met David hier, hoe kan ik u helpen?</p>
         </div>
-        <div class="row user">
+        <!-- <div class="row user">
             <div class="profilePicture" style="background-image: url('../assets/images/Stijn.jpg')"></div>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias veniam nisi earum, itaque,
                 aut commodi voluptatibus non natus alias enim provident. Totam sunt maxime sequi repellat unde quae
                 eius.</p>
-        </div>
-        <?php foreach ($messages as $message): ?>
-            <div class="row user">
-                <div class="profilePicture" style="background-image: url('../assets/images/Stijn.jpg')"></div>
-                <p>
-                    <?php echo $message["message"] ?>
-                </p>
-            </div>
-        <?php endforeach ?>
+        </div> -->
+        <?php if ($messages !== null): ?>
+            <?php foreach ($messages as $message): ?>
+                <div class="row <?php echo ($message['isAdmin'] == "on") ? 'admin' : 'user'; ?>">
+                    <div class="profilePicture" style="background-image: url('assets/images/Stijn.jpg')"></div>
+                    <p>
+                        <?php echo $message["message"] ?>
+                    </p>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
     <div class="bottom">
-        <input type="text" placeholder="Schrijf uw bericht...">
-        <p class="border"></p>
-        <div class="row">
-            <i class="fa fa-paperclip"></i>
-            <form action="" method="post">
-                <button class="btn">Verzenden</button>
-            </form>
-        </div>
+        <form action="" method="post">
+            <input type="text" name="message" placeholder="Schrijf uw bericht...">
+            <p class="border"></p>
+            <div class="row">
+                <i class="fa fa-paperclip"></i>
+                <button class="btn" type="submit">Verzenden</button>
+            </div>
+        </form>
     </div>
 </div>
 

@@ -16,8 +16,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user && password_verify($password, $user['password'])) {
             // Gebruiker succesvol ingelogd
             $_SESSION['user_id'] = $user['id'];
-            header("Location: dashboard.php"); // Stuur door naar het dashboard of een andere pagina
-            exit();
+            if ($user["isAdmin"] == "on") {
+                header("Location: admin/dashboard.php"); // Stuur door naar het dashboard of een andere pagina
+                exit();
+            } else {
+                header("Location: dashboard.php"); // Stuur door naar het dashboard of een andere pagina
+                exit();
+            }
         } else {
             $error = "Ongeldige gebruikersnaam of wachtwoord.";
         }
@@ -55,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p class="border"></p>
             </div>
 
-            <?php if (isset ($error)): ?>
+            <?php if (isset($error)): ?>
                 <p class="alert">
                     <?php echo $error ?>
                 </p>

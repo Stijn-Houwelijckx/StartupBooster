@@ -1973,12 +1973,14 @@ a.active {
   margin-left: 0;
 }
 
-.chat .center .user p {
-  margin-left: 24px;
-}
-
 .chat .center .row p {
   width: 68%;
+  margin-right: 24px;
+}
+
+.chat .center .user p {
+  margin-left: 24px;
+  margin-right: 0px;
 }
 
 .chat .bottom {
@@ -2006,7 +2008,7 @@ a.active {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 16px 16px 16px;
+  padding: 16px;
 }
 
 .chat .bottom .row .fa-paperclip {
