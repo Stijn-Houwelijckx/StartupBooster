@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["id"])) {
         try {
             Subsidie::deleteSubsidie($pdo, $_POST["id"]);
+            $selectedSubsidie = Subsidie::getSubsidieById($pdo, $_POST["id"]);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -79,7 +80,7 @@ $subsidies = Subsidie::getSubsidies($pdo);
 
         <div class="subsidies">
             <?php if (!empty($subsidies)): ?>
-                <form action="" method="post">
+                <form action="" method="post" id="subsidieForm">
                     <div class="subsidie">
                         <div class="text">
                             <input type="text" name="name"
@@ -99,7 +100,6 @@ $subsidies = Subsidie::getSubsidies($pdo);
                     </div>
                     <div class="buttons">
                         <button type="submit" class="btn">Toevoegen</button>
-                        <input type="hidden" name="question" value="<?php echo $selectedSubsidie["id"]; ?>">
                         <button type="submit" class="btn remove">Verwijderen</button>
                     </div>
                 </form>
@@ -109,10 +109,34 @@ $subsidies = Subsidie::getSubsidies($pdo);
         </div>
     </div>
 
+    <div class="popup">
+        <p>Weet je zeker dat je deze subsidie wilt verwijderen?</p>
+        <div class="btns">
+            <a href="#" class="close">Nee</a>
+            <form action="" method="post">
+                <input type="hidden" name="id" value="<?php echo $selectedSubsidie["id"]; ?>">
+                <button type="submit" class="btn remove">Ja</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         function submitSubsidieForm() {
             document.getElementById("subsidieSelector").submit();
         }
+
+
+        document.querySelector(".subsidies .remove").addEventListener("click", function (e) {
+            document.querySelector(".popup").style.display = "flex";
+            e.preventDefault();
+            document.querySelector(".popup .close").addEventListener("click", function (e) {
+                document.querySelector(".popup").style.display = "none";
+            });
+            document.querySelector(".popup .close").addEventListener("click", function (e) {
+                document.getElementById("subsidieForm").submit();
+
+            });
+        });
     </script>
 </body>
 

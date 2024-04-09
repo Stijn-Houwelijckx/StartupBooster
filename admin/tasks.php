@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['id'])) {
         try {
             $id = $_POST["id"];
-            $delete = Task::deleteTask($pdo, $id);
+            Task::deleteTask($pdo, $id);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -89,8 +89,19 @@ $steps = Task::getAllTasks($pdo);
                                 value="<?php echo $step["answer"] ?>" class="answer">
                         </div>
                         <div class="icons">
-                            <input type="hidden" name="question" value="<?php echo $step["id"]; ?>">
-                            <button type="submit" class="delete"><i class="fa fa-trash"></i></button>
+                            <button type="submit" class="delete" data-step-id="<?php echo $step["id"]; ?>"><i
+                                    class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="popup" id="popup_<?php echo $step["id"]; ?>">
+                        <p>Weet je zeker dat je deze gebruiker wilt verwijderen?</p>
+                        <div class="btns">
+                            <a href="#" class="close">Nee</a>
+                            <form action="" method="post">
+                                <input type="hidden" name="id" value="<?php echo $step["id"]; ?>">
+                                <button type="submit" class="btn remove">Ja</button>
+                            </form>
                         </div>
                     </div>
                 <?php endforeach ?>
@@ -98,6 +109,17 @@ $steps = Task::getAllTasks($pdo);
             </form>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll(".steps .delete").forEach(function (deleteBtn) {
+            deleteBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                var stepId = this.getAttribute("data-step-id");
+                var popup = document.getElementById("popup_" + stepId);
+                popup.style.display = "flex";
+            });
+        });
+    </script>
 </body>
 
 </html>

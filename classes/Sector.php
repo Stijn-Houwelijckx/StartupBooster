@@ -53,11 +53,11 @@ class Sector
         }
     }
 
-    public static function deleteSector(PDO $pdo, $title)
+    public static function deleteSector(PDO $pdo, $id)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE sectors SET status = 0 WHERE title = :title");
-            $stmt->bindParam(':title', $title);
+            $stmt = $pdo->prepare("UPDATE sectors SET status = 0 WHERE id = :id");
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
         } catch (PDOException $e) {
             error_log('Database error in updateRead(): ' . $e->getMessage());

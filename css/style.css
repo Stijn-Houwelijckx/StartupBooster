@@ -1770,6 +1770,26 @@ a.active {
   background-color: var(--lightBlue);
 }
 
+.popup {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 16px;
+  padding: 24px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.popup .btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media (min-width: 800px) {
   #login {
     height: 95.9vh;

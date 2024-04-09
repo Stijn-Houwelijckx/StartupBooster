@@ -4,7 +4,7 @@ include_once (__DIR__ . "../../classes/User.php");
 session_start();
 
 $pdo = Db::getInstance();
-
+$popop = false;
 
 if (isset($_SESSION["user_id"])) {
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
@@ -50,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user->setZipCode($_POST['zipCode']);
             $user->setCity($_POST['city']);
             $user->updateUser($pdo, $_POST["user_id"]);
-            // User::updateUserAdmin($pdo, $_POST['firstname'], $_POST['lastname'], $_POST['isAdmin'], $_POST['statute_id'], $_POST['sector_id'], $_POST['email'], $_POST['phoneNumber'], $_POST['street'], $_POST['houseNumber'], $_POST['zipCode'], $_POST['city'], $_POST['id']);
             $selectedUser = User::getUserById($pdo, $_POST["user_id"]);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
@@ -122,19 +121,36 @@ $users = User::getAll($pdo);
                     <div class="buttons">
                         <button type="submit" class="btn">Opslaan</button>
                     </div>
+
+                    <div class="popup">
+                        <p>Weet je zeker dat je deze gebruiker wilt verwijderen?</p>
+                        <div class="btns">
+                            <a href="#" class="close">Nee</a>
+                            <form action="" method="post">
+                                <input type="hidden" name="id" value="<?php echo $selectedUser["id"]; ?>">
+                                <button type="submit" class="btn remove">Ja</button>
+                            </form>
+                        </div>
+                    </div>
                 </form>
-                <form action="" method="post">
-                    <input type="hidden" name="id" value="<?php echo $selectedUser["id"]; ?>">
-                    <button type="submit" class="btn remove">Verwijderen</button>
+                <button class="btn remove">Verwijderen</button>
                 </form>
             <?php endif; ?>
         </div>
     </div>
 
+
     <script>
         function submitUserForm() {
             document.getElementById("userSelector").submit();
         }
+
+        document.querySelector(".users .remove").addEventListener("click", function (e) {
+            document.querySelector(".popup").style.display = "flex";
+            document.querySelector(".popup .close").addEventListener("click", function (e) {
+                document.querySelector(".popup").style.display = "none";
+            });
+        });
     </script>
 </body>
 

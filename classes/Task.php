@@ -236,7 +236,7 @@ class Task
     public static function deleteTask(PDO $pdo, $id)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE tasks SET status = 0 WHERE tasks.id = :id");
+            $stmt = $pdo->prepare("UPDATE tasks SET status = 0 WHERE id = :id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
         } catch (PDOException $e) {

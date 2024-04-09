@@ -15,10 +15,10 @@ $user = User::getUserById($pdo, $_SESSION["user_id"]);
 $current_page = 'stats';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['title'])) {
+    if (isset($_POST['id'])) {
         try {
-            $title = $_POST["title"];
-            $delete = Sector::deleteSector($pdo, $title);
+            $id = $_POST["id"];
+            Sector::deleteSector($pdo, $id);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -75,11 +75,33 @@ $sectors = Sector::getAll($pdo);
                                     class="fa fa-trash"></i></button>
                         </div>
                     </div>
+
+                    <div class="popup">
+                        <p>Weet je zeker dat je deze sector wilt verwijderen?</p>
+                        <div class="btns">
+                            <a href="#" class="close">Nee</a>
+                            <form action="" method="post">
+                                <input type="hidden" name="id" value="<?php echo $sector["id"]; ?>">
+                                <button type="submit" class="btn remove">Ja</button>
+                            </form>
+                        </div>
+                    </div>
                 <?php endforeach ?>
                 <button type="submit" class="btn" name="saveChanges">Opslaan</button>
         </form>
     </div>
-    </div>
+
+    <script>
+        document.querySelectorAll(".sectors .delete").forEach(function (deleteBtn) {
+            deleteBtn.addEventListener("click", function (e) {
+                e.preventDefault(); // Voorkom standaardgedrag van formulier
+                document.querySelector(".popup").style.display = "flex";
+                document.querySelector(".popup .close").addEventListener("click", function (e) {
+                    document.querySelector(".popup").style.display = "none";
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
