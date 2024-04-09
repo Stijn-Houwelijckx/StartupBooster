@@ -1845,6 +1845,164 @@ a.active {
   align-items: center;
 }
 
+/* ---- chat ---- */
+.chatButton {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 16px;
+  background-color: var(--blue);
+  width: fit-content;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  position: fixed;
+  width: fit-content;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  width: fit-content;
+  position: fixed;
+  width: fit-content;
+  border-radius: 16px;
+  width: 320px;
+  bottom: 24px;
+  right: 24px;
+}
+
+.chat .top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  width: 100%;
+  background-color: var(--blue);
+  padding: 16px 0;
+  border-radius: 16px 16px 0px 0px;
+}
+
+.chat .top i {
+  padding-right: 24px;
+  transform: rotate(-45deg);
+  font-size: 24px;
+  color: var(--white);
+}
+
+.chat .top .row,
+.chat .center .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.chat .top .row .profilePictureAdmin {
+  background-image: url("../assets/images/Tom.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 68px;
+  height: 68px;
+  border: 1px solid var(--white);
+  border-radius: 50%;
+  margin-left: 24px;
+}
+
+.chat .top .row .column {
+  margin-right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat .top .row .column span,
+.chat .top .row .column h3 {
+  color: #fff;
+}
+
+.chatButton i,
+.chatButton p {
+  color: var(--white);
+}
+
+.chat .center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--offWhite);
+  padding: 16px 0;
+}
+
+.chat .center .row {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.chat .center .row .profilePicture {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--white);
+  border-radius: 50%;
+  margin-left: 24px;
+}
+
+.chat .center .user .profilePicture {
+  order: 1;
+  margin-right: 24px;
+  margin-left: 0;
+}
+
+.chat .center .user p {
+  margin-left: 24px;
+}
+
+.chat .center .row p {
+  width: 68%;
+}
+
+.chat .bottom {
+  background-color: var(--white);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 0px 0px 16px 16px;
+}
+
+.chat .bottom input {
+  padding: 16px 0;
+  border: none;
+}
+
+.chat .bottom input::placeholder {
+  padding-left: 8px;
+}
+.chat .bottom .border {
+  border: 1px solid var(--offBlack);
+}
+
+.chat .bottom .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 16px 16px 16px;
+}
+
+.chat .bottom .row .fa-paperclip {
+  transform: rotate(90deg);
+}
+
 @media (min-width: 800px) {
   .mobileNav {
     display: none;

@@ -36,6 +36,7 @@ if (isset($_SESSION["user_id"])) {
     <div id="dashboard">
         <h1>Mijn dashboard</h1>
     </div>
+    <?php include_once ('../inc/chat.inc.php'); ?>
 </body>
 
 </html>

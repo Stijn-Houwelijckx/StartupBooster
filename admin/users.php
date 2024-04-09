@@ -19,6 +19,7 @@ $selectedUser = User::getUserById($pdo, 0);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["id"])) {
         try {
+            var_dump("efe");
             User::deleteUser($pdo, $_POST["id"]);
             $selectedUser = User::getUserById($pdo, 0);
         } catch (Exception $e) {
@@ -122,23 +123,29 @@ $users = User::getAll($pdo);
                         <button type="submit" class="btn">Opslaan</button>
                     </div>
 
-                    <div class="popup">
-                        <p>Weet je zeker dat je deze gebruiker wilt verwijderen?</p>
-                        <div class="btns">
-                            <a href="#" class="close">Nee</a>
-                            <button type="submit" class="btn">Ja</button>
-                        </div>
-                    </div>
-
-                    <div class="popupIsAdmin">
-                        <p>Weet je zeker dat je deze gebruiker admin wilt maken?</p>
-                        <div class="btns">
-                            <a href="#" class="close">Nee</a>
-                            <button type="button" class="btn confirm-admin">Ja</button>
-                        </div>
-                    </div>
-
                 </form>
+                <div class="popup">
+                    <p>Weet je zeker dat je deze gebruiker wilt verwijderen?</p>
+                    <div class="btns">
+                        <a href="#" class="close">Nee</a>
+                        <form action="" method="POST">
+                            <input type="text" name="id" hidden value="<?php echo $selectedUser["id"] ?>>">
+                            <button type="submit" class="btn">Ja</button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="popupIsAdmin">
+                    <p>Weet je zeker dat je deze gebruiker admin wilt maken?</p>
+                    <div class="btns">
+                        <a href="#" class="close">Nee</a>
+                        <form action="" method="POST">
+                            <input type="text" name="user_admin_id" hidden value="<?php echo $selectedUser["id"] ?>>">
+                            <button type="button" class="btn confirm-admin">Ja</button>
+                        </form>
+                    </div>
+                </div>
                 <button class="btn remove">Verwijderen</button>
             <?php endif; ?>
         </div>

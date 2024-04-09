@@ -630,7 +630,7 @@ class User
     public static function getUserByEmail(PDO $pdo, string $email)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email AND status = 1");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
