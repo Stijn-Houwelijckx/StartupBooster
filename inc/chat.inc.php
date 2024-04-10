@@ -6,6 +6,9 @@ include_once (__DIR__ . "../../classes/Message.php");
 
 $pdo = Db::getInstance();
 $user = User::getUserById($pdo, $_SESSION["user_id"]);
+$firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
+$profilePictureAdmin = Chat::getAdminProfilePicture($pdo, $_SESSION["user_id"]);
+$profilePictureUser = Chat::getMyProfilePicture($pdo, $_SESSION["user_id"]);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"])) {
@@ -21,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $chat->setAdmin_id($randomAdminId);
             }
             $chat->addChat($pdo);
-            // var_dump($chat);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -43,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $message->setReceiver_id($receiverId);
 
                 $message->addMessage($pdo);
-                var_dump($message);
             } else {
                 // Handel het geval af waarin geen admin ID is gevonden
                 // Hier kun je een foutmelding weergeven of iets anders doen
@@ -81,34 +82,39 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
     <div class="top">
         <i class="fa fa-plus"></i>
         <div class="row">
-            <div class="profilePictureAdmin"></div>
+            <div class="profilePictureAdmin" style="background-image: url('<?php echo $profilePictureAdmin ?>')"></div>
             <div class="column">
                 <span>Chat met</span>
-                <h3>David</h3>
+                <h3><?php echo $firstnameAdmin ?></h3>
             </div>
         </div>
     </div>
     <div class="center">
         <p>Vandaag 18:34</p>
         <div class="row admin">
-            <div class="profilePicture" style="background-image: url('assets/images/Tom.jpg')">
+            <div class="profilePicture" style="background-image: url('<?php echo $profilePictureAdmin ?>')">
             </div>
             <p>Hey, hallo! Met David hier, hoe kan ik u helpen?</p>
         </div>
         <?php if ($messages !== null): ?>
             <?php foreach ($messages as $message): ?>
-                <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'admin' : 'user'; ?>">
-                    <div class="profilePicture"
-                        style="background-image: url('<?php echo ($user["isAdmin"] == "on") ? "../assets/images/Stijn.jpg" : "assets/images/Stijn.jpg"; ?>')">
+                <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
+                    <div class="profilePicture" style="background-image: url('<?php if ($message['sender_id'] == $_SESSION["user_id"]) {
+                        echo $profilePictureUser;
+                    } else {
+                        echo $profilePictureAdmin;
+                    } ?>');">
                     </div>
+
+
                     <p>
-                        <?php echo $message["message"] ?>
+                        <?php echo $message["message"]; ?>
                     </p>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
-    <div class="bottom">
+    <div class=" bottom">
         <form action="" method="post">
             <input type="text" name="message" placeholder="Schrijf uw bericht...">
             <p class="border"></p>

@@ -48,7 +48,7 @@ class Chat
     public static function getAdminId($pdo)
     {
         try {
-            $stmt = $pdo->prepare("SELECT admin_id FROM chat LIMIT 1");
+            $stmt = $pdo->prepare("SELECT admin_id FROM chat");
             $stmt->execute();
             $adminId = $stmt->fetchColumn(); // Haal alleen de admin_id op
 
@@ -59,6 +59,50 @@ class Chat
         }
     }
 
+    public static function getAdminName($pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT users.firstname FROM chat, users WHERE chat.admin_id = users.id AND chat.user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $adminName = $stmt->fetchColumn(); // Haal alleen de admin_id op
+
+            return $adminName !== false ? $adminName : null;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public static function getAdminProfilePicture($pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT users.profileImg FROM chat, users WHERE chat.admin_id = users.id AND chat.user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $adminName = $stmt->fetchColumn(); // Haal alleen de admin_id op
+
+            return $adminName !== false ? $adminName : null;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public static function getMyProfilePicture($pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT users.profileImg FROM users WHERE users.id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $adminName = $stmt->fetchColumn(); // Haal alleen de admin_id op
+
+            return $adminName !== false ? $adminName : null;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return null;
+        }
+    }
 
     public static function getAllAdminsThatHaveNoChat($pdo, $user_id)
     {
@@ -87,6 +131,15 @@ class Chat
     public function addChat(PDO $pdo): bool
     {
         try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM chat WHERE (user_id = :user_id OR admin_id = :user_id)");
+            $stmt->bindParam(':user_id', $this->user_id);
+            $stmt->execute();
+            $chatExists = $stmt->fetchColumn();
+
+            if ($chatExists > 0) {
+                throw new Exception("Gebruiker is al betrokken bij een chat.");
+            }
+
             $stmt = $pdo->prepare("INSERT INTO chat (user_id, admin_id) VALUES (:user_id, :admin_id)");
             $stmt->bindParam(':user_id', $this->user_id);
             $stmt->bindParam(':admin_id', $this->admin_id);
@@ -99,8 +152,12 @@ class Chat
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return false;
+        } catch (Exception $e) {
+            error_log('Chat error: ' . $e->getMessage());
+            return false;
         }
     }
+
 
     public static function deleteChat(PDO $pdo, $user_id)
     {
