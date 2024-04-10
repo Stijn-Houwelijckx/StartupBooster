@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"])) {
         try {
             $chat = new Chat;
+
             $chat->setUser_id($_SESSION["user_id"]);
             $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
             if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
@@ -36,6 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["message"])) {
         try {
             $message = new Message;
+            $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
+            $message->setChat_id($chat_id);
+
             $messageContent = $_POST["message"];
             $message->setSender_id($_SESSION["user_id"]);
 
@@ -45,10 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Alleen als er een admin ID is gevonden
                 $message->setMessage($messageContent);
                 $message->setReceiver_id($receiverId);
-                var_dump($messageContent);
-                var_dump($receiverId);
+
                 $message->addMessage($pdo);
-                var_dump($message);
             } else {
                 // Handel het geval af waarin geen admin ID is gevonden
                 // Hier kun je een foutmelding weergeven of iets anders doen

@@ -2,9 +2,30 @@
 
 class Message
 {
+    private $chat_id;
     private $message;
     private $sender_id;
     private $receiver_id;
+
+    /**
+     * Get the value of chat_id
+     */
+    public function getChat_id()
+    {
+        return $this->chat_id;
+    }
+
+    /**
+     * Set the value of chat_id
+     *
+     * @return  self
+     */
+    public function setChat_id($chat_id)
+    {
+        $this->chat_id = $chat_id;
+
+        return $this;
+    }
 
     /**
      * Get the value of message
@@ -70,6 +91,23 @@ class Message
         return $this;
     }
 
+    public static function getChatIdFunction(PDO $pdo, $userId)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT DISTINCT chat.id FROM chat WHERE (chat.user_id = :user_id OR chat.admin_id = :admin_id) AND chat.status = 1");
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->bindParam(':admin_id', $userId);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+
+
+
     // public static function getAll($pdo, $user_id)
     // {
     //     try {
@@ -103,10 +141,11 @@ class Message
     public function addMessage(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("INSERT INTO message (chat_id, sender_id, receiver_id, message) VALUES (171, :sender_id, :receiver_id, :message)");
-            $stmt->bindParam(':sender_id', $this->sender_id);
-            $stmt->bindParam(':receiver_id', $this->receiver_id);
-            $stmt->bindParam(':message', $this->message);
+            $stmt = $pdo->prepare("INSERT INTO message (chat_id, sender_id, receiver_id, message) VALUES (:chat_id, :sender_id, :receiver_id, :message)");
+            $stmt->bindParam(':chat_id', $this->chat_id, PDO::PARAM_INT);
+            $stmt->bindParam(':sender_id', $this->sender_id, PDO::PARAM_INT);
+            $stmt->bindParam(':receiver_id', $this->receiver_id, PDO::PARAM_INT);
+            $stmt->bindParam(':message', $this->message, PDO::PARAM_STR);
 
             if ($stmt->execute()) {
                 return true;
@@ -118,5 +157,4 @@ class Message
             return false;
         }
     }
-
 }
