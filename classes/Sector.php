@@ -87,12 +87,12 @@ class Sector
         return $result['user_count'];
     }
 
-    public static function updateSectors(PDO $pdo, $old_title, $new_title)
+    public static function updateSectors(PDO $pdo, $sector_id, $title)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE sectors SET title = :new_title WHERE title = :old_title");
-            $stmt->bindParam(':new_title', $new_title);
-            $stmt->bindParam(':old_title', $old_title);
+            $stmt = $pdo->prepare("UPDATE sectors SET title = :title WHERE id = :sector_id");
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':sector_id', $sector_id);
             $stmt->execute();
         } catch (PDOException $e) {
             error_log('Database error in updateSectors(): ' . $e->getMessage());

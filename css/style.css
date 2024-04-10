@@ -754,6 +754,19 @@ a.active {
   padding-left: 24px;
 }
 
+#roadmapAdmin .steps .fa-plus {
+  display: none;
+  padding: 8px;
+  background-color: var(--lightBlue);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: var(--white);
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
 .steps .step:nth-child(even),
 #subsidies.admin .subsidies .subsidie:nth-child(even) {
   background-color: var(--blue);

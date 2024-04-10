@@ -4,6 +4,7 @@ class Message
 {
     private $message;
     private $sender_id;
+    private $receiver_id;
 
     /**
      * Get the value of message
@@ -19,6 +20,15 @@ class Message
      * @return  self
      */
 
+    public function setMessage($message)
+    {
+        if (empty(trim($message))) {
+            throw new Exception("Message mag niet leeg zijn.");
+        }
+        $this->message = $message;
+        return $this;
+    }
+
     /**
      * Get the value of sender_id
      */
@@ -32,26 +42,40 @@ class Message
      *
      * @return  self
      */
+
     public function setSender_id($sender_id)
     {
         $this->sender_id = $sender_id;
 
         return $this;
     }
-    public function setMessage($message)
+
+    /**
+     * Get the value of receiver_id
+     */
+    public function getReceiver_id()
     {
-        if (empty(trim($message))) {
-            throw new Exception("Message mag niet leeg zijn.");
-        }
-        $this->message = $message;
+        return $this->receiver_id;
+    }
+
+    /**
+     * Set the value of receiver_id
+     *
+     * @return  self
+     */
+    public function setReceiver_id($receiver_id)
+    {
+        $this->receiver_id = $receiver_id;
+
         return $this;
     }
 
     public static function getAll($pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT message.*, users.isAdmin FROM message, users WHERE message.sender_id = users.id AND users.id = :user_id");
-            $stmt->bindParam(':user_id', $user_id);
+            $stmt = $pdo->prepare("SELECT * FROM message WHERE sender_id = :sender_id OR receiver_id = :receiver_id");
+            $stmt->bindParam(':sender_id', $user_id);
+            $stmt->bindParam(':receiver_id', $user_id);
             $stmt->execute();
             $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $messages ? $messages : null;
@@ -64,8 +88,9 @@ class Message
     public function addMessage(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("INSERT INTO message (chat_id, sender_id, receiver_id, message) VALUES (2, :sender_id, 44, :message)");
+            $stmt = $pdo->prepare("INSERT INTO message (chat_id, sender_id, receiver_id, message) VALUES (2, :sender_id, :receiver_id, :message)");
             $stmt->bindParam(':sender_id', $this->sender_id);
+            $stmt->bindParam(':receiver_id', $this->receiver_id);
             $stmt->bindParam(':message', $this->message);
 
             if ($stmt->execute()) {

@@ -5,6 +5,10 @@ include_once (__DIR__ . "/../classes/Db.php");
 include_once (__DIR__ . "/../classes/User.php");
 include_once (__DIR__ . "/../classes/Task.php");
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
+
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php?error=notLoggedIn");
     exit();
@@ -15,10 +19,11 @@ $user = User::getUserById($pdo, $_SESSION["user_id"]);
 $current_page = 'roadmap';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['id'])) {
+    if (isset($_POST["delete"])) {
         try {
-            $id = $_POST["id"];
-            Task::deleteTask($pdo, $id);
+            foreach ($_POST["delete"] as $id => $value) {
+                Task::deleteTask($pdo, $id);
+            }
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -70,11 +75,7 @@ $steps = Task::getAllTasks($pdo);
                 <?php foreach ($steps as $step): ?>
                     <div class="step">
                         <div class="text">
-                            <input type="text" name="steps[<?php echo $step["id"] ?>][id]" hidden
-                                value="<?php echo $step["id"] ?>">
-                            <p class="stepID">Stap
-                                <?php echo $step["id"] ?>
-                            </p>
+                            <p class="stepID">Stap <?php echo $step["id"] ?> </p>
                             <select name="steps[<?php echo $step["id"] ?>][label]" class="label">
                                 <option value="Start" <?php if ($step["label"] == "Start") {
                                     echo "selected";
@@ -87,23 +88,17 @@ $steps = Task::getAllTasks($pdo);
                                 value="<?php echo $step["question"] ?>" class="question">
                             <input type="text" name="steps[<?php echo $step["id"] ?>][answer]"
                                 value="<?php echo $step["answer"] ?>" class="answer">
+
+                            <input type="text" name="steps[<?php echo $step["id"] ?>][id]" value="<?php echo $step["id"] ?>"
+                                hidden>
                         </div>
                         <div class="icons">
-                            <button type="submit" class="delete" data-step-id="<?php echo $step["id"]; ?>"><i
-                                    class="fa fa-trash"></i></button>
+                            <label for="delete[<?php echo $step["id"] ?>]"><i class="fa fa-trash"></i></label>
+                            <input hidden type="submit" name="delete[<?php echo $step["id"] ?>]"
+                                id="delete[<?php echo $step["id"] ?>]">
                         </div>
                     </div>
 
-                    <div class="popup" id="popup_<?php echo $step["id"]; ?>">
-                        <p>Weet je zeker dat je deze gebruiker wilt verwijderen?</p>
-                        <div class="btns">
-                            <a href="#" class="close">Nee</a>
-                            <form action="" method="post">
-                                <input type="hidden" name="id" value="<?php echo $step["id"]; ?>">
-                                <button type="submit" class="btn remove">Ja</button>
-                            </form>
-                        </div>
-                    </div>
                 <?php endforeach ?>
                 <button type="submit" class="btn" name="saveChanges">Opslaan</button>
             </form>
