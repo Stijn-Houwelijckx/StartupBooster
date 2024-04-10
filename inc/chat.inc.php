@@ -10,11 +10,9 @@ $firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
 $profilePictureAdmin = Chat::getAdminProfilePicture($pdo, $_SESSION["user_id"]);
 $profilePictureUser = Chat::getMyProfilePicture($pdo, $_SESSION["user_id"]);
 
-var_dump("eee");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"])) {
         try {
-            var_dump("rrrrr");
             $chat = new Chat;
             $chat->setUser_id($_SESSION["user_id"]);
             $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
@@ -28,7 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $howManyChats = Chat::howManyChats($pdo, $_SESSION["user_id"]);
             var_dump($howManyChats);
-            if ($howManyChats === null) {
+            var_dump($_SESSION["user_id"]);
+            if ($howManyChats == null) {
                 $chat->addChat($pdo);
             }
         } catch (Exception $e) {
@@ -132,7 +131,7 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
 
 <script>
     document.querySelector(".chatButton").addEventListener("click", function (e) {
-        e.preventDefault(); // Voorkom standaard formulierversending
+        // e.preventDefault(); // Voorkom standaard formulierversending
 
         // AJAX verzoek om chat te starten
         var xhrStartChat = new XMLHttpRequest();

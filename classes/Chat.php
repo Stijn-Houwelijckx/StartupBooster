@@ -132,16 +132,17 @@ class Chat
     public static function howManyChats(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM chat WHERE (user_id = :user_id AND admin_id = :user_id)");
+            $stmt = $pdo->prepare("SELECT COUNT(*) AS chat_count FROM chat WHERE user_id = :user_id");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result ? $result : null;
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['chat_count'];
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return null;
         }
     }
+
 
     public function addChat(PDO $pdo): bool
     {
