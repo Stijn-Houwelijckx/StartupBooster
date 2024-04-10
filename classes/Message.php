@@ -88,7 +88,7 @@ class Message
     public function addMessage(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("INSERT INTO message (chat_id, sender_id, receiver_id, message) VALUES (2, :sender_id, :receiver_id, :message)");
+            $stmt = $pdo->prepare("INSERT INTO message (sender_id, receiver_id, message) VALUES (:sender_id, :receiver_id, :message)");
             $stmt->bindParam(':sender_id', $this->sender_id);
             $stmt->bindParam(':receiver_id', $this->receiver_id);
             $stmt->bindParam(':message', $this->message);
