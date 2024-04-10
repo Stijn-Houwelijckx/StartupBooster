@@ -15,19 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $chat = new Chat;
             $chat->setUser_id($_SESSION["user_id"]);
-            $getAllAdminsThatHaveNoChat = Chat::getAllAdminsThatHaveNoChat($pdo, $_SESSION["user_id"]);
-            if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
-                $randomKey = array_rand($getAllAdminsThatHaveNoChat);
-                $randomAdminThatHaveNoChat = $getAllAdminsThatHaveNoChat[$randomKey];
-
-                $randomAdminId = $randomAdminThatHaveNoChat['id'];
-                $chat->setAdmin_id($randomAdminId);
-            }
+            $availableAdmin = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
+            $chat->setAdmin_id($availableAdmin);
             $chat->addChat($pdo);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
     }
+
     if (isset($_POST["message"])) {
         try {
             $message = new Message;
@@ -99,13 +94,13 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
         <?php if ($messages !== null): ?>
             <?php foreach ($messages as $message): ?>
                 <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
-                    <div class="profilePicture" style="background-image: url('<?php if ($message['sender_id'] == $_SESSION["user_id"]) {
-                        echo $profilePictureUser;
-                    } else {
-                        echo $profilePictureAdmin;
-                    } ?>');">
+                    <div class="profilePicture"
+                        style="background-image: url('<?php if ($message['sender_id'] == $_SESSION["user_id"]) {
+                            echo $profilePictureUser;
+                        } else {
+                            echo $profilePictureAdmin;
+                        } ?>');">
                     </div>
-
 
                     <p>
                         <?php echo $message["message"]; ?>
