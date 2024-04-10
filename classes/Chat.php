@@ -104,7 +104,7 @@ class Chat
         }
     }
 
-    public static function getAllAdminsThatHaveNoChat($pdo, $user_id)
+    public static function getAvailableAdmin($pdo, $user_id)
     {
         try {
             $stmt = $pdo->prepare("
@@ -115,31 +115,37 @@ class Chat
             AND users.id NOT IN (
                 SELECT receiver_id
                 FROM message
-            )            
+            )
+            ORDER BY RAND()
+            LIMIT 1;
         ");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
-            $adminsThatHaveNoChat = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $adminsThatHaveNoChat ? $adminsThatHaveNoChat : null;
+            $availableAdmin = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $availableAdmin ? $availableAdmin : null;
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return null;
         }
     }
 
+    public static function howManyChats(PDO $pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM chat WHERE (user_id = :user_id AND admin_id = :user_id)");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result ? $result : null;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return null;
+        }
+    }
 
     public function addChat(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM chat WHERE (user_id = :user_id OR admin_id = :user_id)");
-            $stmt->bindParam(':user_id', $this->user_id);
-            $stmt->execute();
-            $chatExists = $stmt->fetchColumn();
-
-            if ($chatExists > 0) {
-                throw new Exception("Gebruiker is al betrokken bij een chat.");
-            }
-
             $stmt = $pdo->prepare("INSERT INTO chat (user_id, admin_id) VALUES (:user_id, :admin_id)");
             $stmt->bindParam(':user_id', $this->user_id);
             $stmt->bindParam(':admin_id', $this->admin_id);
@@ -151,9 +157,6 @@ class Chat
             }
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
-            return false;
-        } catch (Exception $e) {
-            error_log('Chat error: ' . $e->getMessage());
             return false;
         }
     }

@@ -10,14 +10,27 @@ $firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
 $profilePictureAdmin = Chat::getAdminProfilePicture($pdo, $_SESSION["user_id"]);
 $profilePictureUser = Chat::getMyProfilePicture($pdo, $_SESSION["user_id"]);
 
+var_dump("eee");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"])) {
         try {
+            var_dump("rrrrr");
             $chat = new Chat;
             $chat->setUser_id($_SESSION["user_id"]);
-            $availableAdmin = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
-            $chat->setAdmin_id($availableAdmin);
-            $chat->addChat($pdo);
+            $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
+            if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
+                $randomKey = array_rand($getAllAdminsThatHaveNoChat);
+                $randomAdminThatHaveNoChat = $getAllAdminsThatHaveNoChat[$randomKey];
+
+                $randomAdminId = $randomAdminThatHaveNoChat['id'];
+                $chat->setAdmin_id($randomAdminId);
+            }
+
+            $howManyChats = Chat::howManyChats($pdo, $_SESSION["user_id"]);
+            var_dump($howManyChats);
+            if ($howManyChats === null) {
+                $chat->addChat($pdo);
+            }
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
         }
@@ -32,13 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Haal de admin ID op
             $receiverId = Chat::getAdminId($pdo);
             if ($receiverId !== null) {
-                $message->setReceiver_id($receiverId);
-            }
-            if ($receiverId !== null) {
                 // Alleen als er een admin ID is gevonden
                 $message->setMessage($messageContent);
                 $message->setReceiver_id($receiverId);
-
+                // var_dump($messageContent);
+                // var_dump($receiverId);
                 $message->addMessage($pdo);
             } else {
                 // Handel het geval af waarin geen admin ID is gevonden
@@ -94,13 +105,7 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
         <?php if ($messages !== null): ?>
             <?php foreach ($messages as $message): ?>
                 <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
-                    <div class="profilePicture"
-                        style="background-image: url('<?php if ($message['sender_id'] == $_SESSION["user_id"]) {
-                            echo $profilePictureUser;
-                        } else {
-                            echo $profilePictureAdmin;
-                        } ?>');">
-                    </div>
+
 
                     <p>
                         <?php echo $message["message"]; ?>
@@ -145,27 +150,26 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
         };
         // Verzend het verzoek om de chat te starten
         xhrStartChat.send("startChat=");
-
     });
 
-    document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
-        e.preventDefault(); // Voorkom standaard gedrag van de link
+    // document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
+    //     e.preventDefault(); // Voorkom standaard gedrag van de link
 
-        // AJAX verzoek om chatvenster te sluiten
-        var xhrCloseChat = new XMLHttpRequest();
-        xhrCloseChat.open("POST", ""); // lege string betekent dat het naar dezelfde URL wordt verzonden als het huidige document
-        xhrCloseChat.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhrCloseChat.onload = function () {
-            if (xhrCloseChat.status >= 200 && xhrCloseChat.status < 300) {
-                document.querySelector(".chat").style.display = "none"; // Verberg chatvenster
-            } else {
-                console.error('Er is een fout opgetreden bij het sluiten van de chat.');
-            }
-        };
-        xhrCloseChat.onerror = function () {
-            console.error('Er is een fout opgetreden bij het maken van het verzoek.');
-        };
-        // Verzend het verzoek om de chat te sluiten
-        xhrCloseChat.send("closeChat=");
-    });
+    //     // AJAX verzoek om chatvenster te sluiten
+    //     var xhrCloseChat = new XMLHttpRequest();
+    //     xhrCloseChat.open("POST", ""); // lege string betekent dat het naar dezelfde URL wordt verzonden als het huidige document
+    //     xhrCloseChat.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    //     xhrCloseChat.onload = function () {
+    //         if (xhrCloseChat.status >= 200 && xhrCloseChat.status < 300) {
+    //             document.querySelector(".chat").style.display = "none"; // Verberg chatvenster
+    //         } else {
+    //             console.error('Er is een fout opgetreden bij het sluiten van de chat.');
+    //         }
+    //     };
+    //     xhrCloseChat.onerror = function () {
+    //         console.error('Er is een fout opgetreden bij het maken van het verzoek.');
+    //     };
+    //     // Verzend het verzoek om de chat te sluiten
+    //     xhrCloseChat.send("closeChat=");
+    // });
 </script>
