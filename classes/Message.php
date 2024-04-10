@@ -126,7 +126,7 @@ class Message
     public static function getAll(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT DISTINCT message.message FROM message, chat WHERE (message.sender_id = :sender_id OR message.receiver_id = :receiver_id) AND chat.id = message.chat_id AND chat.status = 1");
+            $stmt = $pdo->prepare("SELECT DISTINCT message.* FROM message, chat WHERE (message.sender_id = :sender_id OR message.receiver_id = :receiver_id) AND chat.id = message.chat_id AND chat.status = 1");
             $stmt->bindParam(':sender_id', $user_id);
             $stmt->bindParam(':receiver_id', $user_id);
             $stmt->execute();

@@ -96,15 +96,10 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
     </div>
     <div class="center">
         <p>Vandaag 18:34</p>
-        <div class="row admin">
-            <div class="profilePicture" style="background-image: url('<?php echo $profilePictureAdmin ?>')">
-            </div>
-            <p>Hey, hallo! Met David hier, hoe kan ik u helpen?</p>
-        </div>
         <?php if ($messages !== null): ?>
             <?php foreach ($messages as $message): ?>
                 <div
-                    class="row <?php echo (isset($message['sender_id']) && $message['sender_id'] == $_SESSION["user_id"]) ? 'admin' : 'user'; ?>">
+                    class="row <?php echo (isset($message['sender_id']) && $message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
                     <div class="profilePicture" style="background-image: url('<?php if (isset($message['sender_id']) && $message['sender_id'] == $_SESSION["user_id"]) {
                         echo $profilePictureAdmin;
                     } else {
