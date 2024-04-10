@@ -104,7 +104,7 @@ class Chat
         }
     }
 
-    public static function getAllAdminsThatHaveNoChat($pdo, $user_id)
+    public static function getAvailableAdmin($pdo, $user_id)
     {
         try {
             $stmt = $pdo->prepare("
@@ -115,12 +115,14 @@ class Chat
             AND users.id NOT IN (
                 SELECT receiver_id
                 FROM message
-            )            
+            )
+            ORDER BY RAND()
+            LIMIT 1;
         ");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
-            $adminsThatHaveNoChat = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $adminsThatHaveNoChat ? $adminsThatHaveNoChat : null;
+            $availableAdmin = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $availableAdmin ? $availableAdmin : null;
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return null;
