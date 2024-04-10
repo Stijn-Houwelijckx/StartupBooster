@@ -45,10 +45,11 @@ class Chat
         return $this;
     }
 
-    public static function getAdminId($pdo)
+    public static function getAdminId($pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT admin_id FROM chat");
+            $stmt = $pdo->prepare("SELECT chat.admin_id FROM chat, users WHERE chat.user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $adminId = $stmt->fetchColumn(); // Haal alleen de admin_id op
 

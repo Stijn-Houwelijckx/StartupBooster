@@ -70,25 +70,40 @@ class Message
         return $this;
     }
 
-    public static function getAll($pdo, $user_id)
+    // public static function getAll($pdo, $user_id)
+    // {
+    //     try {
+    //         $stmt = $pdo->prepare("SELECT DISTINCT message.message FROM message, chat WHERE sender_id = :sender_id OR receiver_id = :receiver_id AND chat.id = message.chat_id AND chat.status = 1");
+    //         $stmt->bindParam(':sender_id', $user_id);
+    //         $stmt->bindParam(':receiver_id', $user_id);
+    //         $stmt->execute();
+    //         $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //         return $messages ? $messages : null;
+    //     } catch (PDOException $e) {
+    //         error_log('Database error: ' . $e->getMessage());
+    //         return null;
+    //     }
+    // }
+
+    public static function getAll(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM message WHERE sender_id = :sender_id OR receiver_id = :receiver_id");
+            $stmt = $pdo->prepare("SELECT DISTINCT message.message FROM message, chat WHERE (message.sender_id = :sender_id OR message.receiver_id = :receiver_id) AND chat.id = message.chat_id AND chat.status = 1");
             $stmt->bindParam(':sender_id', $user_id);
             $stmt->bindParam(':receiver_id', $user_id);
             $stmt->execute();
-            $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $messages ? $messages : null;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return null;
         }
     }
 
+
     public function addMessage(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("INSERT INTO message (sender_id, receiver_id, message) VALUES (:sender_id, :receiver_id, :message)");
+            $stmt = $pdo->prepare("INSERT INTO message (chat_id, sender_id, receiver_id, message) VALUES (171, :sender_id, :receiver_id, :message)");
             $stmt->bindParam(':sender_id', $this->sender_id);
             $stmt->bindParam(':receiver_id', $this->receiver_id);
             $stmt->bindParam(':message', $this->message);
@@ -103,4 +118,5 @@ class Message
             return false;
         }
     }
+
 }

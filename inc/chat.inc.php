@@ -25,8 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             $howManyChats = Chat::howManyChats($pdo, $_SESSION["user_id"]);
-            var_dump($howManyChats);
-            var_dump($_SESSION["user_id"]);
             if ($howManyChats == null) {
                 $chat->addChat($pdo);
             }
@@ -42,14 +40,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $message->setSender_id($_SESSION["user_id"]);
 
             // Haal de admin ID op
-            $receiverId = Chat::getAdminId($pdo);
+            $receiverId = Chat::getAdminId($pdo, $_SESSION["user_id"]);
             if ($receiverId !== null) {
                 // Alleen als er een admin ID is gevonden
                 $message->setMessage($messageContent);
                 $message->setReceiver_id($receiverId);
-                // var_dump($messageContent);
-                // var_dump($receiverId);
+                var_dump($messageContent);
+                var_dump($receiverId);
                 $message->addMessage($pdo);
+                var_dump($message);
             } else {
                 // Handel het geval af waarin geen admin ID is gevonden
                 // Hier kun je een foutmelding weergeven of iets anders doen
@@ -72,7 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 $messages = Message::getAll($pdo, $_SESSION["user_id"]);
-
 ?>
 
 <form action="" method="post">
@@ -103,9 +101,13 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
         </div>
         <?php if ($messages !== null): ?>
             <?php foreach ($messages as $message): ?>
-                <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
-
-
+                <div
+                    class="row <?php echo (isset($message['sender_id']) && $message['sender_id'] == $_SESSION["user_id"]) ? 'admin' : 'user'; ?>">
+                    <div class="profilePicture" style="background-image: url('<?php if (isset($message['sender_id']) && $message['sender_id'] == $_SESSION["user_id"]) {
+                        echo $profilePictureUser;
+                    } else {
+                        echo $profilePictureAdmin;
+                    } ?>');"></div>
                     <p>
                         <?php echo $message["message"]; ?>
                     </p>
@@ -131,7 +133,7 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
 
 <script>
     document.querySelector(".chatButton").addEventListener("click", function (e) {
-        // e.preventDefault(); // Voorkom standaard formulierversending
+        e.preventDefault(); // Voorkom standaard formulierversending
 
         // AJAX verzoek om chat te starten
         var xhrStartChat = new XMLHttpRequest();
