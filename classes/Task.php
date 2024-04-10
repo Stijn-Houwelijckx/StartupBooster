@@ -218,14 +218,14 @@ class Task
         }
     }
 
-    public static function updateTasks(PDO $pdo, $id, $label, $question, $answer)
+    public static function updateTasks(PDO $pdo, $task_id, $label, $question, $answer)
     {
         try {
-            $stmt = $pdo->prepare("UPDATE tasks SET label = :label, question = :question, answer = :answer WHERE id = :id");
+            $stmt = $pdo->prepare("UPDATE tasks SET label = :label, question = :question, answer = :answer WHERE id = :task_id");
             $stmt->bindParam(':label', $label);
             $stmt->bindParam(':question', $question);
             $stmt->bindParam(':answer', $answer);
-            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':task_id', $task_id);
             $stmt->execute();
         } catch (PDOException $e) {
             error_log('Database error in updateTasks(): ' . $e->getMessage());

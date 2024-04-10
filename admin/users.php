@@ -19,7 +19,6 @@ $selectedUser = User::getUserById($pdo, 0);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["id"])) {
         try {
-            var_dump("efe");
             User::deleteUser($pdo, $_POST["id"]);
             $selectedUser = User::getUserById($pdo, 0);
         } catch (Exception $e) {
