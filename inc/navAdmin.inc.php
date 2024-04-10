@@ -91,7 +91,7 @@
             </a>
         </div>
         <div class="settings">
-            <a href="logout.php">
+            <a href="../logout.php">
                 <div>
                     <img class="<?php echo ($current_page == 'logout') ? 'logoutItem active' : 'logoutItem'; ?>"
                         src="../assets/images/logout.svg" alt="logoutIcon">

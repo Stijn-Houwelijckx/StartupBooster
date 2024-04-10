@@ -2,6 +2,11 @@
 include_once (__DIR__ . "../../classes/Db.php");
 include_once (__DIR__ . "../../classes/User.php");
 include_once (__DIR__ . "../../classes/Subsidie.php");
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
+
 session_start();
 
 $pdo = Db::getInstance();
@@ -17,14 +22,14 @@ if (isset($_SESSION["user_id"])) {
 $selectedSubsidie = Subsidie::getSubsidieById($pdo, 0);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["id"])) {
-        try {
-            Subsidie::deleteSubsidie($pdo, $_POST["id"]);
-            $selectedSubsidie = Subsidie::getSubsidieById($pdo, $_POST["id"]);
-        } catch (Exception $e) {
-            error_log('Database error: ' . $e->getMessage());
-        }
-    }
+    // if (isset($_POST["id"])) {
+    //     try {
+    //         Subsidie::deleteSubsidie($pdo, $_POST["id"]);
+    //         $selectedSubsidie = Subsidie::getSubsidieById($pdo, $_POST["id"]);
+    //     } catch (Exception $e) {
+    //         error_log('Database error: ' . $e->getMessage());
+    //     }
+    // }
 
     if (isset($_POST["subsidie"])) {
         try {
@@ -100,7 +105,7 @@ $subsidies = Subsidie::getSubsidies($pdo);
                     </div>
                     <div class="buttons">
                         <button type="submit" class="btn">Opslaan</button>
-                        <button type="submit" class="btn remove">Verwijderen</button>
+                        <!-- <button type="submit" class="btn remove">Verwijderen</button> -->
                     </div>
                 </form>
             <?php else: ?>
