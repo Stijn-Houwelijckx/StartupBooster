@@ -107,8 +107,8 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
             </div>
         </form>
         <form action="" method="POST">
-            <input type="text" hidden name="leaveChat" value="<?php echo $_SESSION["user_id"] ?>">
-            <button type="submit">Leave</button>
+            <input type="text" hidden name="leaveChat"></input>
+            <button type="submit" class="signout"><i class="fa fa-sign-out"></i></button>
         </form>
     </div>
 </div>

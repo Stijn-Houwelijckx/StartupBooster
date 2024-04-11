@@ -131,7 +131,7 @@ class Chat
     public static function howManyChats(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT COUNT(*) AS chat_count FROM chat WHERE user_id = :user_id");
+            $stmt = $pdo->prepare("SELECT COUNT(*) AS chat_count FROM chat WHERE user_id = :user_id AND status = 1");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
