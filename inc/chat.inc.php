@@ -10,6 +10,17 @@ $firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
 $profilePictureReceiver = "";
 $profilePictureUser = "";
 
+$message = new Message;
+$chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
+$profilePictures = Chat::getProfilePictures($pdo, $chat_id);
+$profilePictureReceiver = $profilePictures[0]["profileImg"];
+$profilePictureUser = $profilePictures[1]["profileImg"];
+
+if ($user["isAdmin"] == "on") {
+    $profilePictureReceiver = "../" . $profilePictureReceiver;
+    $profilePictureUser = "../" . $profilePictureUser;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"]) && $user["isAdmin"] == "off") {
         try {
@@ -27,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $chat->addChat($pdo);
             }
         } catch (Exception $e) {
+            echo "Er is geen admin gevonden om het bericht naar te sturen.";
             error_log('Database error: ' . $e->getMessage());
         }
     }
@@ -65,19 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 $messages = Message::getAll($pdo, $_SESSION["user_id"]);
-
-if ($messages != null) {
-    $message = new Message;
-    $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
-    $profilePictures = Chat::getProfilePictures($pdo, $chat_id);
-    $profilePictureReceiver = $profilePictures[0]["profileImg"];
-    $profilePictureUser = $profilePictures[1]["profileImg"];
-}
-
-if ($user["isAdmin"] == "on") {
-    $profilePictureReceiver = "../" . $profilePictureReceiver;
-    $profilePictureUser = "../" . $profilePictureUser;
-}
 ?>
 
 <form action="" method="post">
