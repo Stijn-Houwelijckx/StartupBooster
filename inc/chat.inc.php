@@ -12,8 +12,10 @@ $profilePictureUser = "";
 
 if (Message::getChatIdFunction($pdo, $_SESSION["user_id"])) {
     $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
+$message = new Message;
+if($chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"])) {
     $profilePictures = Chat::getProfilePictures($pdo, $chat_id);
-
+    var_dump($profilePictures);
     $profilePictureReceiver = $profilePictures[0]["profileImg"];
     $profilePictureUser = $profilePictures[1]["profileImg"];
 }
