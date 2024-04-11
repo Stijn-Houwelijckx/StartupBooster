@@ -11,7 +11,7 @@ $profilePictureAdmin = Chat::getAdminProfilePicture($pdo, $_SESSION["user_id"]);
 $profilePictureUser = Chat::getMyProfilePicture($pdo, $_SESSION["user_id"]);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["startChat"])) {
+    if (isset($_POST["startChat"]) && $user["isAdmin"] == "off") {
         try {
             $chat = new Chat;
             $chat->setUser_id($_SESSION["user_id"]);
@@ -38,7 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $message->setChat_id($chat_id);
             $messageContent = $_POST["message"];
             $message->setSender_id($_SESSION["user_id"]);
-            $receiverId = Chat::getAdminId($pdo, $_SESSION["user_id"]);
+            $receiverIds = Chat::getReceiverId($pdo, $_SESSION["user_id"]);
+            var_dump($receiverIds);
+            if ($user["isAdmin"] == "on") {
+                $receiverId = $receiverIds[0]["user_id"];
+            } else {
+                $receiverId = $receiverIds[0]["admin_id"];
+            }
             if ($receiverId !== null) {
                 $message->setMessage($messageContent);
                 $message->setReceiver_id($receiverId);

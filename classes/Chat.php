@@ -45,13 +45,14 @@ class Chat
         return $this;
     }
 
-    public static function getAdminId($pdo, $user_id)
+    public static function getReceiverId($pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT chat.admin_id FROM chat, users WHERE chat.user_id = :user_id");
+            $stmt = $pdo->prepare("SELECT DISTINCT chat.user_id, chat.admin_id FROM chat, users WHERE (chat.user_id = :user_id OR chat.admin_id = :admin_id) AND chat.status = 1");
+            $stmt->bindParam(':admin_id', $user_id);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
-            $adminId = $stmt->fetchColumn(); // Haal alleen de admin_id op
+            $adminId = $stmt->fetchAll(); // Haal alleen de admin_id op
 
             return $adminId !== false ? $adminId : null;
         } catch (PDOException $e) {
