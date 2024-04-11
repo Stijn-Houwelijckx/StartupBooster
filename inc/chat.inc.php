@@ -14,7 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"])) {
         try {
             $chat = new Chat;
-
             $chat->setUser_id($_SESSION["user_id"]);
             $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
             if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
@@ -23,8 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $randomAdminId = $randomAdminThatHaveNoChat['id'];
                 $chat->setAdmin_id($randomAdminId);
             }
-
-
             $howManyChats = Chat::howManyChats($pdo, $_SESSION["user_id"]);
             if ($howManyChats == null) {
                 $chat->addChat($pdo);
@@ -39,21 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $message = new Message;
             $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
             $message->setChat_id($chat_id);
-
             $messageContent = $_POST["message"];
             $message->setSender_id($_SESSION["user_id"]);
-
-            // Haal de admin ID op
             $receiverId = Chat::getAdminId($pdo, $_SESSION["user_id"]);
             if ($receiverId !== null) {
-                // Alleen als er een admin ID is gevonden
                 $message->setMessage($messageContent);
                 $message->setReceiver_id($receiverId);
 
                 $message->addMessage($pdo);
             } else {
-                // Handel het geval af waarin geen admin ID is gevonden
-                // Hier kun je een foutmelding weergeven of iets anders doen
                 echo "Er is geen admin gevonden om het bericht naar te sturen.";
             }
         } catch (Exception $e) {
@@ -70,8 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-
 $messages = Message::getAll($pdo, $_SESSION["user_id"]);
 ?>
 
@@ -125,28 +114,26 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
 </div>
 
 <script>
-    // document.querySelector(".chatButton").addEventListener("click", function (e) {
-    //     e.preventDefault(); // Voorkom standaard formulierversending
+    document.querySelector(".chatButton").addEventListener("click", function (e) {
+        e.preventDefault();
 
-    //     // AJAX verzoek om chat te starten
-    //     var xhrStartChat = new XMLHttpRequest();
-    //     xhrStartChat.open("POST", ""); // lege string betekent dat het naar dezelfde URL wordt verzonden als het huidige document
-    //     xhrStartChat.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    //     xhrStartChat.onload = function () {
-    //         if (xhrStartChat.status >= 200 && xhrStartChat.status < 300) {
-    //             document.querySelector(".chat").style.display = "flex"; // Toon chatvenster
-    //         } else {
-    //             console.error('Er is een fout opgetreden bij het starten van de chat.');
-    //         }
-    //     };
-    //     xhrStartChat.onerror = function () {
-    //         console.error('Er is een fout opgetreden bij het maken van het verzoek.');
-    //     };
-    //     // Verzend het verzoek om de chat te starten
-    //     xhrStartChat.send("startChat=");
-    // });
+        var xhrStartChat = new XMLHttpRequest();
+        xhrStartChat.open("POST", "");
+        xhrStartChat.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhrStartChat.onload = function () {
+            if (xhrStartChat.status >= 200 && xhrStartChat.status < 300) {
+                document.querySelector(".chat").style.display = "flex";
+            } else {
+                console.error('Er is een fout opgetreden bij het starten van de chat.');
+            }
+        };
+        xhrStartChat.onerror = function () {
+            console.error('Er is een fout opgetreden bij het maken van het verzoek.');
+        };
+        xhrStartChat.send("startChat=");
+    });
 
-    // document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
-    //     document.querySelector(".chat").style.display = "none"; // Verberg chatvenster
-    // });
+    document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
+        document.querySelector(".chat").style.display = "none";
+    });
 </script>
