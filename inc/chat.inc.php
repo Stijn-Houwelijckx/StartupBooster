@@ -7,15 +7,26 @@ include_once (__DIR__ . "../../classes/Message.php");
 $pdo = Db::getInstance();
 $user = User::getUserById($pdo, $_SESSION["user_id"]);
 $firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
-$profilePictureAdmin = Chat::getAdminProfilePicture($pdo, $_SESSION["user_id"]);
-$profilePictureUser = Chat::getMyProfilePicture($pdo, $_SESSION["user_id"]);
+$profilePictureReceiver = "";
+$profilePictureUser = "";
+
+$message = new Message;
+$chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
+$profilePictures = Chat::getProfilePictures($pdo, $chat_id);
+$profilePictureReceiver = $profilePictures[0]["profileImg"];
+$profilePictureUser = $profilePictures[1]["profileImg"];
+
+if ($user["isAdmin"] == "on") {
+    $profilePictureReceiver = "../" . $profilePictureReceiver;
+    $profilePictureUser = "../" . $profilePictureUser;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"]) && $user["isAdmin"] == "off") {
         try {
             $chat = new Chat;
             $chat->setUser_id($_SESSION["user_id"]);
-            $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
+            $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo);
             if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
                 $randomKey = array_rand($getAllAdminsThatHaveNoChat);
                 $randomAdminThatHaveNoChat = $getAllAdminsThatHaveNoChat[$randomKey];
@@ -27,19 +38,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $chat->addChat($pdo);
             }
         } catch (Exception $e) {
+            echo "Er is geen admin gevonden om het bericht naar te sturen.";
             error_log('Database error: ' . $e->getMessage());
         }
     }
 
     if (isset($_POST["message"])) {
         try {
-            $message = new Message;
-            $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
             $message->setChat_id($chat_id);
             $messageContent = $_POST["message"];
             $message->setSender_id($_SESSION["user_id"]);
             $receiverIds = Chat::getReceiverId($pdo, $_SESSION["user_id"]);
-            var_dump($receiverIds);
             if ($user["isAdmin"] == "on") {
                 $receiverId = $receiverIds[0]["user_id"];
             } else {
@@ -82,7 +91,8 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
     <div class="top">
         <i class="fa fa-plus"></i>
         <div class="row">
-            <div class="profilePictureAdmin" style="background-image: url('<?php echo $profilePictureAdmin ?>')"></div>
+            <div class="profilePictureAdmin" style="background-image: url('<?php echo $profilePictureUser ?>')">
+            </div>
             <div class="column">
                 <span>Chat met</span>
                 <h3><?php echo $firstnameAdmin ?></h3>
@@ -95,7 +105,7 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
             <?php foreach ($messages as $message): ?>
                 <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
                     <div class="profilePicture"
-                        style="background-image: url('<?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? $profilePictureAdmin : $profilePictureUser; ?>');">
+                        style="background-image: url('<?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? $profilePictureReceiver : $profilePictureUser; ?>');">
                     </div>
                     <p><?php echo $message["message"]; ?></p>
                 </div>
