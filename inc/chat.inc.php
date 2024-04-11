@@ -19,16 +19,13 @@ $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
 $profilePictures = Chat::getProfilePictures($pdo, $chat_id);
 $profilePictureReceiver = $profilePictures[0]["profileImg"];
 $profilePictureUser = $profilePictures[1]["profileImg"];
-var_dump($profilePictures);
 
-// var_dump($profilePictureReceiver);
+var_dump($user);
+
 if ($user["isAdmin"] == "on") {
     $profilePictureReceiver = "../" . $profilePictureReceiver;
     $profilePictureUser = "../" . $profilePictureUser;
 }
-
-var_dump($profilePictureReceiver);
-var_dump($profilePictureUser);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"]) && $user["isAdmin"] == "off") {
@@ -57,7 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $messageContent = $_POST["message"];
             $message->setSender_id($_SESSION["user_id"]);
             $receiverIds = Chat::getReceiverId($pdo, $_SESSION["user_id"]);
-            var_dump($receiverIds);
             if ($user["isAdmin"] == "on") {
                 $receiverId = $receiverIds[0]["user_id"];
             } else {
@@ -100,11 +96,10 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
     <div class="top">
         <i class="fa fa-plus"></i>
         <div class="row">
-            <div class="profilePictureAdmin" style="background-image: url('<?php echo $profilePictureReceiver ?>')">
+            <div class="profilePictureAdmin" style="background-image: url('<?php echo $profilePictureUser ?>')">
             </div>
             <div class="column">
                 <span>Chat met</span>
-                <?php var_dump($profilePictureReceiver) ?>
                 <h3><?php echo $firstnameAdmin ?></h3>
             </div>
         </div>
@@ -115,7 +110,7 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
             <?php foreach ($messages as $message): ?>
                 <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
                     <div class="profilePicture"
-                        style="background-image: url('<?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? $profilePictureUser : $profilePictureReceiver; ?>');">
+                        style="background-image: url('<?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? $profilePictureReceiver : $profilePictureUser; ?>');">
                     </div>
                     <p><?php echo $message["message"]; ?></p>
                 </div>
