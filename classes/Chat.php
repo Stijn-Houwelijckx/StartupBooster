@@ -76,13 +76,14 @@ class Chat
         }
     }
 
-    public static function getAdminProfilePicture($pdo, $user_id)
+
+    public static function getProfilePictures($pdo, $chat_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT users.profileImg FROM chat, users WHERE chat.admin_id = users.id AND chat.user_id = :user_id");
-            $stmt->bindParam(':user_id', $user_id);
+            $stmt = $pdo->prepare("SELECT DISTINCT users.profileImg FROM chat, users WHERE chat.id = :chat_id ORDER BY users.isAdmin");
+            $stmt->bindParam(':chat_id', $chat_id);
             $stmt->execute();
-            $adminName = $stmt->fetchColumn(); // Haal alleen de admin_id op
+            $adminName = $stmt->fetchAll(); // Haal alleen de admin_id op
 
             return $adminName !== false ? $adminName : null;
         } catch (PDOException $e) {
@@ -91,33 +92,49 @@ class Chat
         }
     }
 
-    public static function getMyProfilePicture($pdo, $user_id)
-    {
-        try {
-            $stmt = $pdo->prepare("SELECT users.profileImg FROM users WHERE users.id = :user_id");
-            $stmt->bindParam(':user_id', $user_id);
-            $stmt->execute();
-            $adminName = $stmt->fetchColumn(); // Haal alleen de admin_id op
+    // public static function getAdminProfilePicture($pdo, $user_id)
+    // {
+    //     try {
+    //         $stmt = $pdo->prepare("SELECT users.profileImg FROM chat, users WHERE chat.admin_id = users.id AND chat.user_id = :user_id");
+    //         $stmt->bindParam(':user_id', $user_id);
+    //         $stmt->execute();
+    //         $adminName = $stmt->fetchColumn(); // Haal alleen de admin_id op
 
-            return $adminName !== false ? $adminName : null;
-        } catch (PDOException $e) {
-            error_log('Database error: ' . $e->getMessage());
-            return null;
-        }
-    }
+    //         return $adminName !== false ? $adminName : null;
+    //     } catch (PDOException $e) {
+    //         error_log('Database error: ' . $e->getMessage());
+    //         return null;
+    //     }
+    // }
+
+    // public static function getUserProfilePicture($pdo, $user_id)
+    // {
+    //     try {
+    //         $stmt = $pdo->prepare("SELECT users.profileImg FROM users WHERE users.id = :user_id");
+    //         $stmt->bindParam(':user_id', $user_id);
+    //         $stmt->execute();
+    //         $adminName = $stmt->fetchColumn(); // Haal alleen de admin_id op
+
+    //         return $adminName !== false ? $adminName : null;
+    //     } catch (PDOException $e) {
+    //         error_log('Database error: ' . $e->getMessage());
+    //         return null;
+    //     }
+    // }
 
     public static function getAvailableAdmin($pdo, $user_id)
     {
         try {
             $stmt = $pdo->prepare("
             SELECT users.id
-            FROM users
+            FROM users, chat
             WHERE users.isAdmin = 'on'
             AND users.id != :user_id
             AND users.id NOT IN (
                 SELECT receiver_id
                 FROM message
             )
+            WHERE chat.status != 1
         ");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
