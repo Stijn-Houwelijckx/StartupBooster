@@ -4,7 +4,13 @@ include_once (__DIR__ . "/classes/User.php");
 include_once (__DIR__ . "/classes/Statute.php");
 include_once (__DIR__ . "/classes/Sector.php");
 include_once (__DIR__ . "/classes/Message.php");
+
 session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
+
 $current_page = 'dashboard';
 
 if (isset($_SESSION["user_id"])) {

@@ -94,7 +94,6 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
             <?php foreach ($messages as $message): ?>
                 <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
                     <div class="profilePicture" style="background-image: url('<?php if ($message['sender_id'] == $_SESSION["user_id"]) {echo $profilePictureUser;} else {echo $profilePictureAdmin;} ?>');"></div>
-
                     <p>
                         <?php echo $message["message"]; ?>
                     </p>
