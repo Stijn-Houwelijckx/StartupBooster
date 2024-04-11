@@ -80,7 +80,7 @@ class Chat
     public static function getProfilePictures($pdo, $chat_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT DISTINCT users.profileImg FROM chat, users WHERE chat.id = :chat_id ORDER BY users.isAdmin");
+            $stmt = $pdo->prepare("SELECT DISTINCT users.profileImg FROM chat, users WHERE chat.id = :chat_id");
             $stmt->bindParam(':chat_id', $chat_id);
             $stmt->execute();
             $adminName = $stmt->fetchAll(); // Haal alleen de admin_id op
