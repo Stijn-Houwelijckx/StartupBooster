@@ -16,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $chat = new Chat;
             $chat->setUser_id($_SESSION["user_id"]);
             $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo);
-            var_dump($getAllAdminsThatHaveNoChat);
             if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
                 $randomKey = array_rand($getAllAdminsThatHaveNoChat);
                 $randomAdminThatHaveNoChat = $getAllAdminsThatHaveNoChat[$randomKey];
@@ -131,7 +130,7 @@ if ($user["isAdmin"] == "on") {
     </div>
 </div>
 
-<!-- <script>
+<script>
     document.querySelector(".chatButton").addEventListener("click", function (e) {
         e.preventDefault();
 
@@ -154,4 +153,4 @@ if ($user["isAdmin"] == "on") {
     document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
         document.querySelector(".chat").style.display = "none";
     });
-</script> -->
+</script>
