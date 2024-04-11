@@ -98,19 +98,15 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
         <p>Vandaag 18:34</p>
         <?php if ($messages !== null): ?>
             <?php foreach ($messages as $message): ?>
-                <div
-                    class="row <?php echo (isset($message['sender_id']) && $message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
-                    <div class="profilePicture" style="background-image: url('<?php if (isset($message['sender_id']) && $message['sender_id'] == $_SESSION["user_id"]) {
-                        echo $profilePictureAdmin;
-                    } else {
-                        echo $profilePictureUser;
-                    } ?>');"></div>
-                    <p>
-                        <?php echo $message["message"]; ?>
-                    </p>
+                <div class="row <?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? 'user' : 'admin'; ?>">
+                    <div class="profilePicture"
+                        style="background-image: url('<?php echo ($message['sender_id'] == $_SESSION["user_id"]) ? $profilePictureAdmin : $profilePictureUser; ?>');">
+                    </div>
+                    <p><?php echo $message["message"]; ?></p>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
+
     </div>
     <div class=" bottom">
         <form action="" method="post">
@@ -150,24 +146,7 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
         xhrStartChat.send("startChat=");
     });
 
-    // document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
-    //     e.preventDefault(); // Voorkom standaard gedrag van de link
-
-    //     // AJAX verzoek om chatvenster te sluiten
-    //     var xhrCloseChat = new XMLHttpRequest();
-    //     xhrCloseChat.open("POST", ""); // lege string betekent dat het naar dezelfde URL wordt verzonden als het huidige document
-    //     xhrCloseChat.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    //     xhrCloseChat.onload = function () {
-    //         if (xhrCloseChat.status >= 200 && xhrCloseChat.status < 300) {
-    //             document.querySelector(".chat").style.display = "none"; // Verberg chatvenster
-    //         } else {
-    //             console.error('Er is een fout opgetreden bij het sluiten van de chat.');
-    //         }
-    //     };
-    //     xhrCloseChat.onerror = function () {
-    //         console.error('Er is een fout opgetreden bij het maken van het verzoek.');
-    //     };
-    //     // Verzend het verzoek om de chat te sluiten
-    //     xhrCloseChat.send("closeChat=");
-    // });
+    document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
+        document.querySelector(".chat").style.display = "none"; // Verberg chatvenster
+    });
 </script>
