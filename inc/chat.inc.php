@@ -10,11 +10,13 @@ $firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
 $profilePictureReceiver = "";
 $profilePictureUser = "";
 
-$message = new Message;
-$chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
-$profilePictures = Chat::getProfilePictures($pdo, $chat_id);
-$profilePictureReceiver = $profilePictures[0]["profileImg"];
-$profilePictureUser = $profilePictures[1]["profileImg"];
+if(Message::getChatIdFunction($pdo, $_SESSION["user_id"])) {
+    $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
+    $profilePictures = Chat::getProfilePictures($pdo, $chat_id);
+
+    $profilePictureReceiver = $profilePictures[0]["profileImg"];
+    $profilePictureUser = $profilePictures[1]["profileImg"];
+}
 
 if ($user["isAdmin"] == "on") {
     $profilePictureReceiver = "../" . $profilePictureReceiver;
