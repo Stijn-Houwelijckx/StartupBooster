@@ -117,8 +117,6 @@ class Chat
                 SELECT receiver_id
                 FROM message
             )
-            ORDER BY RAND()
-            LIMIT 1;
         ");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();

@@ -20,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
                 $randomKey = array_rand($getAllAdminsThatHaveNoChat);
                 $randomAdminThatHaveNoChat = $getAllAdminsThatHaveNoChat[$randomKey];
-
                 $randomAdminId = $randomAdminThatHaveNoChat['id'];
                 $chat->setAdmin_id($randomAdminId);
             }
+
 
             $howManyChats = Chat::howManyChats($pdo, $_SESSION["user_id"]);
             if ($howManyChats == null) {
@@ -125,28 +125,28 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
 </div>
 
 <script>
-    document.querySelector(".chatButton").addEventListener("click", function (e) {
-        e.preventDefault(); // Voorkom standaard formulierversending
+    // document.querySelector(".chatButton").addEventListener("click", function (e) {
+    //     e.preventDefault(); // Voorkom standaard formulierversending
 
-        // AJAX verzoek om chat te starten
-        var xhrStartChat = new XMLHttpRequest();
-        xhrStartChat.open("POST", ""); // lege string betekent dat het naar dezelfde URL wordt verzonden als het huidige document
-        xhrStartChat.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhrStartChat.onload = function () {
-            if (xhrStartChat.status >= 200 && xhrStartChat.status < 300) {
-                document.querySelector(".chat").style.display = "flex"; // Toon chatvenster
-            } else {
-                console.error('Er is een fout opgetreden bij het starten van de chat.');
-            }
-        };
-        xhrStartChat.onerror = function () {
-            console.error('Er is een fout opgetreden bij het maken van het verzoek.');
-        };
-        // Verzend het verzoek om de chat te starten
-        xhrStartChat.send("startChat=");
-    });
+    //     // AJAX verzoek om chat te starten
+    //     var xhrStartChat = new XMLHttpRequest();
+    //     xhrStartChat.open("POST", ""); // lege string betekent dat het naar dezelfde URL wordt verzonden als het huidige document
+    //     xhrStartChat.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    //     xhrStartChat.onload = function () {
+    //         if (xhrStartChat.status >= 200 && xhrStartChat.status < 300) {
+    //             document.querySelector(".chat").style.display = "flex"; // Toon chatvenster
+    //         } else {
+    //             console.error('Er is een fout opgetreden bij het starten van de chat.');
+    //         }
+    //     };
+    //     xhrStartChat.onerror = function () {
+    //         console.error('Er is een fout opgetreden bij het maken van het verzoek.');
+    //     };
+    //     // Verzend het verzoek om de chat te starten
+    //     xhrStartChat.send("startChat=");
+    // });
 
-    document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
-        document.querySelector(".chat").style.display = "none"; // Verberg chatvenster
-    });
+    // document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
+    //     document.querySelector(".chat").style.display = "none"; // Verberg chatvenster
+    // });
 </script>
