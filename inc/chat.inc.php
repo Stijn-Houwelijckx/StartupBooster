@@ -9,30 +9,14 @@ $user = User::getUserById($pdo, $_SESSION["user_id"]);
 $firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
 $profilePictureReceiver = "";
 $profilePictureUser = "";
-// if ($user["isAdmin"] == "on") {
-//     $profilePictureReceiver = "../" . $profilePictureReceiver;
-//     $profilePictureUser = "../" . $profilePictureUser;
-// }
-
-$message = new Message;
-$chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
-$profilePictures = Chat::getProfilePictures($pdo, $chat_id);
-$profilePictureReceiver = $profilePictures[0]["profileImg"];
-$profilePictureUser = $profilePictures[1]["profileImg"];
-
-var_dump($user);
-
-if ($user["isAdmin"] == "on") {
-    $profilePictureReceiver = "../" . $profilePictureReceiver;
-    $profilePictureUser = "../" . $profilePictureUser;
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["startChat"]) && $user["isAdmin"] == "off") {
         try {
             $chat = new Chat;
             $chat->setUser_id($_SESSION["user_id"]);
-            $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo, $_SESSION["user_id"]);
+            $getAllAdminsThatHaveNoChat = Chat::getAvailableAdmin($pdo);
+            var_dump($getAllAdminsThatHaveNoChat);
             if ($getAllAdminsThatHaveNoChat !== null && !empty($getAllAdminsThatHaveNoChat)) {
                 $randomKey = array_rand($getAllAdminsThatHaveNoChat);
                 $randomAdminThatHaveNoChat = $getAllAdminsThatHaveNoChat[$randomKey];
@@ -82,6 +66,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 $messages = Message::getAll($pdo, $_SESSION["user_id"]);
+
+if ($messages != null) {
+    $message = new Message;
+    $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
+    $profilePictures = Chat::getProfilePictures($pdo, $chat_id);
+    $profilePictureReceiver = $profilePictures[0]["profileImg"];
+    $profilePictureUser = $profilePictures[1]["profileImg"];
+}
+
+if ($user["isAdmin"] == "on") {
+    $profilePictureReceiver = "../" . $profilePictureReceiver;
+    $profilePictureUser = "../" . $profilePictureUser;
+}
 ?>
 
 <form action="" method="post">
@@ -134,7 +131,7 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
     </div>
 </div>
 
-<script>
+<!-- <script>
     document.querySelector(".chatButton").addEventListener("click", function (e) {
         e.preventDefault();
 
@@ -157,4 +154,4 @@ $messages = Message::getAll($pdo, $_SESSION["user_id"]);
     document.querySelector(".chat .fa-plus").addEventListener("click", function (e) {
         document.querySelector(".chat").style.display = "none";
     });
-</script>
+</script> -->

@@ -122,21 +122,15 @@ class Chat
     //     }
     // }
 
-    public static function getAvailableAdmin($pdo, $user_id)
+    public static function getAvailableAdmin($pdo)
     {
         try {
             $stmt = $pdo->prepare("
-            SELECT users.id
-            FROM users, chat
+            SELECT users.id 
+            FROM users
             WHERE users.isAdmin = 'on'
-            AND users.id != :user_id
-            AND users.id NOT IN (
-                SELECT receiver_id
-                FROM message
-            )
-            WHERE chat.status != 1
+            AND (users.id NOT IN (SELECT chat.admin_id FROM chat) OR users.id IN (SELECT chat.admin_id FROM chat WHERE chat.status = 0))                     
         ");
-            $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $availableAdmin = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $availableAdmin ? $availableAdmin : null;
