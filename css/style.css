@@ -1961,6 +1961,7 @@ a.active {
   padding: 16px 0;
   overflow-y: auto;
   max-height: 200px;
+  width: 100%;
 }
 
 .chat .center .row {
@@ -2025,6 +2026,14 @@ a.active {
 
 .chat .bottom .row .fa-paperclip {
   transform: rotate(90deg);
+  font-size: 24px;
+}
+
+.chat .bottom .signout {
+  background-color: transparent;
+  border: none;
+  opacity: 0.8;
+  font-size: 24px;
 }
 
 @media (min-width: 800px) {
