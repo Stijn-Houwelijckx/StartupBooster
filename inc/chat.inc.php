@@ -10,7 +10,7 @@ $firstnameAdmin = Chat::getAdminName($pdo, $_SESSION["user_id"]);
 $profilePictureReceiver = "";
 $profilePictureUser = "";
 
-if(Message::getChatIdFunction($pdo, $_SESSION["user_id"])) {
+if (Message::getChatIdFunction($pdo, $_SESSION["user_id"])) {
     $chat_id = Message::getChatIdFunction($pdo, $_SESSION["user_id"]);
     $profilePictures = Chat::getProfilePictures($pdo, $chat_id);
 
