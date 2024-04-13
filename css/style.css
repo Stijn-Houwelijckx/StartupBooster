@@ -755,26 +755,23 @@ a.active {
 }
 
 #roadmapAdmin .steps .fa-plus {
+  position: absolute;
   display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
   background-color: var(--lightBlue);
   width: 24px;
   height: 24px;
   border-radius: 50%;
   color: var(--white);
-  align-items: center;
-  justify-content: center;
-  margin: auto;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
-.steps .step:nth-child(even),
-#subsidies.admin .subsidies .subsidie:nth-child(even) {
+#roadmapAdmin .steps .step:nth-child(even) {
+  border-top: 1px solid var(--white);
   background-color: var(--blue);
-}
-
-.steps .step:nth-child(even) p,
-#roadmapAdmin .steps .step:nth-child(even) .icons .fa-edit {
-  color: #fff;
 }
 
 #roadmapAdmin .stepID {
