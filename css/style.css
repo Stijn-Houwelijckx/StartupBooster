@@ -754,9 +754,9 @@ a.active {
   padding-left: 24px;
 }
 
-#roadmapAdmin .steps .fa-plus {
+#roadmapAdmin .steps .addTaskBtn {
   position: absolute;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 8px;
@@ -770,12 +770,22 @@ a.active {
 }
 
 #roadmapAdmin .steps .step:nth-child(even) {
-  border-top: 1px solid var(--white);
   background-color: var(--blue);
+}
+#roadmapAdmin .steps .step:nth-child(odd) {
+  background-color: var(--offWhite);
 }
 
 #roadmapAdmin .stepID {
   width: 28%;
+}
+
+#roadmapAdmin .steps .step:nth-child(even) .stepID {
+  color: var(--white);
+}
+
+#roadmapAdmin .steps .step:nth-child(odd) .stepID {
+  color: var(--blue);
 }
 
 #roadmapAdmin .label {
@@ -790,14 +800,14 @@ a.active {
   width: 100%;
 }
 
-#roadmapAdmin .steps .step {
+#roadmapAdmin .steps .stepContent {
   display: flex;
   flex-direction: row;
   gap: 16px;
   padding: 40px 24px;
 }
 
-#roadmapAdmin .steps .step .text {
+#roadmapAdmin .steps .stepContent .text {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -805,30 +815,30 @@ a.active {
   width: 100%;
 }
 
-#roadmapAdmin .steps .step .icons,
+#roadmapAdmin .steps .stepContent .icons,
 #stats .sectors .sector .icons {
   display: flex;
   flex-direction: row;
   gap: 8px;
 }
 
-#roadmapAdmin .steps .step .icons button,
+#roadmapAdmin .steps .stepContent .icons button,
 #stats .sectors .sector .icons button {
   background-color: transparent;
   border: none;
 }
 
-#roadmapAdmin .steps .step .icons i,
+#roadmapAdmin .steps .stepContent .icons i,
 #stats .sectors .sector .icons i {
   font-size: 24px;
 }
 
-#roadmapAdmin .steps .step .icons .fa-edit,
+#roadmapAdmin .steps .stepContent .icons .fa-edit,
 #stats .sectors .sector .icons .fa-edit {
   color: var(--blue);
 }
 
-#roadmapAdmin .steps .step .icons .fa-trash,
+#roadmapAdmin .steps .stepContent .icons .fa-trash,
 #stats .sectors .sector .icons .fa-trash {
   color: red;
 }

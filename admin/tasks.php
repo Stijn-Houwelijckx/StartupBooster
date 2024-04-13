@@ -73,30 +73,34 @@ $steps = Task::getAllTasks($pdo);
             </div>
             <form action="" method="post">
                 <?php foreach ($steps as $step): ?>
-                    <i class="fa fa-plus"></i>
                     <div class="step">
-                        <div class="text">
-                            <p class="stepID">Stap <?php echo $step["id"] ?> </p>
-                            <select name="steps[<?php echo $step["id"] ?>][label]" class="label">
-                                <option value="Start" <?php if ($step["label"] == "Start") {
-                                    echo "selected";
-                                } ?>>Start</option>
-                                <option value="Aanvragen" <?php if ($step["label"] == "Aanvragen") {
-                                    echo "selected";
-                                } ?>>Aanvragen</option>
-                            </select>
-                            <input type="text" name="steps[<?php echo $step["id"] ?>][question]"
-                                value="<?php echo $step["question"] ?>" class="question">
-                            <input type="text" name="steps[<?php echo $step["id"] ?>][answer]"
-                                value="<?php echo $step["answer"] ?>" class="answer">
-
-                            <input type="text" name="steps[<?php echo $step["id"] ?>][id]" value="<?php echo $step["id"] ?>"
-                                hidden>
-                        </div>
-                        <div class="icons">
-                            <label for="delete[<?php echo $step["id"] ?>]"><i class="fa fa-trash"></i></label>
-                            <input hidden type="submit" name="delete[<?php echo $step["id"] ?>]"
-                                id="delete[<?php echo $step["id"] ?>]">
+                        <a class="addTaskBtn" data-taskid="<?php echo $step["position"] ?>">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        <div class="stepContent">
+                            <div class="text">
+                                <p class="stepID">Stap <?php echo $step["position"] ?> </p>
+                                <select name="steps[<?php echo $step["id"] ?>][label]" class="label">
+                                    <option value="Start" <?php if ($step["label"] == "Start") {
+                                        echo "selected";
+                                    } ?>>Start</option>
+                                    <option value="Aanvragen" <?php if ($step["label"] == "Aanvragen") {
+                                        echo "selected";
+                                    } ?>>Aanvragen</option>
+                                </select>
+                                <input type="text" name="steps[<?php echo $step["id"] ?>][question]"
+                                    value="<?php echo $step["question"] ?>" class="question">
+                                <input type="text" name="steps[<?php echo $step["id"] ?>][answer]"
+                                    value="<?php echo $step["answer"] ?>" class="answer">
+    
+                                <input type="text" name="steps[<?php echo $step["id"] ?>][id]" value="<?php echo $step["id"] ?>"
+                                    hidden>
+                            </div>
+                            <div class="icons">
+                                <label for="delete[<?php echo $step["id"] ?>]"><i class="fa fa-trash"></i></label>
+                                <input hidden type="submit" name="delete[<?php echo $step["id"] ?>]"
+                                    id="delete[<?php echo $step["id"] ?>]">
+                            </div>
                         </div>
                     </div>
 
@@ -107,15 +111,10 @@ $steps = Task::getAllTasks($pdo);
     </div>
 
     <script>
-        document.querySelectorAll(".steps .delete").forEach(function (deleteBtn) {
-            deleteBtn.addEventListener("click", function (e) {
-                e.preventDefault();
-                var stepId = this.getAttribute("data-step-id");
-                var popup = document.getElementById("popup_" + stepId);
-                popup.style.display = "flex";
-            });
-        });
+
     </script>
+    
+    <script src="../javascript/adminTask.js"></script>
 </body>
 
 </html>

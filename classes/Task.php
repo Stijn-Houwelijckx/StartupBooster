@@ -121,7 +121,7 @@ class Task
     public static function getAllTasks(PDO $pdo)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE status = 1");
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE status = 1 ORDER BY position");
             $stmt->execute();
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $tasks ?: [];
