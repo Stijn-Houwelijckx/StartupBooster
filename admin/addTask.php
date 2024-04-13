@@ -11,8 +11,8 @@ ini_set('error_log', 'error.log');
 
 $current_page = 'roadmap';
 
-if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php?error=notLoggedIn");
+if (!isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
+    header("Location: ../login.php?error=notLoggedIn");
     exit();
 }
 

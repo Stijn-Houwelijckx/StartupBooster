@@ -9,8 +9,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('error_log', 'error.log');
 
-if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php?error=notLoggedIn");
+if (!isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
+    header("Location: ../login.php?error=notLoggedIn");
     exit();
 }
 

@@ -5,7 +5,7 @@ include_once (__DIR__ . "/../classes/User.php");
 session_start();
 $subsidie = new Subsidie();
 
-if (isset($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,7 +28,7 @@ if (isset($_SESSION["user_id"])) {
     }
     $current_page = 'subsidies';
 } else {
-    header("Location: login.php?error=notLoggedIn");
+    header("Location: ../login.php?error=notLoggedIn");
     exit();
 }
 

@@ -11,11 +11,11 @@ session_start();
 
 $pdo = Db::getInstance();
 
-if (isset($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
     $current_page = 'subsidies';
 } else {
-    header("Location: login.php?error=notLoggedIn");
+    header("Location: ../login.php?error=notLoggedIn");
     exit();
 }
 

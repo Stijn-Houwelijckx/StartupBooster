@@ -5,7 +5,9 @@ include_once (__DIR__ . "/../classes/Sector.php");
 session_start();
 $sector = new Sector();
 
-if (isset($_SESSION["user_id"])) {
+$user = User::getUserById($pdo, $_SESSION["user_id"]);
+
+if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -23,7 +25,7 @@ if (isset($_SESSION["user_id"])) {
     }
     $current_page = 'sectors';
 } else {
-    header("Location: login.php?error=notLoggedIn");
+    header("Location: ../login.php?error=notLoggedIn");
     exit();
 }
 

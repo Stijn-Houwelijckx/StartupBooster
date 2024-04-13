@@ -4,7 +4,7 @@ include_once (__DIR__ . "../../classes/Db.php");
 session_start();
 $current_page = 'dashboard';
 
-if (isset($_SESSION["user_id"])) {
+if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
@@ -14,7 +14,7 @@ if (isset($_SESSION["user_id"])) {
         error_log('Database error: ' . $e->getMessage());
     }
 } else {
-    header("Location: login.php?error=notLoggedIn");
+    header("Location: ../login.php?error=notLoggedIn");
     exit();
 }
 ?>
