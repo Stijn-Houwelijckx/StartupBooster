@@ -6,6 +6,13 @@
   --lightBlue: #cfd9e1;
   --blue: #0e3f6a;
   --gray: #dadada;
+
+  /* ---- 2de kleurenpalet ---- */
+  --muzli: #0a1e25;
+  --two: #9f8661;
+  --three: #6c4b46;
+  --four: #9f8a86;
+  --five: #554341;
 }
 
 @font-face {
