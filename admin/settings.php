@@ -439,15 +439,6 @@ if (isset($_SESSION["user_id"])) {
         </div>
     </div>
     <script>
-        function toggleCheckbox(id) {
-            var checkboxes = document.querySelectorAll('.' + id);
-
-            // Iterate through all checkboxes with the given class
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = !checkbox.checked;
-            });
-        }
-
         function togglePasswordVisibility(inputId, iconId) {
             var input = document.getElementById(inputId);
             var icon = document.getElementById(iconId);
@@ -462,10 +453,12 @@ if (isset($_SESSION["user_id"])) {
             }
         }
 
-        // Function to submit the profileImg form when a file is selected
-        document.getElementById('profileImg').addEventListener('change', function () {
-            document.getElementById('profileImgForm').submit();
-        });
+        <?php if ($currentStep == "persoonlijkeGegevens"): ?>
+            // Function to submit the profileImg form when a file is selected
+            document.getElementById('profileImg').addEventListener('change', function () {
+                document.getElementById('profileImgForm').submit();
+            });
+        <?php endif; ?>
     </script>
 </body>
 
