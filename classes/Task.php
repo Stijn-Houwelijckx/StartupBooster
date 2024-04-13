@@ -153,6 +153,39 @@ class Task
     }
 
     /**
+     * Retrieves a task from the database by its ID.
+     *
+     * @param PDO $pdo The PDO object representing the database connection.
+     * @param int $task_id The ID of the task to retrieve.
+     * @return array|null The task data as an associative array if found, or null if not found.
+     */
+    public static function getTaskById(PDO $pdo, $task_id): ?array
+    {
+        try {
+            // Query to get a task by its ID
+            $query = "SELECT * FROM tasks WHERE id = :task_id";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':task_id', $task_id, PDO::PARAM_INT);
+
+            // Execute the query
+            $stmt->execute();
+
+            // Fetch the task
+            $task = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Return the task if found, otherwise return null
+            return $task ? $task : null;
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Adds a task to the database.
      *
      * @param PDO $pdo The PDO object representing the database connection.
@@ -301,6 +334,26 @@ class Task
         } catch (PDOException $e) {
             error_log('Database error in updateRead(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to update read status');
+        }
+    }
+
+    public static function updatePositionOnDelete (PDO $pdo, $position): bool
+    {
+        try {
+            // Query to update the positions of the tasks
+            $query = "UPDATE tasks SET position = position - 1 WHERE position > :position";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':position', $position, PDO::PARAM_INT);
+
+            // return true if the query was successful
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
         }
     }
 }
