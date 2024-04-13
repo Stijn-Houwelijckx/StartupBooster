@@ -269,7 +269,7 @@ if (isset($_SESSION["user_id"])) {
                             <?php echo $success ?>
                         </p>
                     <?php endif; ?>
-                    <form action="" method="post">
+                    <form action="" method="post" class="elements">
                         <div class="extraInfo">
                             <h3>Persoonlijke gegevens</h3>
                             <div class="fields">

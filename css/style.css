@@ -279,6 +279,31 @@ a.active {
   width: 100%;
 }
 
+#login .text .back {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+#login .text .back i {
+  background-color: var(--lightBlue);
+  padding: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#login .text .back p {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
 #login .text .partners {
   display: flex;
   flex-direction: row;
@@ -1032,7 +1057,8 @@ a.active {
 #addSector,
 #addTask,
 #users,
-#helpdesk {
+#helpdesk,
+#settings {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -1633,14 +1659,6 @@ a.active {
 }
 
 /* ---- settings ---- */
-#settings {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 24px;
-  padding-left: 80px;
-}
-
 #settings .elements {
   display: flex;
   flex-direction: row;
@@ -1756,11 +1774,30 @@ a.active {
 }
 
 #settings .option form {
+  position: relative;
+}
+
+#settings .option form.elements {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;
-  width: 100%;
+  gap: 16px;
+}
+
+#settings .option form #profileImgInput {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: var(--blue);
+  color: var(--white);
+  padding: 4px;
+  height: 28px;
+  width: 28px;
+  font-size: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #settings .option .success {
