@@ -221,12 +221,14 @@ if (isset($_SESSION["user_id"])) {
                     echo "active";
                 } ?>'>Persoonlijke
                     Gegevens</a>
-                <a href='settings.php?page=veiligheid' class='<?php if ($currentStep === "veiligheid") {
-                    echo "active";
-                } ?>'>Veiligheid</a>
-                <a href='settings.php?page=meldingen' class='<?php if ($currentStep === "meldingen") {
-                    echo "active";
-                } ?>'>Meldingen</a>
+                <?php if (User::getUserById($pdo, $_SESSION["user_id"])["isAdmin"] != "on"): ?>
+                    <a href='settings.php?page=veiligheid' class='<?php if ($currentStep === "veiligheid") {
+                        echo "active";
+                    } ?>'>Veiligheid</a>
+                    <a href='settings.php?page=meldingen' class='<?php if ($currentStep === "meldingen") {
+                         echo "active";
+                    } ?>'>Meldingen</a>
+                <?php endif; ?>
                 <a href='settings.php?page=account' class='<?php if ($currentStep === "account" || $currentStep === "EmailWijzigen" || $currentStep === "WachtwoordWijzigen" || $currentStep === "AccountVerwijderen") {
                     echo "active";
                 } ?>'>Account</a>
