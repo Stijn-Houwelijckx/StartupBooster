@@ -339,7 +339,7 @@ if (isset($_SESSION["user_id"])) {
                             <?php echo $success ?>
                         </p>
                     <?php endif; ?>
-                    <form action="" method="POST">
+                    <form action="" method="POST" class="elements">
                         <div class="field">
                             <label for="email">Uw nieuwe e-mailadres</label>
                             <input type="text" id="email" name="email" placeholder="your@email.com" value="<?php $user = User::getUserById($pdo, $_SESSION["user_id"]);

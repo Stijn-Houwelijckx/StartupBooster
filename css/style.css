@@ -1854,7 +1854,7 @@ a.active {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 50%;
+  width: 100%;
 }
 
 #settings .option .field input {
