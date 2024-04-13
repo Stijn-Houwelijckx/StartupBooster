@@ -237,9 +237,7 @@ if (isset($_SESSION["user_id"])) {
                     <h2>Persoonlijke gegevens</h2>
                     <p class="border"></p>
                     <div class="info">
-                        <div class="profilePicture"
-                            style="background-image: url('<?php echo ($user["profileImg"] !== NULL) ? $user["profileImg"] : "assets/images/Tom.jpg"; ?>');">
-                        </div>
+                        <!--  Hier komt de profileImg -->
                         <form id="profileImgForm" action="" method="post" enctype="multipart/form-data">
                             <label for="profileImg" id="profileImgInput">
                                 <i class="fa fa-edit"></i>
