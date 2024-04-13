@@ -64,9 +64,8 @@ if (isset($_SESSION["user_id"])) {
         <div class="top">
             <i class="fa fa-plus"></i>
             <div class="row">
-                <div class="profilePictureAdmin"
-                    style="background-image: url('<?php echo $pathExtention;
-                    echo $user["isAdmin"] == "on" ? $userProfilePicture : $adminProfilePicture; ?>')">
+                <div class="profilePictureAdmin" style="background-image: url('<?php echo $pathExtention;
+                echo $user["isAdmin"] == "on" ? $userProfilePicture : $adminProfilePicture; ?>')">
                 </div>
                 <div class="column">
                     <span>Chat met</span>
