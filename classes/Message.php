@@ -2,27 +2,69 @@
 
 class Message
 {
-    private $chat_id;
+    private $chatId;
+    private $senderId;
+    private $receiverId;
     private $message;
-    private $sender_id;
-    private $receiver_id;
+    private $timestamp;
 
     /**
-     * Get the value of chat_id
+     * Get the value of chatId
      */
-    public function getChat_id()
+    public function getChatId()
     {
-        return $this->chat_id;
+        return $this->chatId;
     }
 
     /**
-     * Set the value of chat_id
+     * Set the value of chatId
      *
      * @return  self
      */
-    public function setChat_id($chat_id)
+    public function setChatId($chatId)
     {
-        $this->chat_id = $chat_id;
+        $this->chatId = $chatId;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of senderId
+     */
+    public function getSenderId()
+    {
+        return $this->senderId;
+    }
+
+    /**
+     * Set the value of senderId
+     *
+     * @return  self
+     */
+    public function setSenderId($senderId)
+    {
+        $this->senderId = $senderId;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of receiverId
+     */
+    public function getReceiverId()
+    {
+        return $this->receiverId;
+    }
+
+    /**
+     * Set the value of receiverId
+     *
+     * @return  self
+     */
+    public function setReceiverId($receiverId)
+    {
+        $this->receiverId = $receiverId;
 
         return $this;
     }
@@ -40,118 +82,89 @@ class Message
      *
      * @return  self
      */
-
     public function setMessage($message)
     {
-        if (empty(trim($message))) {
-            throw new Exception("Message mag niet leeg zijn.");
-        }
         $this->message = $message;
+
         return $this;
     }
 
     /**
-     * Get the value of sender_id
+     * Get the value of timestamp
      */
-    public function getSender_id()
+    public function getTimestamp()
     {
-        return $this->sender_id;
+        return $this->timestamp;
     }
 
     /**
-     * Set the value of sender_id
+     * Set the value of timestamp
      *
      * @return  self
      */
-
-    public function setSender_id($sender_id)
+    public function setTimestamp($timestamp)
     {
-        $this->sender_id = $sender_id;
+        $this->timestamp = $timestamp;
 
         return $this;
     }
 
     /**
-     * Get the value of receiver_id
-     */
-    public function getReceiver_id()
-    {
-        return $this->receiver_id;
-    }
-
-    /**
-     * Set the value of receiver_id
+     * Retrieves all messages from a specific chat by chat ID.
      *
-     * @return  self
+     * @param PDO $pdo The PDO object for the database connection.
+     * @param int $chatId The ID of the chat.
+     * @return array|null An array of messages if they exist, otherwise null.
      */
-    public function setReceiver_id($receiver_id)
-    {
-        $this->receiver_id = $receiver_id;
-
-        return $this;
-    }
-
-    public static function getChatIdFunction(PDO $pdo, $userId)
+    public static function getMessagesByChatId(PDO $pdo, $chatId): ?array
     {
         try {
-            $stmt = $pdo->prepare("SELECT DISTINCT chat.id FROM chat WHERE (chat.user_id = :user_id OR chat.admin_id = :admin_id) AND chat.status = 1");
-            $stmt->bindParam(':user_id', $userId);
-            $stmt->bindParam(':admin_id', $userId);
+            // Query to get all messages from a chat
+            $query = "SELECT * FROM messages WHERE chat_id = :chat_id ORDER BY timestamp";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':chat_id', $chatId, PDO::PARAM_INT);
+
+            // Execute the query
             $stmt->execute();
-            return $stmt->fetchColumn();
-        } catch (PDOException $e) {
-            error_log('Database error: ' . $e->getMessage());
-            return false;
-        }
-    }
 
+            // Fetch the result
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-
-    // public static function getAll($pdo, $user_id)
-    // {
-    //     try {
-    //         $stmt = $pdo->prepare("SELECT DISTINCT message.message FROM message, chat WHERE sender_id = :sender_id OR receiver_id = :receiver_id AND chat.id = message.chat_id AND chat.status = 1");
-    //         $stmt->bindParam(':sender_id', $user_id);
-    //         $stmt->bindParam(':receiver_id', $user_id);
-    //         $stmt->execute();
-    //         $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //         return $messages ? $messages : null;
-    //     } catch (PDOException $e) {
-    //         error_log('Database error: ' . $e->getMessage());
-    //         return null;
-    //     }
-    // }
-
-    public static function getAll(PDO $pdo, $user_id)
-    {
-        try {
-            $stmt = $pdo->prepare("SELECT DISTINCT message.* FROM message, chat WHERE (message.sender_id = :sender_id OR message.receiver_id = :receiver_id) AND chat.id = message.chat_id AND chat.status = 1");
-            $stmt->bindParam(':sender_id', $user_id);
-            $stmt->bindParam(':receiver_id', $user_id);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // Return the result if it exists, otherwise return null
+            return $result ? $result : null;
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return null;
         }
     }
 
-
-    public function addMessage(PDO $pdo): bool
+    /**
+     * Saves the message to the database.
+     *
+     * @param PDO $pdo The PDO object representing the database connection.
+     * @return bool Returns true if the message is successfully saved, false otherwise.
+     */
+    public function saveMessage(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("INSERT INTO message (chat_id, sender_id, receiver_id, message) VALUES (:chat_id, :sender_id, :receiver_id, :message)");
-            $stmt->bindParam(':chat_id', $this->chat_id, PDO::PARAM_INT);
-            $stmt->bindParam(':sender_id', $this->sender_id, PDO::PARAM_INT);
-            $stmt->bindParam(':receiver_id', $this->receiver_id, PDO::PARAM_INT);
+            // Query to insert a new message
+            $query = "INSERT INTO messages (chat_id, sender_id, receiver_id, message) VALUES (:chat_id, :sender_id, :receiver_id, :message)";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':chat_id', $this->chatId, PDO::PARAM_INT);
+            $stmt->bindParam(':sender_id', $this->senderId, PDO::PARAM_INT);
+            $stmt->bindParam(':receiver_id', $this->receiverId, PDO::PARAM_INT);
             $stmt->bindParam(':message', $this->message, PDO::PARAM_STR);
 
-            if ($stmt->execute()) {
-                return true;
-            } else {
-                return false;
-            }
+            // Execute the query and return true if successful
+            return $stmt->execute();
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return false;
