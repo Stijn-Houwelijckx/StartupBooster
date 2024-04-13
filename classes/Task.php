@@ -1,10 +1,31 @@
 <?php
 class Task
 {
+    private $position;
     private $label;
     private $question;
     private $answer;
     private $status;
+
+    /**
+     * Get the value of position
+     */ 
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set the value of position
+     *
+     * @return  self
+     */ 
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
 
     /**
      * Get the value of label
@@ -131,24 +152,62 @@ class Task
         }
     }
 
-    public static function addTask(PDO $pdo, $label, $question, $answer, $status)
+    /**
+     * Adds a task to the database.
+     *
+     * @param PDO $pdo The PDO object representing the database connection.
+     * @return bool Returns true if the task was successfully added, false otherwise.
+     */
+    public function addTask(PDO $pdo): bool
     {
         try {
-            $stmt = $pdo->prepare("INSERT INTO tasks (label, question, answer, status) VALUES (:label, :question, :answer, :status)");
-            $stmt->execute(
-                array(
-                    ':label' => $label,
-                    ':question' => $question,
-                    ':answer' => $answer,
-                    ':status' => $status,
-                )
-            );
-            return true;
+            // Query to add a task
+            $query = "INSERT INTO tasks (position, label, question, answer) VALUES (:position, :label, :question, :answer)";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':position', $this->position, PDO::PARAM_INT);
+            $stmt->bindParam(':label', $this->label, PDO::PARAM_STR);
+            $stmt->bindParam(':question', $this->question, PDO::PARAM_STR);
+            $stmt->bindParam(':answer', $this->answer, PDO::PARAM_STR);
+
+            // Execute the query and return true if successful
+            return $stmt->execute();
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return false;
         }
     }
+
+    /**
+     * Updates the positions of the tasks in the database.
+     *
+     * @param PDO $pdo The PDO object representing the database connection.
+     * @param int $insertedPosition The position of the newly inserted task.
+     * @return bool Returns true if the query was successful, false otherwise.
+     */
+    public static function updateTaskPositions(PDO $pdo, $insertedPosition): bool
+    {
+        try {
+            // Query to update the positions of the tasks
+            $query = "UPDATE tasks SET position = position + 1 WHERE position >= :position";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':position', $insertedPosition, PDO::PARAM_INT);
+
+            // return true if the query was successful
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
 
     public static function getActiveTask(PDO $pdo, $user_id)
     {

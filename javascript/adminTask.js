@@ -21,8 +21,6 @@ document.querySelectorAll(".step").forEach(function (step) {
 
 document.querySelectorAll(".addTaskBtn").forEach(function (addTaskBtn) {
   addTaskBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
     var taskId = this.dataset.taskid;
     console.log("Task ID: ", taskId);
   });

@@ -2,7 +2,14 @@
 include_once (__DIR__ . "/../classes/Db.php");
 include_once (__DIR__ . "/../classes/User.php");
 include_once (__DIR__ . "/../classes/Task.php");
+
 session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
+
+$current_page = 'roadmap';
 
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php?error=notLoggedIn");
@@ -11,17 +18,29 @@ if (!isset($_SESSION["user_id"])) {
 
 $pdo = Db::getInstance();
 $user = User::getUserById($pdo, $_SESSION["user_id"]);
-$current_page = 'roadmap';
+
+// Retreive position of last task
+$allTasks = Task::getAllTasks($pdo);
+$position = end($allTasks)["position"] + 1;
+
+if (isset($_GET["position"]) && !empty($_GET["position"])) {
+    $position = intval($_GET["position"]);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["label"]) && !empty($_POST["question"]) && !empty($_POST["answer"])) {
         try {
+            // Update positions of the tasks first before adding a new task
+            Task::updateTaskPositions($pdo, $position);
+
+            // Create new task
             $task = new Task();
+            $task->setPosition($position);
             $task->setLabel($_POST["label"]);
             $task->setQuestion($_POST["question"]);
             $task->setAnswer($_POST["answer"]);
-            $task->setStatus("1");
-            Task::addTask($pdo, $_POST["label"], $_POST["question"], $_POST["answer"], "1");
+            $task->addTask($pdo);
+
             header("Location: tasks.php");
             exit;
         } catch (PDOException $e) {
@@ -45,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <?php include_once ('../inc/navAdmin.inc.php'); ?>
     <div id="addTask">
-        <h2>Voeg een subsidie toe</h2>
+        <h2>Voeg een subsidie toe op positie <?php echo $position ?></h2>
         <form action="" method="POST">
             <div class="column">
                 <label for="label">Label</label>

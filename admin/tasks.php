@@ -5,6 +5,8 @@ include_once (__DIR__ . "/../classes/Db.php");
 include_once (__DIR__ . "/../classes/User.php");
 include_once (__DIR__ . "/../classes/Task.php");
 
+$current_page = 'roadmap';
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('error_log', 'error.log');
@@ -16,7 +18,6 @@ if (!isset($_SESSION["user_id"])) {
 
 $pdo = Db::getInstance();
 $user = User::getUserById($pdo, $_SESSION["user_id"]);
-$current_page = 'roadmap';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["delete"])) {
@@ -74,7 +75,7 @@ $steps = Task::getAllTasks($pdo);
             <form action="" method="post">
                 <?php foreach ($steps as $step): ?>
                     <div class="step">
-                        <a class="addTaskBtn" data-taskid="<?php echo $step["position"] ?>">
+                        <a href="addTask.php?position=<?php echo $step["position"] ?>" class="addTaskBtn" data-taskid="<?php echo $step["position"] ?>">
                             <i class="fa fa-plus"></i>
                         </a>
                         <div class="stepContent">
