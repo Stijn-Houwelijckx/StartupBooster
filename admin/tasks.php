@@ -73,6 +73,7 @@ $steps = Task::getAllTasks($pdo);
             </div>
             <form action="" method="post">
                 <?php foreach ($steps as $step): ?>
+                    <i class="fa fa-plus"></i>
                     <div class="step">
                         <div class="text">
                             <p class="stepID">Stap <?php echo $step["id"] ?> </p>
@@ -97,9 +98,6 @@ $steps = Task::getAllTasks($pdo);
                             <input hidden type="submit" name="delete[<?php echo $step["id"] ?>]"
                                 id="delete[<?php echo $step["id"] ?>]">
                         </div>
-                    </div>
-                    <div class="addTaskBtn">
-                        <a class="btn" href="#"><i class="fa fa-plus"></i></a>
                     </div>
 
                 <?php endforeach ?>

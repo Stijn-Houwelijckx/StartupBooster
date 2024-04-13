@@ -755,7 +755,7 @@ a.active {
 }
 
 #roadmapAdmin .steps .fa-plus {
-  display: none;
+  display: flex;
   padding: 8px;
   background-color: var(--lightBlue);
   width: 24px;
