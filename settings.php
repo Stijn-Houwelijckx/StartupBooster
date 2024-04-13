@@ -238,6 +238,7 @@ if (isset($_SESSION["user_id"])) {
                     <p class="border"></p>
                     <div class="info">
                         <!--  Hier komt de profileImg -->
+                        <div class="profilePicture" style="background-image: url('<?php $user = User::getUserById($pdo, $_SESSION["user_id"]); echo $user["profileImg"] !== null ? $user["profileImg"] : "assets/images/Tom.jpg"; ?>');"></div>
                         <form id="profileImgForm" action="" method="post" enctype="multipart/form-data">
                             <label for="profileImg" id="profileImgInput">
                                 <i class="fa fa-edit"></i>
