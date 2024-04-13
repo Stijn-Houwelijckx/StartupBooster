@@ -21,6 +21,7 @@ class User
     private int $emailNotifications;
     private int $smsNotifications;
     private int $deviceNotificationAlerts;
+    private $profileImg;
 
     /**
      * Get the value of firstname
@@ -480,6 +481,63 @@ class User
         return $this;
     }
 
+    /**
+     * Get the value of bannerImg
+     */
+    public function getProfileImg()
+    {
+        return $this->profileImg;
+    }
+
+    /**
+     * Set the value of bannerImg
+     *
+     * @return  self
+     */
+    public function setProfileImg($file, $allowedExt, $maxFileSize)
+    {
+        // Retrieve file info
+        $fileName = $file["name"];
+        $fileTmpName = $file["tmp_name"]; // Temporary file location
+        $fileSize = $file["size"];
+        $fileError = $file["error"];
+        $fileType = $file["type"];
+
+        // Get file extention
+        $fileExt = explode(".", $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+
+        // File checks
+        if (in_array($fileActualExt, $allowedExt)) {
+            if ($fileError === 0) {
+                if ($fileSize < $maxFileSize) {
+                    // Create unique file name
+                    $fileNameNew = uniqid("", true) . "." . $fileActualExt;
+
+                    // Set file destination
+                    $fileDestination = "uploads/profileImg/" . $fileNameNew;
+                    move_uploaded_file($fileTmpName, $fileDestination);
+
+                } else {
+                    // throw new Exception("File size too big.");
+                    $error = "File size too big. (max " . $maxFileSize / 1000 / 1000 . "MB";
+                    return $error;
+                }
+            } else {
+                // throw new Exception("Error uploading file.");
+                $error = "Error uploading file.";
+                return $error;
+            }
+        } else {
+            // throw new Exception("File extention not allowed"); 
+            $error = "File extention not allowed";
+            return $error;
+        }
+
+        $this->profileImg = $fileDestination;
+        return $this;
+    }
+
     public function addUser(PDO $pdo): bool
     {
         try {
@@ -681,4 +739,27 @@ class User
             throw new Exception('Database error: Unable to retrieve users');
         }
     }
+
+    public function updateProfileImg(PDO $pdo, $user_id): bool
+    {
+        try {
+            $stmt = $pdo->prepare("UPDATE users SET profileImg = :profileImg WHERE id = :user_id");
+            $stmt->bindParam(':profileImg', $this->profileImg);
+            $stmt->bindParam(':user_id', $user_id);
+
+            // Controleer of de SQL-instructie met succes is uitgevoerd
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        } catch (Exception $e) {
+            error_log('Error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
 }
