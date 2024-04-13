@@ -47,7 +47,7 @@ if (isset ($_SESSION["user_id"])) {
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = new User();
-
+ 
         try {
             if (isset ($_POST["firstname"])) {
                 $firstName = filter_input(INPUT_POST, 'firstname');
