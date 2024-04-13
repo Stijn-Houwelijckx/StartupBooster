@@ -3,6 +3,10 @@ include_once (__DIR__ . "/../classes/Subsidie.php");
 include_once (__DIR__ . "/../classes/Db.php");
 include_once (__DIR__ . "/../classes/User.php");
 session_start();
+
+$pdo = Db::getInstance();
+$user = User::getUserById($pdo, $_SESSION["user_id"]);
+
 $subsidie = new Subsidie();
 
 if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {

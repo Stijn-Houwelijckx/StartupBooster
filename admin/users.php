@@ -4,7 +4,8 @@ include_once (__DIR__ . "../../classes/User.php");
 session_start();
 
 $pdo = Db::getInstance();
-$popop = false;
+$user = User::getUserById($pdo, $_SESSION["user_id"]);
+// $popop = false;
 
 if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     $user = User::getUserById($pdo, $_SESSION["user_id"]);

@@ -5,6 +5,7 @@ include_once (__DIR__ . "/../classes/Sector.php");
 session_start();
 $sector = new Sector();
 
+$pdo = Db::getInstance();
 $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
 if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {

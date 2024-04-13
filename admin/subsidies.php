@@ -10,6 +10,7 @@ ini_set('error_log', 'error.log');
 session_start();
 
 $pdo = Db::getInstance();
+$user = User::getUserById($pdo, $_SESSION["user_id"]);
 
 if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
