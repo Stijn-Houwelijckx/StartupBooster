@@ -98,6 +98,9 @@ $steps = Task::getAllTasks($pdo);
                                 id="delete[<?php echo $step["id"] ?>]">
                         </div>
                     </div>
+                    <div class="addTaskBtn">
+                        <a class="btn" href="#"><i class="fa fa-plus"></i></a>
+                    </div>
 
                 <?php endforeach ?>
                 <button type="submit" class="btn" name="saveChanges">Opslaan</button>

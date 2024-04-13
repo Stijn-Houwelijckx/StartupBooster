@@ -797,7 +797,7 @@ a.active {
   display: flex;
   flex-direction: row;
   gap: 16px;
-  padding: 16px 24px;
+  padding: 40px 24px;
 }
 
 #roadmapAdmin .steps .step .text {
