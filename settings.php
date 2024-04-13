@@ -31,6 +31,12 @@ if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
 
+    if ($user["isAdmin"] == "on") {
+        $userIsAdmin = "on";
+    } else {
+        $userIsAdmin = "off";
+    }
+
     try {
         $pdo = Db::getInstance();
         $statutes = Statute::getAll($pdo);
@@ -56,6 +62,9 @@ if (isset($_SESSION["user_id"])) {
 
                 $user->setFirstname($firstName);
                 $user->setLastname($lastName);
+
+                $user->setisAdmin($userIsAdmin);
+
                 $user->setStatute($statute);
                 $user->setSector($sector);
                 $user->setPhoneNumber($phone);
@@ -63,6 +72,8 @@ if (isset($_SESSION["user_id"])) {
                 $user->setHouseNumber($houseNumber);
                 $user->setZipCode($zipCode);
                 $user->setCity($city);
+
+
 
                 $user->updateUser($pdo, $_SESSION["user_id"]);
                 $success = "Uw gegevens zijn successvol aangepast.";
