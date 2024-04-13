@@ -107,12 +107,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Wachtwoord herstellen</title>
     <link rel="stylesheet" href="https://use.typekit.net/kqy0ynu.css">
     <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
 </head>
 
 <body>
     <div id="login">
         <div class="text">
+            <a href="login.php" class="back"><i class="fa fa-angle-left"></i><p>Ga terug</p></a>
             <h1>Wachtwoord herstellen</h1>
             <p>Vul je e-mailadres in en ontvang een herstelcode om je wachtwoord opnieuw in te stellen.</p>
 

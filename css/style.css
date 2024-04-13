@@ -279,6 +279,31 @@ a.active {
   width: 100%;
 }
 
+#login .text .back {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+#login .text .back i {
+  background-color: var(--lightBlue);
+  padding: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#login .text .back p {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
 #login .text .partners {
   display: flex;
   flex-direction: row;
@@ -1761,8 +1786,8 @@ a.active {
 
 #settings .option form #profileImgInput {
   position: absolute;
-  bottom: 0; /* Zet het aan de onderkant */
-  right: 0; /* Zet het naar rechts */
+  bottom: 0;
+  right: 0;
   background-color: var(--blue);
   color: var(--white);
   padding: 4px;
