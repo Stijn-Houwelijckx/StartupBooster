@@ -106,6 +106,7 @@ $tasks = Task::getAllTasks($pdo);
                                     hidden>
                             </div>
                             <div class="icons">
+                                <span class="handle"><i class="fa fa-bars"></i></span>
                                 <label for="delete[<?php echo $task["id"] ?>]"><i class="fa fa-trash"></i></label>
                                 <input hidden type="submit" name="delete[<?php echo $task["id"] ?>]"
                                     id="delete[<?php echo $task["id"] ?>]">
