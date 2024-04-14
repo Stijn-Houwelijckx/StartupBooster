@@ -310,18 +310,38 @@ class Task
         }
     }
 
-    public static function updateTasks(PDO $pdo, $task_id, $label, $question, $answer)
+    /**
+     * Update a task in the database.
+     *
+     * @param PDO $pdo The PDO object representing the database connection.
+     * @param int $task_id The ID of the task to update.
+     * @param string $label The new label for the task.
+     * @param string $question The new question for the task.
+     * @param string $answer The new answer for the task.
+     * @param int $position The new position for the task.
+     * @return bool Returns true if the task was successfully updated, false otherwise.
+     */
+    public static function updateTasks(PDO $pdo, $task_id, $label, $question, $answer, $position): bool
     {
         try {
-            $stmt = $pdo->prepare("UPDATE tasks SET label = :label, question = :question, answer = :answer WHERE id = :task_id");
-            $stmt->bindParam(':label', $label);
-            $stmt->bindParam(':question', $question);
-            $stmt->bindParam(':answer', $answer);
-            $stmt->bindParam(':task_id', $task_id);
-            $stmt->execute();
+            // Query to update the tasks
+            $query = "UPDATE tasks SET label = :label, question = :question, answer = :answer, position = :position WHERE id = :task_id";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':label', $label, PDO::PARAM_STR);
+            $stmt->bindParam(':question', $question, PDO::PARAM_STR);
+            $stmt->bindParam(':answer', $answer, PDO::PARAM_STR);
+            $stmt->bindParam(':position', $position, PDO::PARAM_INT);
+            $stmt->bindParam(':task_id', $task_id, PDO::PARAM_INT);
+
+            // return true if the query was successful
+            return $stmt->execute();
         } catch (PDOException $e) {
-            error_log('Database error in updateTasks(): ' . $e->getMessage());
-            throw new Exception('Database error: Unable to update tasks');
+            error_log('Database error: ' . $e->getMessage());
+            return false;
         }
     }
 

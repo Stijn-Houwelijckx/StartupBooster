@@ -13,6 +13,9 @@
   --three: #6c4b46;
   --four: #9f8a86;
   --five: #554341;
+
+  /* ---- Utility colors ---- */
+  --clr-disabled: #dadada;
 }
 
 @font-face {
@@ -66,6 +69,18 @@ button {
   padding: 0;
   color: var(--offBlack);
   text-decoration: none;
+}
+
+input.areaDisabled,
+select.areaDisabled {
+  cursor: not-allowed;
+}
+
+a.btnDisabled,
+button.btnDisabled {
+  pointer-events: none;
+  cursor: default;
+  background-color: var(--clr-disabled);
 }
 
 input::placeholder {
@@ -781,6 +796,20 @@ a.active {
   border-radius: 24px;
 }
 
+#roadmapAdmin .steps #dropzone {
+  padding-top: 5px;
+}
+
+/* Style when dragging */
+#roadmapAdmin .steps .step.dragging {
+  scale: 1.015;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+}
+#roadmapAdmin .steps .step.dragging .stepContent {
+  background-color: var(--four);
+  color: white;
+}
+
 #roadmapAdmin .steps h2 {
   padding-top: 24px;
   padding-left: 24px;
@@ -885,6 +914,10 @@ a.active {
 
 #roadmapAdmin .steps .stepContent .icons .fa-bars {
   cursor: grab;
+}
+
+#roadmapAdmin .steps .step.dragging .stepContent .icons .fa-bars {
+  cursor: grabbing;
 }
 
 #roadmap .tasks .task:before {

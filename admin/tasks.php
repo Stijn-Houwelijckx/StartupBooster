@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tasks = $_POST['steps'];
         foreach ($tasks as $task) {
             try {
-                Task::updateTasks($pdo, $task['id'], $task['label'], $task['question'], $task['answer']);
+                Task::updateTasks($pdo, $task['id'], $task['label'], $task['question'], $task['answer'], $task['position']);
             } catch (Exception $e) {
                 error_log('Database error: ' . $e->getMessage());
             }
@@ -70,7 +70,8 @@ $tasks = Task::getAllTasks($pdo);
     <div id="roadmapAdmin">
         <div class="top">
             <h1>Stappenplan</h1>
-            <a href="addTask.php" class="btn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
+            <a href="#" class="btn" id="changePositionBtn"><i class="fa fa-sort" style="padding-right:8px"></i> Volgorde aanpassen</a>
+            <a href="addTask.php" class="btn" id="appendTaskBtn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
         </div>
         <div class="steps">
             <h2>Stappen</h2>
@@ -80,42 +81,41 @@ $tasks = Task::getAllTasks($pdo);
                 <h3 class="topQuestion">Vraag</h3>
                 <h3 class="topAnswer">Antwoord</h3>
             </div>
-            <form action="" method="post">
-                <?php foreach ($tasks as $task): ?>
-                    <div class="step">
-                        <a href="addTask.php?position=<?php echo $task["position"] ?>" class="addTaskBtn" data-taskid="<?php echo $task["position"] ?>">
-                            <i class="fa fa-plus"></i>
-                        </a>
-                        <div class="stepContent">
-                            <div class="text">
-                                <p class="stepID">Stap <?php echo $task["position"] ?> </p>
-                                <select name="steps[<?php echo $task["id"] ?>][label]" class="label">
-                                    <option value="Start" <?php if ($task["label"] == "Start") {
-                                        echo "selected";
-                                    } ?>>Start</option>
-                                    <option value="Aanvragen" <?php if ($task["label"] == "Aanvragen") {
-                                        echo "selected";
-                                    } ?>>Aanvragen</option>
-                                </select>
-                                <input type="text" name="steps[<?php echo $task["id"] ?>][question]"
-                                    value="<?php echo $task["question"] ?>" class="question">
-                                <input type="text" name="steps[<?php echo $task["id"] ?>][answer]"
-                                    value="<?php echo $task["answer"] ?>" class="answer">
-    
-                                <input type="text" name="steps[<?php echo $task["id"] ?>][id]" value="<?php echo $task["id"] ?>"
-                                    hidden>
-                            </div>
-                            <div class="icons">
-                                <span class="handle"><i class="fa fa-bars"></i></span>
-                                <label for="delete[<?php echo $task["id"] ?>]"><i class="fa fa-trash"></i></label>
-                                <input hidden type="submit" name="delete[<?php echo $task["id"] ?>]"
-                                    id="delete[<?php echo $task["id"] ?>]">
+            <form action="" method="post" id="tasksForm">
+                <div id="dropzone">
+                    <?php foreach ($tasks as $index => $task): ?>
+                        <div class="step" draggable="false">
+                            <a href="addTask.php?position=<?php echo $task["position"] ?>" class="addTaskBtn" data-taskid="<?php echo $task["position"] ?>">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                            <div class="stepContent">
+                                <div class="text">
+                                    <p class="stepID">Stap <?php echo $task["position"] ?> </p>
+                                    <select name="steps[<?php echo $task["id"] ?>][label]" class="label">
+                                        <option value="Start" <?php if ($task["label"] == "Start") {
+                                            echo "selected";
+                                        } ?>>Start</option>
+                                        <option value="Aanvragen" <?php if ($task["label"] == "Aanvragen") {
+                                            echo "selected";
+                                        } ?>>Aanvragen</option>
+                                    </select>
+                                    <input type="text" name="steps[<?php echo $task["id"] ?>][question]" value="<?php echo $task["question"] ?>" class="question">
+                                    <input type="text" name="steps[<?php echo $task["id"] ?>][answer]" value="<?php echo $task["answer"] ?>" class="answer">
+                                    <input type="text" name="steps[<?php echo $task["id"] ?>][id]" value="<?php echo $task["id"] ?>" hidden>
+                                    <input type="hidden" name="steps[<?php echo $task["id"] ?>][position]" class="task-position" value="<?php echo $index + 1; ?>">
+                                </div>
+                                <div class="icons">
+                                    <span class="handle" style="display:none"><i class="fa fa-bars"></i></span>
+                                    <label for="delete[<?php echo $task["id"] ?>]"><i class="fa fa-trash"></i></label>
+                                    <input hidden type="submit" name="delete[<?php echo $task["id"] ?>]"
+                                        id="delete[<?php echo $task["id"] ?>]">
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                <?php endforeach ?>
-                <button type="submit" class="btn" name="saveChanges">Opslaan</button>
+    
+                    <?php endforeach ?>
+                </div>
+                <button type="submit" class="btn" name="saveChanges" id="saveChangesBtn">Opslaan</button>
             </form>
         </div>
     </div>
