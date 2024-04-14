@@ -873,6 +873,7 @@ a.active {
 #roadmapAdmin .steps .stepContent .icons .fa-trash,
 #stats .sectors .sector .icons .fa-trash {
   color: red;
+  cursor: pointer;
 }
 
 #roadmap .tasks .task:before {
