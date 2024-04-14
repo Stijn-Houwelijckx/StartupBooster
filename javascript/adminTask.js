@@ -136,6 +136,9 @@ changePositionBtn.addEventListener("click", function (e) {
     tasks.forEach((task) => {
       task.setAttribute("draggable", "false");
     });
+
+    // Submit form to save changes
+    saveChangesBtn.click();
   }
 });
 
