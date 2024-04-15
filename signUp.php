@@ -113,6 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
 
                     unset($_SESSION["firstname"]);
                     unset($_SESSION["lastname"]);
+                    unset($_SESSION["statute"]);
+                    unset($_SESSION["sector"]);
                     unset($_SESSION["email"]);
                     unset($_SESSION["street"]);
                     unset($_SESSION["houseNumber"]);
