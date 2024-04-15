@@ -89,19 +89,25 @@ $subsidies = Subsidie::getSubsidies($pdo);
                 <form action="" method="post" id="subsidieForm">
                     <div class="subsidie">
                         <div class="text">
-                            <input type="text" name="name"
-                                value="<?php echo htmlspecialchars($selectedSubsidie["name"]); ?>">
-                            <textarea name="description" cols="30"
-                                rows="10"><?php echo htmlspecialchars($selectedSubsidie["description"]); ?></textarea>
-                            <input type="text" name="who" value="<?php echo htmlspecialchars($selectedSubsidie["who"]); ?>">
-                            <input type="text" name="what"
-                                value="<?php echo htmlspecialchars($selectedSubsidie["what"]); ?>">
-                            <input type="text" name="amount"
-                                value="<?php echo htmlspecialchars($selectedSubsidie["amount"]); ?>">
-                            <input type="text" name="link"
-                                value="<?php echo htmlspecialchars($selectedSubsidie["link"]); ?>">
-                            <input type="text" name="id" hidden
-                                value="<?php echo htmlspecialchars($selectedSubsidie["id"]); ?>">
+                            <label for="name">Naam:</label>
+                            <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($selectedSubsidie["name"]); ?>">
+                            
+                            <label for="description">Beschrijving:</label>
+                            <textarea name="description" id="description" cols="30" rows="10"><?php echo htmlspecialchars($selectedSubsidie["description"]); ?></textarea>
+                            
+                            <label for="who">Wie:</label>
+                            <input type="text" name="who" id="who" value="<?php echo htmlspecialchars($selectedSubsidie["who"]); ?>">
+                            
+                            <label for="what">Wat:</label>
+                            <input type="text" name="what" id="what" value="<?php echo htmlspecialchars($selectedSubsidie["what"]); ?>">
+                            
+                            <label for="amount">Bedrag:</label>
+                            <input type="text" name="amount" id="amount" value="<?php echo htmlspecialchars($selectedSubsidie["amount"]); ?>">
+                            
+                            <label for="link">Link:</label>
+                            <input type="text" name="link" id="link" value="<?php echo htmlspecialchars($selectedSubsidie["link"]); ?>">
+                            
+                            <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($selectedSubsidie["id"]); ?>">
                         </div>
                     </div>
                     <div class="buttons">

@@ -112,9 +112,13 @@ $users = User::getAll($pdo);
                 <form action="" method="post" id="userForm">
                     <div class="user">
                         <div class="text">
-                            <input type="text" name="firstname" value="<?php echo htmlspecialchars($selectedUser["firstname"]); ?>">
-                            <input type="text" name="lastname" value="<?php echo htmlspecialchars($selectedUser["lastname"]); ?>">
-
+                            <label for="firstname">Voornaam:</label>
+                            <input type="text" name="firstname" id="firstname" value="<?php echo htmlspecialchars($selectedUser["firstname"]); ?>">
+                            
+                            <label for="lastname">Achternaam:</label>
+                            <input type="text" name="lastname" id="lastname" value="<?php echo htmlspecialchars($selectedUser["lastname"]); ?>">
+                            
+                            <label for="statute">Statuut:</label>
                             <select name="statute" id="statute">
                                 <?php foreach ($statutes as $statute): ?>
                                     <option value="<?php echo $statute["id"] ?>" <?php echo $selectedUser["statute_id"] == $statute["id"] ? "selected" : "" ?>>
@@ -122,7 +126,8 @@ $users = User::getAll($pdo);
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-
+                            
+                            <label for="sector">Sector:</label>
                             <select name="sector" id="sector">
                                 <?php foreach ($sectors as $sector): ?>
                                     <option value="<?php echo $sector["id"] ?>" <?php echo $selectedUser["sector_id"] == $sector["id"] ? "selected" : "" ?>>
@@ -130,26 +135,37 @@ $users = User::getAll($pdo);
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-
-                            <input type="text" name="email" value="<?php echo htmlspecialchars($selectedUser["email"]); ?>">
-                            <input type="text" name="phoneNumber" value="<?php echo htmlspecialchars($selectedUser["phoneNumber"]); ?>">
-                            <input type="text" name="street" value="<?php echo htmlspecialchars($selectedUser["street"]); ?>">
-                            <input type="text" name="houseNumber" value="<?php echo htmlspecialchars($selectedUser["houseNumber"]); ?>">
-                            <input type="text" name="zipCode" value="<?php echo htmlspecialchars($selectedUser["zipCode"]); ?>">
-                            <input type="text" name="city" value="<?php echo htmlspecialchars($selectedUser["city"]); ?>">
-                            <input type="text" name="user_id" hidden value="<?php echo htmlspecialchars($selectedUser["id"]); ?>">
+                            
+                            <label for="email">E-mail:</label>
+                            <input type="text" name="email" id="email" value="<?php echo htmlspecialchars($selectedUser["email"]); ?>">
+                            
+                            <label for="phoneNumber">Telefoonnummer:</label>
+                            <input type="text" name="phoneNumber" id="phoneNumber" value="<?php echo htmlspecialchars($selectedUser["phoneNumber"]); ?>">
+                            
+                            <label for="street">Straat:</label>
+                            <input type="text" name="street" id="street" value="<?php echo htmlspecialchars($selectedUser["street"]); ?>">
+                            
+                            <label for="houseNumber">Huisnummer:</label>
+                            <input type="text" name="houseNumber" id="houseNumber" value="<?php echo htmlspecialchars($selectedUser["houseNumber"]); ?>">
+                            
+                            <label for="zipCode">Postcode:</label>
+                            <input type="text" name="zipCode" id="zipCode" value="<?php echo htmlspecialchars($selectedUser["zipCode"]); ?>">
+                            
+                            <label for="city">Stad:</label>
+                            <input type="text" name="city" id="city" value="<?php echo htmlspecialchars($selectedUser["city"]); ?>">
+                            
+                            <input type="hidden" name="user_id" id="user_id" value="<?php echo htmlspecialchars($selectedUser["id"]); ?>">
+                            
                             <div class="row">
                                 <input type="hidden" name="isAdmin" value="off">
-                                <label for="checkboxIsAdmin">isAdmin</label>
-                                <input type="checkbox" name="isAdmin" id="checkboxIsAdmin" <?php if ($selectedUser["isAdmin"] == "on")
-                                    echo "checked"; ?>>
+                                <label for="checkboxIsAdmin">isAdmin:</label>
+                                <input type="checkbox" name="isAdmin" id="checkboxIsAdmin" <?php if ($selectedUser["isAdmin"] == "on") echo "checked"; ?>>
                             </div>
                         </div>
                     </div>
                     <div class="buttons">
                         <button type="submit" class="btn">Opslaan</button>
                     </div>
-
                 </form>
                 <div class="popup">
                     <p>Weet je zeker dat je deze gebruiker wilt verwijderen?</p>
