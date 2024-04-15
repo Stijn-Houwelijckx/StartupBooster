@@ -42,7 +42,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $task->setLabel($_POST["label"]);
             $task->setQuestion($_POST["question"]);
             $task->setAnswer($_POST["answer"]);
-            $task->addTask($pdo);
+            $insertedTaskId = $task->addTask($pdo);
+
+            // Insert new task to all users
+            if ($insertedTaskId) {
+                $users = User::getAll($pdo);
+                foreach ($users as $user) {
+                    Task::addTaskToUser($pdo, $user["id"], $insertedTaskId);
+                }
+            } else {
+                error_log('Failed to insert task to all users.');
+            }
 
             header("Location: tasks.php");
             exit;

@@ -593,26 +593,38 @@ class User
         }
     }
 
-    public static function updateUserAdmin(PDO $pdo, $firstname, $lastname, $isAdmin, $statute_id, $sector_id, $email, $phoneNumber, $street, $houseNumber, $zipCode, $city, $id)
+    /**
+     * Update the admin user in the database.
+     *
+     * @param PDO $pdo The PDO object for the database connection.
+     * @param int $admin_id The ID of the admin user to update.
+     * @return bool Returns true if the update was successful, false otherwise.
+     */
+    public function updateAdmin(PDO $pdo, $admin_id): bool
     {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, isAdmin = :isAdmin, statute_id = :statute_id, sector_id = :sector_id, email = :email, phoneNumber = :phoneNumber, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city WHERE id = :id");
-            $stmt->bindParam(':firstname', $firstname);
-            $stmt->bindParam(':lastname', $lastname);
-            $stmt->bindParam(':isAdmin', $isAdmin);
-            $stmt->bindParam(':statute_id', $statute_id);
-            $stmt->bindParam(':sector_id', $sector_id);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':phoneNumber', $phoneNumber);
-            $stmt->bindParam(':street', $street);
-            $stmt->bindParam(':houseNumber', $houseNumber);
-            $stmt->bindParam(':zipCode', $zipCode);
-            $stmt->bindParam(':city', $city);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
+            // Query to update user
+            $query = "UPDATE users SET firstname = :firstname, lastname = :lastname, isAdmin = :isAdmin, phoneNumber = :phoneNumber, street = :street, houseNumber = :houseNumber, zipCode = :zipCode, city = :city WHERE id = :admin_id";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':firstname', $this->firstname, PDO::PARAM_STR);
+            $stmt->bindParam(':lastname', $this->lastname, PDO::PARAM_STR);
+            $stmt->bindParam(':isAdmin', $this->isAdmin, PDO::PARAM_STR);
+            $stmt->bindParam(':phoneNumber', $this->phoneNumber, PDO::PARAM_STR);
+            $stmt->bindParam(':street', $this->street, PDO::PARAM_STR);
+            $stmt->bindParam(':houseNumber', $this->houseNumber, PDO::PARAM_STR);
+            $stmt->bindParam(':zipCode', $this->zipCode, PDO::PARAM_STR);
+            $stmt->bindParam(':city', $this->city, PDO::PARAM_STR);
+            $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+
+            // Execute the query and return true if successful
+            return $stmt->execute();
         } catch (PDOException $e) {
-            error_log('Database error in updateUsers(): ' . $e->getMessage());
-            throw new Exception('Database error: Unable to update users');
+            error_log('Database error: ' . $e->getMessage());
+            return false;
         }
     }
 

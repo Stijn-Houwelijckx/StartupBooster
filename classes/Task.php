@@ -128,7 +128,7 @@ class Task
     public static function getTasks(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id AND tasks.status = 1");
+            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id AND tasks.status = 1 ORDER BY tasks.position");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -189,9 +189,9 @@ class Task
      * Adds a task to the database.
      *
      * @param PDO $pdo The PDO object representing the database connection.
-     * @return bool Returns true if the task was successfully added, false otherwise.
+     * @return int|false The id of the inserted task, or false if an error occurred.
      */
-    public function addTask(PDO $pdo): bool
+    public function addTask(PDO $pdo): int|false
     {
         try {
             // Query to add a task
@@ -205,6 +205,38 @@ class Task
             $stmt->bindParam(':label', $this->label, PDO::PARAM_STR);
             $stmt->bindParam(':question', $this->question, PDO::PARAM_STR);
             $stmt->bindParam(':answer', $this->answer, PDO::PARAM_STR);
+
+            // Execute the query
+            $stmt->execute();
+
+            // Return id of the inserted task
+            return $pdo->lastInsertId();
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Adds a task to a user.
+     *
+     * @param PDO $pdo The PDO object representing the database connection.
+     * @param int $user_id The ID of the user.
+     * @param int $task_id The ID of the task.
+     * @return bool Returns true if the task was successfully added to the user, false otherwise.
+     */
+    public static function addTaskToUser(PDO $pdo, $user_id, $task_id): bool
+    {
+        try {
+            // Query to add a task to a user
+            $query = "INSERT INTO user_tasks (user_id, task_id) VALUES (:user_id, :task_id)";
+
+            // Prepare the query
+            $stmt = $pdo->prepare($query);
+
+            // Bind the parameters
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':task_id', $task_id, PDO::PARAM_INT);
 
             // Execute the query and return true if successful
             return $stmt->execute();
@@ -245,7 +277,7 @@ class Task
     public static function getActiveTask(PDO $pdo, $user_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT task_id FROM user_tasks WHERE is_complete = 0 AND user_id = :user_id ORDER BY id ASC LIMIT 1");
+            $stmt = $pdo->prepare("SELECT task_id FROM user_tasks, tasks WHERE is_complete = 0 AND user_tasks.user_id = :user_id AND user_tasks.task_id = tasks.id ORDER BY tasks.position ASC LIMIT 1");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
             $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -357,7 +389,16 @@ class Task
         }
     }
 
-    public static function updatePositionOnDelete (PDO $pdo, $position): bool
+    /**
+     * Update the position of tasks on deletion.
+     *
+     * This method updates the positions of tasks in the database when a task is deleted.
+     *
+     * @param PDO $pdo The PDO object representing the database connection.
+     * @param int $position The position of the deleted task.
+     * @return bool Returns true if the query was successful, false otherwise.
+     */
+    public static function updatePositionOnDelete(PDO $pdo, $position): bool
     {
         try {
             // Query to update the positions of the tasks
