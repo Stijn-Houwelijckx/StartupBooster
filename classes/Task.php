@@ -151,10 +151,12 @@ class Task
         try {
             $sql = "
                 SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete 
-                FROM tasks
-                INNER JOIN user_tasks ON user_tasks.task_id = tasks.id
-                INNER JOIN statutes ON statutes.id = tasks.statute_id
-                WHERE user_tasks.user_id = :user_id AND tasks.statute_id = :statute_id AND tasks.status = 1
+                FROM tasks, user_tasks, statutes 
+                WHERE user_tasks.task_id = tasks.id 
+                AND user_tasks.user_id = :user_id 
+                AND statutes.id = tasks.statute_id 
+                AND tasks.statute_id = :statute_id 
+                AND tasks.status = 1
                 ORDER BY tasks.position
             ";
             
@@ -171,7 +173,6 @@ class Task
             throw new Exception('Database error: Unable to retrieve tasks');
         }
     }
-    
 
     public static function getAllTasks(PDO $pdo)
     {
