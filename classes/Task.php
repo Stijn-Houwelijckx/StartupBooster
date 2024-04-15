@@ -125,11 +125,12 @@ class Task
         }
     }
 
-    public static function getTasks(PDO $pdo, $user_id)
+    public static function getTasks(PDO $pdo, $user_id, $statute)
     {
         try {
-            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id AND tasks.status = 1 ORDER BY tasks.position");
+            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks, statutes WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id AND statutes.id = tasks.statute AND tasks.statute = :statute AND tasks.status = 1 ORDER BY tasks.position");
             $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':statute', $statute);
             $stmt->execute();
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $tasks ?: [];
@@ -333,6 +334,7 @@ class Task
         try {
             $stmt = $pdo->prepare("SELECT * FROM tasks WHERE question = :question");
             $stmt->bindParam(':question', $question);
+            $stmt->bindParam(':statute', $statute);
             $stmt->execute();
             $task = $stmt->fetch(PDO::FETCH_ASSOC);
             return $task ? $task : null;
