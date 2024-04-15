@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $task = new Task();
             $task->setPosition($position);
             $task->setLabel($_POST["label"]);
-            $task->setStatute($_POST["statute"]);
+            $task->setStatute_id($_POST["statute_id"]);
             $task->setQuestion($_POST["question"]);
             $task->setAnswer($_POST["answer"]);
             $insertedTaskId = $task->addTask($pdo);

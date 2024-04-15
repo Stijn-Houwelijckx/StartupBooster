@@ -2,7 +2,7 @@
 class Task
 {
     private $position;
-    private $statute;
+    private $statute_id;
     private $label;
     private $question;
     private $answer;
@@ -28,26 +28,26 @@ class Task
         return $this;
     }
 
-        /**
-     * Get the value of statute
+    /**
+     * Get the value of statute_id
      */ 
-    public function getStatute()
+    public function getStatute_id()
     {
-        return $this->statute;
+        return $this->statute_id;
     }
 
     /**
-     * Set the value of statute
+     * Set the value of statute_id
      *
      * @return  self
      */ 
-    public function setStatute($statute)
+    public function setStatute_id($statute_id)
     {
-        $this->statute = $statute;
+        $this->statute_id = $statute_id;
 
         return $this;
     }
-
+    
     /**
      * Get the value of label
      */
@@ -146,20 +146,32 @@ class Task
         }
     }
 
-    public static function getTasks(PDO $pdo, $user_id, $statute)
+    public static function getTasks(PDO $pdo, $user_id, $statute_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks, statutes WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id AND statutes.id = tasks.statute AND tasks.statute = :statute AND tasks.status = 1 ORDER BY tasks.position");
-            $stmt->bindParam(':user_id', $user_id);
-            $stmt->bindParam(':statute', $statute);
+            $sql = "
+                SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete 
+                FROM tasks
+                INNER JOIN user_tasks ON user_tasks.task_id = tasks.id
+                INNER JOIN statutes ON statutes.id = tasks.statute_id
+                WHERE user_tasks.user_id = :user_id AND tasks.statute_id = :statute_id AND tasks.status = 1
+                ORDER BY tasks.position
+            ";
+            
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT); // Assuming $user_id is an integer
+            $stmt->bindParam(':statute_id', $statute_id, PDO::PARAM_INT); // Assuming $statute_id is an integer
             $stmt->execute();
+            
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
             return $tasks ?: [];
         } catch (PDOException $e) {
             error_log('Database error in getTasks(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve tasks');
         }
     }
+    
 
     public static function getAllTasks(PDO $pdo)
     {
@@ -217,14 +229,14 @@ class Task
     {
         try {
             // Query to add a task
-            $query = "INSERT INTO tasks (position, statute, label, question, answer) VALUES (:position, :statute, :label, :question, :answer)";
+            $query = "INSERT INTO tasks (position, statute_id, label, question, answer) VALUES (:position, :statute_id, :label, :question, :answer)";
 
             // Prepare the query
             $stmt = $pdo->prepare($query);
 
             // Bind the parameters
             $stmt->bindParam(':position', $this->position, PDO::PARAM_INT);
-            $stmt->bindParam(':statute', $this->statute, PDO::PARAM_INT);
+            $stmt->bindParam(':statute_id', $this->statute_id, PDO::PARAM_INT);
             $stmt->bindParam(':label', $this->label, PDO::PARAM_STR);
             $stmt->bindParam(':question', $this->question, PDO::PARAM_STR);
             $stmt->bindParam(':answer', $this->answer, PDO::PARAM_STR);
@@ -356,7 +368,6 @@ class Task
         try {
             $stmt = $pdo->prepare("SELECT * FROM tasks WHERE question = :question");
             $stmt->bindParam(':question', $question);
-            $stmt->bindParam(':statute', $statute);
             $stmt->execute();
             $task = $stmt->fetch(PDO::FETCH_ASSOC);
             return $task ? $task : null;

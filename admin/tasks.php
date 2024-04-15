@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tasks = $_POST['steps'];
         foreach ($tasks as $task) {
             try {
-                Task::updateTasks($pdo, $task['id'], $task['statute'], $task['label'], $task['question'], $task['answer'], $task['position']);
+                Task::updateTasks($pdo, $task['id'], $task['statute_id'], $task['label'], $task['question'], $task['answer'], $task['position']);
             } catch (Exception $e) {
                 error_log('Database error: ' . $e->getMessage());
             }
@@ -92,11 +92,11 @@ $tasks = Task::getAllTasks($pdo);
                             <div class="stepContent">
                                 <div class="text">
                                     <p class="stepID">Stap <?php echo $task["position"] ?> </p>
-                                    <select name="steps[<?php echo $task["id"] ?>][statute]" class="statute">
-                                        <option value="1" <?php if ($task["statute"] == "1") {
+                                    <select name="steps[<?php echo $task["id"] ?>][statute_id]" class="statute">
+                                        <option value="1" <?php if ($task["statute_id"] == "1") {
                                             echo "selected";
                                         } ?>>Zelfstandige</option>
-                                        <option value="2" <?php if ($task["statute"] == "2") {
+                                        <option value="2" <?php if ($task["statute_id"] == "2") {
                                             echo "selected";
                                         } ?>>Student-zelfstandige</option>
                                     </select>
