@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="" method="POST">
             <div class="column">
                 <label for="statute">Statute</label>
-                <select name="statute">
+                <select name="statute_id">
                     <option value="1">Zelfstandige</option>
                     <option value="2">Student-zelfstandige
                     </option>
