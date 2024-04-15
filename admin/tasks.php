@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tasks = $_POST['steps'];
         foreach ($tasks as $task) {
             try {
-                Task::updateTasks($pdo, $task['id'], $task['label'], $task['question'], $task['answer'], $task['position']);
+                Task::updateTasks($pdo, $task['id'], $task['statute'], $task['label'], $task['question'], $task['answer'], $task['position']);
             } catch (Exception $e) {
                 error_log('Database error: ' . $e->getMessage());
             }
@@ -77,6 +77,7 @@ $tasks = Task::getAllTasks($pdo);
             <h2>Stappen</h2>
             <div class="nav">
                 <h3 class="topStepID">Stap</h3>
+                <h3 class="topStepStatute">Statuut</h3>
                 <h3 class="topLabel">Label</h3>
                 <h3 class="topQuestion">Vraag</h3>
                 <h3 class="topAnswer">Antwoord</h3>
@@ -91,6 +92,14 @@ $tasks = Task::getAllTasks($pdo);
                             <div class="stepContent">
                                 <div class="text">
                                     <p class="stepID">Stap <?php echo $task["position"] ?> </p>
+                                    <select name="steps[<?php echo $task["id"] ?>][statute]" class="statute">
+                                        <option value="1" <?php if ($task["statute"] == "1") {
+                                            echo "selected";
+                                        } ?>>Zelfstandige</option>
+                                        <option value="2" <?php if ($task["statute"] == "2") {
+                                            echo "selected";
+                                        } ?>>Student-zelfstandige</option>
+                                    </select>
                                     <select name="steps[<?php echo $task["id"] ?>][label]" class="label">
                                         <option value="Start" <?php if ($task["label"] == "Start") {
                                             echo "selected";

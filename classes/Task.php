@@ -355,16 +355,17 @@ class Task
      * @param int $position The new position for the task.
      * @return bool Returns true if the task was successfully updated, false otherwise.
      */
-    public static function updateTasks(PDO $pdo, $task_id, $label, $question, $answer, $position): bool
+    public static function updateTasks(PDO $pdo, $task_id, $statute, $label, $question, $answer, $position): bool
     {
         try {
             // Query to update the tasks
-            $query = "UPDATE tasks SET label = :label, question = :question, answer = :answer, position = :position WHERE id = :task_id";
+            $query = "UPDATE tasks SET statute = :statute, label = :label, question = :question, answer = :answer, position = :position WHERE id = :task_id";
 
             // Prepare the query
             $stmt = $pdo->prepare($query);
 
             // Bind the parameters
+            $stmt->bindParam(':statute', $statute, PDO::PARAM_STR);
             $stmt->bindParam(':label', $label, PDO::PARAM_STR);
             $stmt->bindParam(':question', $question, PDO::PARAM_STR);
             $stmt->bindParam(':answer', $answer, PDO::PARAM_STR);
