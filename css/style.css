@@ -57,6 +57,7 @@ p,
 label,
 span,
 a,
+textarea,
 select,
 option,
 input,
@@ -781,13 +782,6 @@ a.active {
   border-left: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-#roadmapAdmin .nav {
-  display: none;
-  flex-direction: row;
-  width: 100%;
-  padding: 0 24px;
-}
-
 #roadmapAdmin .steps {
   background-color: rgba(255, 255, 255, 0.6);
   display: flex;
@@ -833,12 +827,13 @@ a.active {
 #roadmapAdmin .steps .step:nth-child(even) {
   background-color: var(--blue);
 }
-#roadmapAdmin .steps .step:nth-child(odd) {
-  background-color: var(--offWhite);
+
+#roadmapAdmin .steps .step:nth-child(even) label {
+  color: var(--white);
 }
 
-#roadmapAdmin .stepID {
-  width: 28%;
+#roadmapAdmin .steps .step:nth-child(odd) {
+  background-color: var(--offWhite);
 }
 
 #roadmapAdmin .steps .step:nth-child(even) .stepID,
@@ -849,10 +844,6 @@ a.active {
 #roadmapAdmin .steps .step:nth-child(odd) .stepID,
 #roadmapAdmin .steps .step:nth-child(odd) .stepContent .icons .fa-bars {
   color: var(--blue);
-}
-
-#roadmapAdmin .label {
-  max-width: 24%;
 }
 
 #roadmapAdmin .question {
@@ -876,6 +867,17 @@ a.active {
   flex-wrap: wrap;
   gap: 16px;
   width: 100%;
+}
+
+#roadmapAdmin .steps .stepContent .text div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+#roadmapAdmin .steps .stepContent .text div textarea {
+  height: 200px;
 }
 
 #stats .sectors .sector .icons {
@@ -1594,6 +1596,17 @@ a.active {
   align-items: center;
 }
 
+#roadmapAdmin .top {
+  align-items: flex-start;
+}
+
+#roadmapAdmin .top .column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
 #helpdesk .FAQ .top .filter {
   display: flex;
   flex-direction: row;
@@ -2153,6 +2166,11 @@ a.active {
   #users,
   #helpdesk {
     padding: 24px;
+    padding-left: 86px;
+  }
+
+  #roadmapAdmin .top .column {
+    flex-direction: row;
   }
 
   #login {
@@ -2271,42 +2289,6 @@ a.active {
 
   #roadmap .tasks .task.active:nth-child(odd):after {
     background-color: var(--blue);
-  }
-
-  #roadmapAdmin .nav {
-    display: flex;
-  }
-
-  #roadmapAdmin .topStepID {
-    width: 10%;
-  }
-
-  #roadmapAdmin .stepID {
-    width: 9%;
-  }
-
-  #roadmapAdmin .topLabel {
-    width: 15%;
-  }
-
-  #roadmapAdmin .label {
-    width: 14%;
-  }
-
-  #roadmapAdmin .topQuestion {
-    width: 32%;
-  }
-
-  #roadmapAdmin .question {
-    width: 32%;
-  }
-
-  #roadmapAdmin .topAnswer {
-    width: 35.5%;
-  }
-
-  #roadmapAdmin .answer {
-    width: 32%;
   }
 
   /* #roadmap .tasks .task:before {
@@ -2453,38 +2435,6 @@ a.active {
   #roadmapAdmin .steps .stepContent .icons {
     flex-direction: row;
     gap: 48px;
-  }
-
-  #roadmapAdmin .topStepID {
-    width: 6%;
-  }
-
-  #roadmapAdmin .stepID {
-    width: 5%;
-  }
-
-  #roadmapAdmin .topLabel {
-    width: 7%;
-  }
-
-  #roadmapAdmin .label {
-    width: 7%;
-  }
-
-  #roadmapAdmin .topQuestion {
-    width: 38%;
-  }
-
-  #roadmapAdmin .question {
-    width: 40%;
-  }
-
-  #roadmapAdmin .topAnswer {
-    width: 31.8%;
-  }
-
-  #roadmapAdmin .answer {
-    width: 40%;
   }
 }
 

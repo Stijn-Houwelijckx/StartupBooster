@@ -70,62 +70,60 @@ $tasks = Task::getAllTasks($pdo);
     <div id="roadmapAdmin">
         <div class="top">
             <h1>Stappenplan</h1>
-            <a href="#" class="btn" id="changePositionBtn"><i class="fa fa-sort" style="padding-right:8px"></i> Volgorde aanpassen</a>
-            <a href="addTask.php" class="btn" id="appendTaskBtn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
+            <div class="column">
+                <a href="#" class="btn" id="changePositionBtn"><i class="fa fa-sort" style="padding-right:8px"></i> Volgorde aanpassen</a>
+                <a href="addTask.php" class="btn" id="appendTaskBtn"><i class="fa fa-plus" style="padding-right:8px"></i> Toevoegen</a>
+            </div>
         </div>
         <div class="steps">
             <h2>Stappen</h2>
-            <div class="nav">
-                <h3 class="topStepID">Stap</h3>
-                <h3 class="topStepStatute">Statuut</h3>
-                <h3 class="topLabel">Label</h3>
-                <h3 class="topQuestion">Vraag</h3>
-                <h3 class="topAnswer">Antwoord</h3>
-            </div>
             <form action="" method="post" id="tasksForm">
-                <div id="dropzone">
-                    <?php foreach ($tasks as $index => $task): ?>
-                        <div class="step" draggable="false">
-                            <a href="addTask.php?position=<?php echo $task["position"] ?>" class="addTaskBtn" data-taskid="<?php echo $task["position"] ?>">
-                                <i class="fa fa-plus"></i>
-                            </a>
-                            <div class="stepContent">
-                                <div class="text">
-                                    <p class="stepID">Stap <?php echo $task["position"] ?> </p>
-                                    <select name="steps[<?php echo $task["id"] ?>][statute_id]" class="statute">
-                                        <option value="1" <?php if ($task["statute_id"] == "1") {
-                                            echo "selected";
-                                        } ?>>Zelfstandige</option>
-                                        <option value="2" <?php if ($task["statute_id"] == "2") {
-                                            echo "selected";
-                                        } ?>>Student-zelfstandige</option>
-                                    </select>
-                                    <select name="steps[<?php echo $task["id"] ?>][label]" class="label">
-                                        <option value="Start" <?php if ($task["label"] == "Start") {
-                                            echo "selected";
-                                        } ?>>Start</option>
-                                        <option value="Aanvragen" <?php if ($task["label"] == "Aanvragen") {
-                                            echo "selected";
-                                        } ?>>Aanvragen</option>
-                                    </select>
-                                    <input type="text" name="steps[<?php echo $task["id"] ?>][question]" value="<?php echo $task["question"] ?>" class="question">
-                                    <input type="text" name="steps[<?php echo $task["id"] ?>][answer]" value="<?php echo $task["answer"] ?>" class="answer">
-                                    <input type="text" name="steps[<?php echo $task["id"] ?>][id]" value="<?php echo $task["id"] ?>" hidden>
-                                    <input type="hidden" name="steps[<?php echo $task["id"] ?>][position]" class="task-position" value="<?php echo $index + 1; ?>">
-                                </div>
-                                <div class="icons">
-                                    <span class="handle" style="display:none"><i class="fa fa-bars"></i></span>
-                                    <label for="delete[<?php echo $task["id"] ?>]"><i class="fa fa-trash"></i></label>
-                                    <input hidden type="submit" name="delete[<?php echo $task["id"] ?>]"
-                                        id="delete[<?php echo $task["id"] ?>]">
-                                </div>
-                            </div>
+    <div id="dropzone">
+        <?php foreach ($tasks as $index => $task): ?>
+            <div class="step" draggable="false">
+                <a href="addTask.php?position=<?php echo $task["position"] ?>" class="addTaskBtn" data-taskid="<?php echo $task["position"] ?>">
+                    <i class="fa fa-plus"></i>
+                </a>
+                <div class="stepContent">
+                    <div class="text">
+                        <p class="stepID">Stap <?php echo $task["position"] ?> </p>
+                        <div>
+                            <label for="steps_<?php echo $task["id"] ?>_statute_id">Statuut</label>
+                            <select name="steps[<?php echo $task["id"] ?>][statute_id]" id="steps_<?php echo $task["id"] ?>_statute_id" class="statute">
+                                <option value="1" <?php if ($task["statute_id"] == "1") { echo "selected"; } ?>>Zelfstandige</option>
+                                <option value="2" <?php if ($task["statute_id"] == "2") { echo "selected"; } ?>>Student-zelfstandige</option>
+                            </select>
                         </div>
-    
-                    <?php endforeach ?>
+                        <div>
+                            <label for="steps_<?php echo $task["id"] ?>_label">Label</label>
+                            <select name="steps[<?php echo $task["id"] ?>][label]" id="steps_<?php echo $task["id"] ?>_label" class="label">
+                                <option value="Start" <?php if ($task["label"] == "Start") { echo "selected"; } ?>>Start</option>
+                                <option value="Aanvragen" <?php if ($task["label"] == "Aanvragen") { echo "selected"; } ?>>Aanvragen</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="steps_<?php echo $task["id"] ?>_question">Vraag</label>
+                            <textarea name="steps[<?php echo $task["id"] ?>][question]" id="steps_<?php echo $task["id"] ?>_question" class="question"><?php echo $task["question"] ?></textarea>
+                        </div>
+                        <div>
+                            <label for="steps_<?php echo $task["id"] ?>_answer">Antwoord</label>
+                            <textarea name="steps[<?php echo $task["id"] ?>][answer]" id="steps_<?php echo $task["id"] ?>_answer" class="answer"><?php echo $task["answer"] ?></textarea>
+                        </div>
+                        <input type="hidden" name="steps[<?php echo $task["id"] ?>][id]" value="<?php echo $task["id"] ?>" hidden>
+                        <input type="hidden" name="steps[<?php echo $task["id"] ?>][position]" class="task-position" value="<?php echo $index + 1; ?>">
+                    </div>
+                    <div class="icons">
+                        <span class="handle" style="display:none"><i class="fa fa-bars"></i></span>
+                        <label for="delete_<?php echo $task["id"] ?>"><i class="fa fa-trash"></i></label>
+                        <input hidden type="submit" name="delete[<?php echo $task["id"] ?>]" id="delete_<?php echo $task["id"] ?>">
+                    </div>
                 </div>
-                <button type="submit" class="btn" name="saveChanges" id="saveChangesBtn">Opslaan</button>
-            </form>
+            </div>
+        <?php endforeach ?>
+    </div>
+    <button type="submit" class="btn" name="saveChanges" id="saveChangesBtn">Opslaan</button>
+</form>
+
         </div>
     </div>
 
