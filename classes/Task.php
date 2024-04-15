@@ -2,6 +2,7 @@
 class Task
 {
     private $position;
+    private $statute;
     private $label;
     private $question;
     private $answer;
@@ -23,6 +24,26 @@ class Task
     public function setPosition($position)
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+        /**
+     * Get the value of statute
+     */ 
+    public function getStatute()
+    {
+        return $this->statute;
+    }
+
+    /**
+     * Set the value of statute
+     *
+     * @return  self
+     */ 
+    public function setStatute($statute)
+    {
+        $this->statute = $statute;
 
         return $this;
     }
@@ -196,13 +217,14 @@ class Task
     {
         try {
             // Query to add a task
-            $query = "INSERT INTO tasks (position, label, question, answer) VALUES (:position, :label, :question, :answer)";
+            $query = "INSERT INTO tasks (position, statute, label, question, answer) VALUES (:position, :statute, :label, :question, :answer)";
 
             // Prepare the query
             $stmt = $pdo->prepare($query);
 
             // Bind the parameters
             $stmt->bindParam(':position', $this->position, PDO::PARAM_INT);
+            $stmt->bindParam(':statute', $this->statute, PDO::PARAM_INT);
             $stmt->bindParam(':label', $this->label, PDO::PARAM_STR);
             $stmt->bindParam(':question', $this->question, PDO::PARAM_STR);
             $stmt->bindParam(':answer', $this->answer, PDO::PARAM_STR);
