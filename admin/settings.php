@@ -50,8 +50,6 @@ if (isset($_SESSION["user_id"])) {
             if (isset($_POST["firstname"])) {
                 $firstName = filter_input(INPUT_POST, 'firstname');
                 $lastName = filter_input(INPUT_POST, 'lastname');
-                $statute = filter_input(INPUT_POST, 'statute');
-                $sector = filter_input(INPUT_POST, 'sector');
                 $phone = filter_input(INPUT_POST, 'phone');
                 $street = filter_input(INPUT_POST, 'street');
                 $houseNumber = filter_input(INPUT_POST, 'houseNumber');
@@ -63,15 +61,13 @@ if (isset($_SESSION["user_id"])) {
 
                 $user->setisAdmin($userIsAdmin);
 
-                $user->setStatute($statute);
-                $user->setSector($sector);
                 $user->setPhoneNumber($phone);
                 $user->setStreet($street);
                 $user->setHouseNumber($houseNumber);
                 $user->setZipCode($zipCode);
                 $user->setCity($city);
 
-                $user->updateUser($pdo, $_SESSION["user_id"]);
+                $user->updateAdmin($pdo, $_SESSION["user_id"]);
                 $success = "Uw gegevens zijn successvol aangepast.";
             }
         } catch (Exception $e) {
@@ -248,26 +244,6 @@ if (isset($_SESSION["user_id"])) {
                                     <input type="text" name="phone" id="phone" placeholder="+32476 75 67 36" value="<?php if ($user["phoneNumber"] != null) {
                                         echo htmlspecialchars($user["phoneNumber"]);
                                     } ?>">
-                                </div>
-                                <div class="field">
-                                    <label for="statute">Statuut</label>
-                                    <select name="statute" id="statute">
-                                        <?php foreach ($statutes as $statute): ?>
-                                            <option value="<?php echo $statute["id"] ?>" <?php echo ($user["statute_id"] == $statute["id"]) ? 'selected' : '' ?>>
-                                                <?php echo htmlspecialchars($statute["title"]) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="field">
-                                    <label for="sector">Sector</label>
-                                    <select name="sector" id="sector">
-                                        <?php foreach ($sectors as $sector): ?>
-                                            <option value="<?php echo $sector["id"] ?>" <?php echo ($user["sector_id"] == $sector["id"]) ? 'selected' : '' ?>>
-                                                <?php echo htmlspecialchars($sector["title"]) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
                                 </div>
                             </div>
                         </div>
