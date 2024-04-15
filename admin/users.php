@@ -1,6 +1,13 @@
 <?php
 include_once (__DIR__ . "../../classes/Db.php");
 include_once (__DIR__ . "../../classes/User.php");
+include_once (__DIR__ . "../../classes/Statute.php");
+include_once (__DIR__ . "../../classes/Sector.php");
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
+
 session_start();
 
 $pdo = Db::getInstance();
@@ -10,6 +17,9 @@ $user = User::getUserById($pdo, $_SESSION["user_id"]);
 if (isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
     $current_page = 'users';
+
+    $statutes = Statute::getAll($pdo);
+    $sectors = Sector::getAll($pdo);
 } else {
     header("Location: ../login.php?error=notLoggedIn");
     exit();
@@ -51,6 +61,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user->setZipCode($_POST['zipCode']);
             $user->setCity($_POST['city']);
             $user->updateUser($pdo, $_POST["user_id"]);
+
+            unset($_SESSION["firstname"]);
+            unset($_SESSION["lastname"]);
+            unset($_SESSION["statute"]);
+            unset($_SESSION["sector"]);
+            unset($_SESSION["email"]);
+            unset($_SESSION["street"]);
+            unset($_SESSION["houseNumber"]);
+            unset($_SESSION["zipCode"]);
+            unset($_SESSION["city"]);
+
             $selectedUser = User::getUserById($pdo, $_POST["user_id"]);
         } catch (Exception $e) {
             error_log('Database error: ' . $e->getMessage());
@@ -91,29 +112,35 @@ $users = User::getAll($pdo);
                 <form action="" method="post" id="userForm">
                     <div class="user">
                         <div class="text">
-                            <input type="text" name="firstname"
-                                value="<?php echo htmlspecialchars($selectedUser["firstname"]); ?>">
-                            <input type="text" name="lastname"
-                                value="<?php echo htmlspecialchars($selectedUser["lastname"]); ?>">
-                            <input type="text" name="statute"
-                                value="<?php echo htmlspecialchars($selectedUser["statute_id"]); ?>">
-                            <input type="text" name="sector"
-                                value="<?php echo htmlspecialchars($selectedUser["sector_id"]); ?>">
+                            <input type="text" name="firstname" value="<?php echo htmlspecialchars($selectedUser["firstname"]); ?>">
+                            <input type="text" name="lastname" value="<?php echo htmlspecialchars($selectedUser["lastname"]); ?>">
+
+                            <select name="statute" id="statute">
+                                <?php foreach ($statutes as $statute): ?>
+                                    <option value="<?php echo $statute["id"] ?>" <?php echo $selectedUser["statute_id"] == $statute["id"] ? "selected" : "" ?>>
+                                        <?php echo $statute["title"] ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+
+                            <select name="sector" id="sector">
+                                <?php foreach ($sectors as $sector): ?>
+                                    <option value="<?php echo $sector["id"] ?>" <?php echo $selectedUser["sector_id"] == $sector["id"] ? "selected" : "" ?>>
+                                        <?php echo $sector["title"] ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+
                             <input type="text" name="email" value="<?php echo htmlspecialchars($selectedUser["email"]); ?>">
-                            <input type="text" name="phoneNumber"
-                                value="<?php echo htmlspecialchars($selectedUser["phoneNumber"]); ?>">
-                            <input type="text" name="street"
-                                value="<?php echo htmlspecialchars($selectedUser["street"]); ?>">
-                            <input type="text" name="houseNumber"
-                                value="<?php echo htmlspecialchars($selectedUser["houseNumber"]); ?>">
-                            <input type="text" name="zipCode"
-                                value="<?php echo htmlspecialchars($selectedUser["zipCode"]); ?>">
+                            <input type="text" name="phoneNumber" value="<?php echo htmlspecialchars($selectedUser["phoneNumber"]); ?>">
+                            <input type="text" name="street" value="<?php echo htmlspecialchars($selectedUser["street"]); ?>">
+                            <input type="text" name="houseNumber" value="<?php echo htmlspecialchars($selectedUser["houseNumber"]); ?>">
+                            <input type="text" name="zipCode" value="<?php echo htmlspecialchars($selectedUser["zipCode"]); ?>">
                             <input type="text" name="city" value="<?php echo htmlspecialchars($selectedUser["city"]); ?>">
-                            <input type="text" name="user_id" hidden
-                                value="<?php echo htmlspecialchars($selectedUser["id"]); ?>">
+                            <input type="text" name="user_id" hidden value="<?php echo htmlspecialchars($selectedUser["id"]); ?>">
                             <div class="row">
                                 <input type="hidden" name="isAdmin" value="off">
-                                <label for="isAdmin">isAdmin</label>
+                                <label for="checkboxIsAdmin">isAdmin</label>
                                 <input type="checkbox" name="isAdmin" id="checkboxIsAdmin" <?php if ($selectedUser["isAdmin"] == "on")
                                     echo "checked"; ?>>
                             </div>
