@@ -40,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $task = new Task();
             $task->setPosition($position);
             $task->setLabel($_POST["label"]);
-            $task->setStatute_id($_POST["statute_id"]);
             $task->setQuestion($_POST["question"]);
             $task->setAnswer($_POST["answer"]);
             $insertedTaskId = $task->addTask($pdo);
@@ -81,12 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Voeg een subsidie toe op positie <?php echo $position ?></h2>
         <form action="" method="POST">
             <div class="column">
-                <label for="statute">Statute</label>
-                <select name="statute_id">
-                    <option value="1">Zelfstandige</option>
-                    <option value="2">Student-zelfstandige
-                    </option>
-                </select>
                 <label for="label">Label</label>
                 <select name="label">
                     <option value="Start">Start</option>

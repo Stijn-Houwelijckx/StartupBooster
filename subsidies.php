@@ -1,7 +1,7 @@
 <?php
-include_once (__DIR__ . "/classes/Subsidie.php");
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
+include_once (__DIR__ . "/classes/Subsidie.php");
 session_start();
 
 if (isset ($_SESSION["user_id"])) {
@@ -41,7 +41,7 @@ $current_page = 'subsidies';
         <div class="subsidies">
             <?php if (!empty ($subsidies)): ?>
                 <?php foreach ($subsidies as $subsidie): ?>
-                    <a href="subsidieDetails.php?name=<?php echo urlencode($subsidie["name"]); ?>">
+                    <a href="subsidieDetails.php?id=<?php echo urlencode($subsidie["id"]); ?>">
                         <div class="subsidie">
                             <div class="image"
                                 style="background-image: url('./assets/images/subsidies/tegel<?php echo htmlspecialchars($subsidie["id"]); ?>.jpg')">

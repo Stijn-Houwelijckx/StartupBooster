@@ -19,6 +19,7 @@ if (isset($_SESSION["user_id"])) {
         $pdo = Db::getInstance();
         $userYears = Stat::getUserYears($pdo, $_SESSION["user_id"]);
         if (!empty($userYears)) {
+            
             // eerste grafiek
             $years = array_column($userYears, 'year');
             $lowestYear = min($years);

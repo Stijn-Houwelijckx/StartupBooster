@@ -15,7 +15,8 @@ if (isset($_SESSION["user_id"])) {
 
     try {
         $pdo = Db::getInstance();
-        $tasks = Task::getTasks($pdo, $_SESSION["user_id"], $user["statute_id"]);
+        $tasks = Task::getTasks($pdo, $_SESSION["user_id"]);
+        
         $finished_steps = Task::getProgress($pdo, $_SESSION["user_id"]);
         
         $activeTask = Task::getActiveTask($pdo, $_SESSION["user_id"]);
