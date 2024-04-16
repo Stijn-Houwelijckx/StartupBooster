@@ -1,5 +1,4 @@
 <?php
-include_once (__DIR__ . "/classes/Question.php");
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
 session_start();
@@ -112,49 +111,6 @@ if (isset ($_SESSION["user_id"])) {
             </div>
         </div>
     </div>
-
-    <script>
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     let statusFilter = document.getElementById('status');
-        //     let questionsToShow = document.querySelectorAll(".question");
-
-        //     statusFilter.addEventListener('change', function () {
-        //         let selectedOption = statusFilter.value;
-
-        //         questionsToShow.forEach(function (question) {
-        //             if (selectedOption === 'student-zelfstandige') {
-        //                 if (question.classList.contains('student-zelfstandige')) {
-        //                     question.style.display = 'block';
-        //                 } else {
-        //                     question.style.display = 'none';
-        //                 }
-        //             } else if (selectedOption === 'zelfstandige') {
-        //                 if (question.classList.contains('zelfstandige')) {
-        //                     question.style.display = 'block';
-        //                 } else {
-        //                     question.style.display = 'none';
-        //                 }
-        //             }
-        //         });
-        //     });
-        //     let questions = document.querySelectorAll(".question");
-
-        //     questions.forEach(function (question) {
-        //         let questionArrow = question.querySelector(".fa");
-        //         let answer = question.querySelector(".answer");
-
-        //         question.addEventListener('click', function (e) {
-        //             if (answer.classList.contains("show-answer")) {
-        //                 answer.classList.remove("show-answer"); // Verwijder de klasse om het antwoord te verbergen
-        //                 questionArrow.style.animation = "rotateIconReverse 0.5s forwards"; // Start de animatie om het pictogram terug te draaien
-        //             } else {
-        //                 answer.classList.add("show-answer"); // Voeg de klasse toe om het antwoord weer te geven
-        //                 questionArrow.style.animation = "rotateIcon 0.5s forwards"; // Start de animatie om het pictogram te draaien
-        //             }
-        //         });
-        //     });
-        // });
-    </script>
 </body>
 
 </html>
