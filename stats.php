@@ -444,7 +444,7 @@ if (isset($_SESSION["user_id"])) {
         const modifiedXYValues = xyValues.map(value => ({
             backgroundColor: value.backgroundColor,
             label: value.label,
-            data: [{ x: value.x, y: value.y, r: value.pointRadius }]
+            data: [{ x: value.x, y: value.y, r: value.pointRadius / 2 }]
         }));
 
         new Chart("myChart", {
