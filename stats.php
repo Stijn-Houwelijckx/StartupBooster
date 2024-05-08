@@ -343,8 +343,8 @@ if (isset($_SESSION["user_id"])) {
                                 <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
                                 <i class="fa fa-angle-down"></i>
                             </div>
-                            <form action="" method="GET">
-                            <div class="row">
+                            <form action="" method="GET" id="firstForm">
+                                <div class="row">
                                     <div class="column">
                                         <label for="employee_count">Aantal werknemers</label>
                                         <input type="text" name="employee_count" id="employee_count">
@@ -362,14 +362,23 @@ if (isset($_SESSION["user_id"])) {
                                 </div>
                                 <button type="submit" class="btn">Simuleren</button>
                             </form>
-                            <div class="question">
-                                <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
+                            <div class="question second">
+                                <p>Hoeveel kost een pand in mijn buurt?</p>
                                 <i class="fa fa-angle-down"></i>
                             </div>
-                            <div class="question">
-                                <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
-                                <i class="fa fa-angle-down"></i>
-                            </div>
+                            <form action="" method="GET" id="secondForm">
+                                <div class="row">
+                                    <div class="column">
+                                        <label for="premises_location">Locatie</label>
+                                        <input type="text" id="premises_location" name="premises_location">
+                                    </div>
+                                    <div class="column">
+                                        <label for="premises_budget">Budget</label>
+                                        <input type="text" id="premises_budget" name="premises_budget">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn">Simuleren</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -497,19 +506,20 @@ if (isset($_SESSION["user_id"])) {
             }
         });
 
-        document.querySelector(".question.first").addEventListener("click", function(e){
-            var angleDownIcon = document.querySelector(".question.first .fa-angle-down");
-            var form = document.querySelector(".questions form");
+        document.querySelectorAll(".question").forEach(function(question) {
+            question.addEventListener("click", function(e) {
+                var angleDownIcon = question.querySelector(".fa-angle-down");
+                var form = question.nextElementSibling; // Assuming the form is the next sibling of the question element
 
-            if (form.style.display === "flex") {
-                form.style.display = "none";
-                angleDownIcon.style.transform = "rotate(0deg)";
-            } else {
-                form.style.display = "flex";
-                angleDownIcon.style.transform = "rotate(180deg)";
-            }
+                if (form.style.display === "flex") {
+                    form.style.display = "none";
+                    angleDownIcon.style.transform = "rotate(0deg)";
+                } else {
+                    form.style.display = "flex";
+                    angleDownIcon.style.transform = "rotate(180deg)";
+                }
+            });
         });
-
     </script>
 
     <script src="javascript/simulator.js"></script>
