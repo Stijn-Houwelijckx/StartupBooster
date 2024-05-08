@@ -1390,6 +1390,30 @@ a.active {
   justify-content: space-between;
 }
 
+#stats .right .background .questions .question .fa-angle-down {
+  transform: rotate(180deg);
+}
+
+#stats .right .background form {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#stats .right .background form .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+#stats .right .background form .row .column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 46%;
+}
+
 /* ---- subsidies ---- */
 #addSector form {
   display: flex;

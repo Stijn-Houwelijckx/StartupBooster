@@ -333,10 +333,29 @@ if (isset($_SESSION["user_id"])) {
                     <div class="background">
                         <h2>Meest gestelde vragen</h2>
                         <div class="questions">
-                            <div class="question">
+                            <div class="question first">
                                 <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
                                 <i class="fa fa-angle-down"></i>
                             </div>
+                            <form action="" method="GET">
+                            <div class="row">
+                                    <div class="column">
+                                        <label for="count">Aantal werknemers</label>
+                                        <input type="text" name="count">
+                                    </div>
+                                    <div class="column">
+                                        <label for="hours">Aantal werkuren per dag</label>
+                                        <input type="text" name="hours">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="column">
+                                        <label for="count">Uurloon</label>
+                                        <input type="text" name="money" placeholder="10">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn">Simuleren</button>
+                            </form>
                             <div class="question">
                                 <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
                                 <i class="fa fa-angle-down"></i>
@@ -468,6 +487,20 @@ if (isset($_SESSION["user_id"])) {
                 }
             }
         });
+
+        document.querySelector(".question.first").addEventListener("click", function(e){
+            var angleDownIcon = document.querySelector(".question.first .fa-angle-down");
+            var form = document.querySelector(".questions form");
+
+            if (form.style.display === "flex") {
+                form.style.display = "none";
+                angleDownIcon.style.transform = "rotate(0deg)";
+            } else {
+                form.style.display = "flex";
+                angleDownIcon.style.transform = "rotate(180deg)";
+            }
+        });
+
     </script>
 </body>
 
