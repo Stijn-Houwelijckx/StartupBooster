@@ -3,7 +3,7 @@ include_once (__DIR__ . "/classes/Subsidie.php");
 include_once (__DIR__ . "/classes/Db.php");
 session_start();
 
-$subsidie_id = isset($_GET['id']) ? $_GET['id'] : '';
+$subsidie_id = isset($_GET['id']) ? $_GET['id'] : 0;
 
 if (empty($subsidie_id)) {
     echo "Ongeldige subsidienaam.";
