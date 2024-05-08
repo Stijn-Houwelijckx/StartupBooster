@@ -283,7 +283,7 @@ if (isset($_SESSION["user_id"])) {
                                         <option value="median" <?php if ($wantedStatCalc == "median") {echo "selected";} ?>>Mediaan</option>
                                         <option value="average" <?php if ($wantedStatCalc == "average") {echo "selected";} ?>>Gemiddelde</option>
                                     </select>
-                                    <select name="statsFilter">
+                                    <select name="statsFilter" id="statsFilterChart">
                                         <option value="revenue" <?php if ($wantedStat == "revenue") {echo "selected";} ?>>Omzet</option>
                                         <option value="costs" <?php if ($wantedStat == "costs") {echo "selected";} ?>>Kosten</option>
                                         <option value="profit_loss" <?php if ($wantedStat == "profit_loss") {echo "selected";} ?>>Winst</option>
@@ -343,7 +343,7 @@ if (isset($_SESSION["user_id"])) {
                                 <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
                                 <i class="fa fa-angle-down"></i>
                             </div>
-                            <form action="" method="GET" id="firstForm">
+                            <form action="" method="GET" id="employee_form">
                                 <div class="row">
                                     <div class="column">
                                         <label for="employee_count">Aantal werknemers</label>
@@ -360,13 +360,13 @@ if (isset($_SESSION["user_id"])) {
                                         <input type="text" name="employee_wage" id="employee_wage" placeholder="10">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn">Simuleren</button>
+                                <button type="submit" class="btn" id="employee_simulate">Simuleren</button>
                             </form>
                             <div class="question second">
                                 <p>Hoeveel kost een pand in mijn buurt?</p>
                                 <i class="fa fa-angle-down"></i>
                             </div>
-                            <form action="" method="GET" id="secondForm">
+                            <form action="" method="GET" id="premises_form">
                                 <div class="row">
                                     <div class="column">
                                         <label for="premises_location">Locatie</label>
@@ -459,17 +459,20 @@ if (isset($_SESSION["user_id"])) {
         /* ---- eerste grafiek, vergelijken met gemiddelde ondernemer binnen sector ---- */
         google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
-
+        
+        var jsonData = <?php echo $json_data; ?>; // Haal de JSON-data op die door PHP is gegenereerd
         function drawChart() {
-            var jsonData = <?php echo $json_data; ?>; // Haal de JSON-data op die door PHP is gegenereerd
-
-            var data = google.visualization.arrayToDataTable(jsonData);
-
             var options = {
                 curveType: 'function',
-                legend: { position: 'bottom' }
+                legend: { position: 'bottom' },
+                // colors: ['red', 'blue', 'green'],
+                series: {
+                            0: {color: 'blue', lineWidth: 1},
+                            1: {color: 'red', lineWidth: 1},
+                            2: {lineDashStyle: [8, 8], color : 'green', lineWidth: 4},
+                        },
             };
-
+            var data = google.visualization.arrayToDataTable(jsonData);
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
             chart.draw(data, options);
