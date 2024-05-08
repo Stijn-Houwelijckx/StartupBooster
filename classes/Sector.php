@@ -99,4 +99,18 @@ class Sector
             throw new Exception('Database error: Unable to update sectors');
         }
     }
+
+    public static function getSectorByUserId(PDO $pdo, $user_id)
+    {
+        try {
+            $query = "SELECT sectors.* FROM sectors, users WHERE users.sector_id = sectors.id AND users.id = :user_id";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage());
+            return null;
+        }
+    }
 }

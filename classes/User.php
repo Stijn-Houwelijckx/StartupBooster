@@ -773,5 +773,4 @@ class User
             return false;
         }
     }
-
 }

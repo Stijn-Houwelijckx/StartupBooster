@@ -124,6 +124,12 @@ if (isset($_SESSION["user_id"])) {
                 }
             }
 
+            $userSector = Sector::getSectorByUserId($pdo, $_SESSION["user_id"]);
+
+            // var_dump($userSector);
+
+            $json_sector_UID = json_encode($userSector["UID"]);
+
             $json_data = json_encode($data);
 
             // tweede grafiek
@@ -331,7 +337,7 @@ if (isset($_SESSION["user_id"])) {
                 </div>
                 <div class="right">
                     <div class="background">
-                        <h2>Meest gestelde vragen</h2>
+                        <h2>Simulator</h2>
                         <div class="questions">
                             <div class="question first">
                                 <p>Is het voordelig om iemand extra aan te nemen in mijn bedrijf?</p>
@@ -340,18 +346,18 @@ if (isset($_SESSION["user_id"])) {
                             <form action="" method="GET">
                             <div class="row">
                                     <div class="column">
-                                        <label for="count">Aantal werknemers</label>
-                                        <input type="text" name="count">
+                                        <label for="employee_count">Aantal werknemers</label>
+                                        <input type="text" name="employee_count" id="employee_count">
                                     </div>
                                     <div class="column">
-                                        <label for="hours">Aantal werkuren per dag</label>
-                                        <input type="text" name="hours">
+                                        <label for="employee_hours">Aantal werkuren per dag</label>
+                                        <input type="text" name="employee_hours" id="employee_hours">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="column">
-                                        <label for="count">Uurloon</label>
-                                        <input type="text" name="money" placeholder="10">
+                                        <label for="employee_wage">Uurloon (&euro;)</label>
+                                        <input type="text" name="employee_wage" id="employee_wage" placeholder="10">
                                     </div>
                                 </div>
                                 <button type="submit" class="btn">Simuleren</button>
@@ -375,6 +381,9 @@ if (isset($_SESSION["user_id"])) {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        const json_sector_UID = <?php echo $json_sector_UID; ?>;
+    </script>
     <script>
         function submitYearForm() {
             document.getElementById("filter_year_form").submit();
@@ -502,6 +511,8 @@ if (isset($_SESSION["user_id"])) {
         });
 
     </script>
+
+    <script src="javascript/simulator.js"></script>
 </body>
 
 </html>
