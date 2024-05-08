@@ -363,12 +363,12 @@ if (isset($_SESSION["user_id"])) {
                             <form action="" method="GET" id="secondForm">
                                 <div class="row">
                                     <div class="column">
-                                        <label for="location">Locatie</label>
-                                        <input type="text" name="location">
+                                        <label for="premises_location">Locatie</label>
+                                        <input type="text" id="premises_location" name="premises_location">
                                     </div>
                                     <div class="column">
-                                        <label for="budget">Budget</label>
-                                        <input type="text" name="budget">
+                                        <label for="premises_budget">Budget</label>
+                                        <input type="text" id="premises_budget" name="premises_budget">
                                     </div>
                                 </div>
                                 <button type="submit" class="btn">Simuleren</button>
