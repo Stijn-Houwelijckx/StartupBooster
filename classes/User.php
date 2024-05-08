@@ -768,9 +768,31 @@ class User
         } catch (PDOException $e) {
             error_log('Database error: ' . $e->getMessage());
             return false;
-        } catch (Exception $e) {
-            error_log('Error: ' . $e->getMessage());
-            return false;
+        }
+    }
+
+    public static function getAllCitys(PDO $pdo){
+        try {
+            $stmt = $pdo->prepare("SELECT DISTINCT city FROM users");
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $users ?: [];
+        } catch (PDOException $e) {
+            error_log('Database error in getUsers(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve users');
+        }
+    }
+
+    public static function priceByCity(PDO $pdo, $city){
+        try {
+            $stmt = $pdo->prepare("SELECT AVG(price) FROM stats, users WHERE users.id = stats.user_id AND users.city = :city");
+            $stmt->bindParam(':city', $city);
+            $stmt->execute();
+            $users = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $users ?: [];
+        } catch (PDOException $e) {
+            error_log('Database error in getUsers(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve users');
         }
     }
 }

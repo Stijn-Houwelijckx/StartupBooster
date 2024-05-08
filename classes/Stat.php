@@ -10,6 +10,7 @@ class Stat
     private $revenue;
     private $costs;
     private $personnel;
+    private $price;
     private $year;
 
     // ======================== STATISTICS GETTERS & SETTERS ========================
@@ -134,6 +135,26 @@ class Stat
         return $this;
     }
 
+        /**
+     * Get the value of price
+     */ 
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set the value of price
+     *
+     * @return  self
+     */ 
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+    
     /**
      * Get the value of year
      */

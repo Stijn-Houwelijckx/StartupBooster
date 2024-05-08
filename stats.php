@@ -18,7 +18,17 @@ if (isset($_SESSION["user_id"])) {
     try {
         $pdo = Db::getInstance();
         $userYears = Stat::getUserYears($pdo, $_SESSION["user_id"]);
+
+        if (isset($_GET["location"]) && isset($_GET["budget"])) {
+            $location = $_GET["location"];
+            $budget = $_GET["budget"];
+            $estimatedCost = User::priceByCity($pdo, $_GET["location"]);
+            $estimatedCost = (float)$estimatedCost['AVG(price)'];
+            $response = "De geschatte kosten voor een pand in $location met een budget van €$budget zijn €$estimatedCost per maand.";
+        }
+
         if (!empty($userYears)) {
+            $citys = User::getAllCitys($pdo);
             
             // eerste grafiek
             $years = array_column($userYears, 'year');
@@ -370,14 +380,18 @@ if (isset($_SESSION["user_id"])) {
                                 <div class="row">
                                     <div class="column">
                                         <label for="premises_location">Locatie</label>
-                                        <input type="text" id="premises_location" name="premises_location">
+                                        <select name="premises_location" id="premises_location">
+                                            <?php foreach ($citys as $city): ?>
+                                                <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                     <div class="column">
                                         <label for="premises_budget">Budget</label>
-                                        <input type="text" id="premises_budget" name="premises_budget">
+                                        <input type="text" id="premises_budget" name="premises_budget" placeholder="<?php echo $estimatedCost?>">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn">Simuleren</button>
+                                <button type="button" class="btn" id="premises_simulate">Simuleren</button>
                             </form>
                         </div>
                     </div>
@@ -390,7 +404,34 @@ if (isset($_SESSION["user_id"])) {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Luister naar klikken op de "Simuleren" knop
+            document.getElementById("premises_simulate").addEventListener("click", function () {
+                // Verzamel de gegevens uit het formulier
+                var location = document.getElementById("premises_location").value;
+                var budget = document.getElementById("premises_budget").value;
+
+                // Maak een AJAX-request aan
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "stats.php?location=" + encodeURIComponent(location) + "&budget=" + encodeURIComponent(budget), true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Verwerk het antwoord van de server
+                            alert(xhr.responseText); // Hier kun je het antwoord verder verwerken, bijv. door het toe te voegen aan de pagina
+                        } else {
+                            // Toon een foutmelding als er een probleem was met het verwerken van de aanvraag
+                            alert("Er is een fout opgetreden bij het verwerken van de aanvraag.");
+                        }
+                    }
+                };
+                // Verzend de AJAX-request
+                xhr.send();
+            });
+        });
+
         const json_sector_UID = <?php echo $json_sector_UID; ?>;
     </script>
     <script>
