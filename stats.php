@@ -18,6 +18,14 @@ if (isset($_SESSION["user_id"])) {
     try {
         $pdo = Db::getInstance();
         $userYears = Stat::getUserYears($pdo, $_SESSION["user_id"]);
+        $citys = User::getAllCitys($pdo);
+
+        // Standaardlocatie
+        $defaultLocation = isset($citys[0]['city']) ? $citys[0]['city'] : "";
+
+        // Haal de geschatte kosten op voor de standaardlocatie
+        $defaultEstimatedCost = User::priceByCity($pdo, $defaultLocation);
+        $defaultEstimatedCost = (float)$defaultEstimatedCost['AVG(price)'];
 
         if (isset($_GET["location"]) && isset($_GET["budget"])) {
             $location = $_GET["location"];
@@ -25,11 +33,11 @@ if (isset($_SESSION["user_id"])) {
             $estimatedCost = User::priceByCity($pdo, $_GET["location"]);
             $estimatedCost = (float)$estimatedCost['AVG(price)'];
             $response = "De geschatte kosten voor een pand in $location met een budget van €$budget zijn €$estimatedCost per maand.";
+            var_dump($estimatedCost);
         }
 
         if (!empty($userYears)) {
-            $citys = User::getAllCitys($pdo);
-            
+           
             // eerste grafiek
             $years = array_column($userYears, 'year');
             $lowestYear = min($years);
@@ -135,8 +143,6 @@ if (isset($_SESSION["user_id"])) {
             }
 
             $userSector = Sector::getSectorByUserId($pdo, $_SESSION["user_id"]);
-
-            // var_dump($userSector);
 
             $json_sector_UID = json_encode($userSector["UID"]);
 
@@ -380,15 +386,19 @@ if (isset($_SESSION["user_id"])) {
                                 <div class="row">
                                     <div class="column">
                                         <label for="premises_location">Locatie</label>
-                                        <select name="premises_location" id="premises_location">
-                                            <?php foreach ($citys as $city): ?>
-                                                <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+        <!-- HTML -->
+<select name="premises_location" id="premises_location" onchange="updateEstimatedCost(this.value)">
+    <?php foreach ($citys as $city): ?>
+        <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
+    <?php endforeach; ?>
+</select>
+<p id="estimated_cost"><?php echo $defaultEstimatedCost; ?></p>
+
                                     </div>
                                     <div class="column">
-                                        <label for="premises_budget">Budget</label>
-                                        <input type="text" id="premises_budget" name="premises_budget" placeholder="<?php echo $estimatedCost?>">
+                                        <p id="estimated_cost"></p>
+                                        <label for="premises_price">Gemiddeld bedrag</label>
+                                        <p id="default_estimated_cost"><?php echo $defaultEstimatedCost?></p>
                                     </div>
                                 </div>
                                 <button type="button" class="btn" id="premises_simulate">Simuleren</button>
@@ -406,33 +416,21 @@ if (isset($_SESSION["user_id"])) {
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Luister naar klikken op de "Simuleren" knop
-            document.getElementById("premises_simulate").addEventListener("click", function () {
-                // Verzamel de gegevens uit het formulier
-                var location = document.getElementById("premises_location").value;
-                var budget = document.getElementById("premises_budget").value;
-
-                // Maak een AJAX-request aan
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "stats.php?location=" + encodeURIComponent(location) + "&budget=" + encodeURIComponent(budget), true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // Verwerk het antwoord van de server
-                            alert(xhr.responseText); // Hier kun je het antwoord verder verwerken, bijv. door het toe te voegen aan de pagina
-                        } else {
-                            // Toon een foutmelding als er een probleem was met het verwerken van de aanvraag
-                            alert("Er is een fout opgetreden bij het verwerken van de aanvraag.");
-                        }
-                    }
-                };
-                // Verzend de AJAX-request
-                xhr.send();
-            });
-        });
-
-        const json_sector_UID = <?php echo $json_sector_UID; ?>;
+function updateEstimatedCost() {
+    var location = document.getElementById("premises_location").value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var estimatedCost = parseFloat(this.responseText);
+            document.getElementById("estimated_cost").innerText = "Geschatte kosten: €" + estimatedCost.toFixed(2);
+            console.log(estimatedCost);
+        }
+    };
+    xhttp.open("GET", "stats.php?location=" + location, true);
+    xhttp.send();
+}
+    
+    const json_sector_UID = <?php echo $json_sector_UID; ?>;
     </script>
     <script>
         function submitYearForm() {

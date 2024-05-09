@@ -137,7 +137,6 @@ $subsidies = Subsidie::getSubsidies($pdo);
             document.getElementById("subsidieSelector").submit();
         }
 
-
         document.querySelector(".subsidies .remove").addEventListener("click", function (e) {
             document.querySelector(".popup").style.display = "flex";
             e.preventDefault();
