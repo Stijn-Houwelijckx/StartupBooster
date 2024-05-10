@@ -21,7 +21,7 @@ premisesLocation.addEventListener("change", function () {
       } else {
         console.log("Success: ", result);
         if (result.price == null) {
-          averageBuildingCost.innerHTML = "Not available";
+          averageBuildingCost.innerHTML = "Niet gevonden";
           return;
         } else {
           averageBuildingCost.innerHTML = result.price;
