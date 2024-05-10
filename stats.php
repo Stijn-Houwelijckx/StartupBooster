@@ -25,7 +25,7 @@ if (isset($_SESSION["user_id"])) {
 
         // Haal de geschatte kosten op voor de standaardlocatie
         $defaultEstimatedCost = User::priceByCity($pdo, $defaultLocation);
-        $defaultEstimatedCost = (float)$defaultEstimatedCost['AVG(price)'];
+        $defaultEstimatedCost = (float)$defaultEstimatedCost['avgPrice'];
 
         if (isset($_GET["location"]) && isset($_GET["budget"])) {
             $location = $_GET["location"];
@@ -260,7 +260,13 @@ if (isset($_SESSION["user_id"])) {
                             <div class="btnsElements">
                                 <button id="prevBtn"><i class="fa fa-angle-left"></i></button>
                                 <div class="elements tegels">
+                                    <?php $count = count($currentYearStats); ?>
                                     <?php foreach ($currentYearStats[0] as $key => $stat): ?>
+                                        <?php 
+                                            if ($key === "price") {
+                                                continue;
+                                            } 
+                                        ?>
                                         <div class="element">
                                             <div class="row">
                                                 <img src="./assets/images/<?php echo $key ?>.svg" alt="icon">
@@ -386,18 +392,15 @@ if (isset($_SESSION["user_id"])) {
                                 <div class="row">
                                     <div class="column">
                                         <label for="premises_location">Locatie</label>
-        <!-- HTML -->
-<select name="premises_location" id="premises_location" onchange="updateEstimatedCost(this.value)">
-    <?php foreach ($citys as $city): ?>
-        <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
-    <?php endforeach; ?>
-</select>
-<p id="estimated_cost"><?php echo $defaultEstimatedCost; ?></p>
-
+                                        <select name="premises_location" id="premises_location">
+                                            <?php foreach ($citys as $city): ?>
+                                                <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                     <div class="column">
                                         <p id="estimated_cost"></p>
-                                        <label for="premises_price">Gemiddeld bedrag</label>
+                                        <p>Gemiddeld bedrag</p>
                                         <p id="default_estimated_cost"><?php echo $defaultEstimatedCost?></p>
                                     </div>
                                 </div>
@@ -416,21 +419,7 @@ if (isset($_SESSION["user_id"])) {
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     
     <script>
-function updateEstimatedCost() {
-    var location = document.getElementById("premises_location").value;
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var estimatedCost = parseFloat(this.responseText);
-            document.getElementById("estimated_cost").innerText = "Geschatte kosten: €" + estimatedCost.toFixed(2);
-            console.log(estimatedCost);
-        }
-    };
-    xhttp.open("GET", "stats.php?location=" + location, true);
-    xhttp.send();
-}
-    
-    const json_sector_UID = <?php echo $json_sector_UID; ?>;
+        const json_sector_UID = <?php echo $json_sector_UID; ?>;
     </script>
     <script>
         function submitYearForm() {
@@ -565,6 +554,7 @@ function updateEstimatedCost() {
     </script>
 
     <script src="javascript/simulator.js"></script>
+    <script src="javascript/fetchAverageBuildingCost.js"></script>
 </body>
 
 </html>

@@ -785,11 +785,11 @@ class User
 
     public static function priceByCity(PDO $pdo, $city){
         try {
-            $stmt = $pdo->prepare("SELECT AVG(price) FROM stats, users WHERE users.id = stats.user_id AND users.city = :city");
+            $stmt = $pdo->prepare("SELECT AVG(stats.price) As avgPrice FROM stats, users WHERE users.id = stats.user_id AND users.city = :city");
             $stmt->bindParam(':city', $city);
             $stmt->execute();
-            $users = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $users ?: [];
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
         } catch (PDOException $e) {
             error_log('Database error in getUsers(): ' . $e->getMessage());
             throw new Exception('Database error: Unable to retrieve users');
