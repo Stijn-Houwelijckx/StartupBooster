@@ -5,7 +5,6 @@ fetch("https://www.stijn-houwelijckx.be/myApi/api.php")
   .then((response) => response.json())
   .then((data) => {
     const sector = data.data.find((item) => item.UID === json_sector_UID);
-    console.log("Sector:", sector);
     if (sector) {
       averageWageInput.value = sector.wage;
       averageMonthlyIncome = sector.income;
