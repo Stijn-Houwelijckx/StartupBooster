@@ -1,6 +1,7 @@
 <?php
 include_once (__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
+include_once (__DIR__ . "/classes/Stat.php");
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -14,8 +15,23 @@ $current_page = 'simulaties';
 if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
-
+    
     try {
+        $allUsers = User::getAll($pdo);
+        $locations = [];
+
+        foreach ($allUsers as $user) {
+            $stats = Stat::getStats($pdo, date('Y') - 1, $user["id"]);
+
+            $locations[] = [
+                'name' => $user["street"] . " " . $user["houseNumber"] . ", " . $user["city"],
+                'number' => $stats[0]["price"]
+            ];
+        }
+
+        // var_dump($locations);
+
+        $locationsJson = json_encode($locations);
         
     } catch (Exception $e) {
         error_log('Database error: ' . $e->getMessage());
@@ -84,57 +100,7 @@ if (isset($_SESSION["user_id"])) {
         });
 
         // Sample array of locations with numbers
-        var locations = [
-            { name: "Antwerp", number: 718 },
-            { name: "Ghent", number: 635 },
-            { name: "Charleroi", number: 821 },
-            { name: "Liège", number: 569 },
-            { name: "Brussels", number: 914 },
-            { name: "Bruges", number: 726 },
-            { name: "Namur", number: 567 },
-            { name: "Leuven", number: 824 },
-            { name: "Mons", number: 690 },
-            { name: "Aalst", number: 554 },
-            { name: "Mechelen", number: 728 },
-            { name: "La Louvière", number: 625 },
-            { name: "Kortrijk", number: 581 },
-            { name: "Hasselt", number: 903 },
-            { name: "Ostend", number: 640 },
-            { name: "Sint-Niklaas", number: 546 },
-            { name: "Tournai", number: 809 },
-            { name: "Genk", number: 725 },
-            { name: "Roeselare", number: 582 },
-            { name: "Verviers", number: 768 },
-            { name: "Mouscron", number: 667 },
-            { name: "Beveren", number: 772 },
-            { name: "Dendermonde", number: 687 },
-            { name: "Beringen", number: 519 },
-            { name: "Turnhout", number: 698 },
-            { name: "Dilbeek", number: 631 },
-            { name: "Heist-op-den-Berg", number: 578 },
-            { name: "Sint-Truiden", number: 621 },
-            { name: "Lokeren", number: 914 },
-            { name: "Braine-l'Alleud", number: 750 },
-            { name: "Brasschaat", number: 543 },
-            { name: "Grimbergen", number: 873 },
-            { name: "Halle", number: 661 },
-            { name: "Waregem", number: 802 },
-            { name: "Lier", number: 945 },
-            { name: "Schoten", number: 700 },
-            { name: "Ieper", number: 891 },
-            { name: "Tienen", number: 546 },
-            { name: "Herentals", number: 939 },
-            { name: "Waver", number: 624 },
-            { name: "Aarschot", number: 738 },
-            { name: "Bilzen", number: 579 },
-            { name: "Hoboken", number: 607 },
-            { name: "Mol", number: 876 },
-            { name: "Lommel", number: 554 },
-            { name: "Geraardsbergen", number: 750 },
-            { name: "Houthalen", number: 645 },
-            { name: "Maasmechelen", number: 807 },
-            { name: "Zaventem", number: 698 },
-        ];
+        var locations = <?php echo $locationsJson; ?>;
 
         // Add markers for each location
         locations.forEach(location => {
