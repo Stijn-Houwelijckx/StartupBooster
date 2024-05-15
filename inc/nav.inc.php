@@ -75,6 +75,13 @@
                     <p>Statistieken</p>
                 </div>
             </a>
+            <a href="./simulaties.php">
+                <div>
+                    <img class="<?php echo ($current_page == 'simulaties') ? 'simulatiesItem active' : 'simulatiesItem'; ?>"
+                        src="assets/images/Simulaties.svg" alt="simulatiesIcon">
+                    <p>Simulaties</p>
+                </div>
+            </a>
             <a href="./subsidies.php">
                 <div>
                     <img class="<?php echo ($current_page == 'subsidies') ? 'subsidiesItem active' : 'subsidiesItem'; ?>"
