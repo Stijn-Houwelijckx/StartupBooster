@@ -106,7 +106,7 @@ premisesSubmitButton.addEventListener("click", (event) => {
       break;
     case "costs":
       count = parseInt(count);
-      value = count;
+      value = count * 12;
       break;
     case "profit_loss":
       value = 0;

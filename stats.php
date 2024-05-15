@@ -391,7 +391,7 @@ if (isset($_SESSION["user_id"])) {
                                     </div>
                                     <div class="column">
                                         <p id="estimated_cost"></p>
-                                        <p>Gemiddeld bedrag</p>
+                                        <p>Gemiddeld bedrag per maand</p>
                                         <p id="default_estimated_cost"><?php echo $defaultEstimatedCost?></p>
                                     </div>
                                 </div>
