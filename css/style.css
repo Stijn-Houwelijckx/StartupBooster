@@ -1100,6 +1100,7 @@ a.active {
 
 /* ---- stats ---- */
 #dashboard,
+#simulaties,
 #stats,
 #roadmap,
 #roadmapAdmin,
@@ -2166,6 +2167,7 @@ a.active {
   }
 
   #dashboard,
+  #simulaties,
   #stats,
   #roadmap,
   #roadmapAdmin,
@@ -2434,6 +2436,7 @@ a.active {
 
   /* ---- helpdesk ---- */
   #dashboard,
+  #simulaties,
   #roadmap,
   #roadmapAdmin,
   #stats,
