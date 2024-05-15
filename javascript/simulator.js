@@ -1,11 +1,14 @@
-averageWageInput = document.getElementById("employee_wage");
+const averageWageInput = document.getElementById("employee_wage");
+var averageMonthlyIncome = 0;
 
 fetch("https://www.stijn-houwelijckx.be/myApi/api.php")
   .then((response) => response.json())
   .then((data) => {
     const sector = data.data.find((item) => item.UID === json_sector_UID);
+    console.log("Sector:", sector);
     if (sector) {
       averageWageInput.value = sector.wage;
+      averageMonthlyIncome = sector.income;
     } else {
     }
   })
@@ -38,7 +41,7 @@ employeeSubmitButton.addEventListener("click", (event) => {
   var selectedValue = document.getElementById("statsFilterChart").value;
   switch (selectedValue) {
     case "revenue":
-      value = 0;
+      value = employeeCount * averageMonthlyIncome * 12 * (employeeHours / 8);
       break;
     case "costs":
       const wagePerYear = employeeWage * employeeHours * 5 * 52;
