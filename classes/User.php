@@ -752,6 +752,20 @@ class User
         }
     }
 
+    public static function getAllByUserSector(PDO $pdo, $user_id)
+    {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE sector_id = (SELECT sector_id FROM users WHERE id = :user_id) AND status = 1");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $users ?: [];
+        } catch (PDOException $e) {
+            error_log('Database error in getUsers(): ' . $e->getMessage());
+            throw new Exception('Database error: Unable to retrieve users');
+        }
+    }
+
     public function updateProfileImg(PDO $pdo, $user_id): bool
     {
         try {

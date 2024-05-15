@@ -17,10 +17,11 @@ if (isset($_SESSION["user_id"])) {
     $user = User::getUserById($pdo, $_SESSION["user_id"]);
     
     try {
-        $allUsers = User::getAll($pdo);
+        // $allUsers = User::getAll($pdo);
+        $allUsersBySector = User::getAllByUserSector($pdo, $user["id"]);
         $locations = [];
 
-        foreach ($allUsers as $user) {
+        foreach ($allUsersBySector as $user) {
             $stats = Stat::getStats($pdo, date('Y') - 1, $user["id"]);
 
             $locations[] = [
@@ -83,7 +84,7 @@ if (isset($_SESSION["user_id"])) {
         <h1>Simulaties</h1>
 
         <input id="city-input" type="text" placeholder="Enter city name">
-        <button id="search-button" class="btn">Search</button>
+        <button id="search-button">Search</button>
 
         <div id="map"></div>
         
