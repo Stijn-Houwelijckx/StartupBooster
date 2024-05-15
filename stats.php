@@ -225,6 +225,13 @@ if (isset($_SESSION["user_id"])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
 </head>
 
 
@@ -386,14 +393,12 @@ if (isset($_SESSION["user_id"])) {
                                 <div class="row">
                                     <div class="column">
                                         <label for="premises_location">Locatie</label>
-        <!-- HTML -->
-<select name="premises_location" id="premises_location" onchange="updateEstimatedCost(this.value)">
-    <?php foreach ($citys as $city): ?>
-        <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
-    <?php endforeach; ?>
-</select>
-<p id="estimated_cost"><?php echo $defaultEstimatedCost; ?></p>
-
+                                        <select name="premises_location" id="premises_location" onchange="updateEstimatedCost(this.value)">
+                                            <?php foreach ($citys as $city): ?>
+                                                <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <p id="estimated_cost"><?php echo $defaultEstimatedCost; ?></p>
                                     </div>
                                     <div class="column">
                                         <p id="estimated_cost"></p>
