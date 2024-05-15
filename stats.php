@@ -19,7 +19,6 @@ if (isset($_SESSION["user_id"])) {
         $pdo = Db::getInstance();
         $userYears = Stat::getUserYears($pdo, $_SESSION["user_id"]);
         $citys = User::getAllCitys($pdo);
-
         // Standaardlocatie
         $defaultLocation = isset($citys[0]['city']) ? $citys[0]['city'] : "";
 
