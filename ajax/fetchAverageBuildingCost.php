@@ -24,7 +24,7 @@ if (!empty($_POST)) {
 
         $response = [
             "status" => "success",
-            "price" => $averageBuildingPrice["avgPrice"]
+            "price" => number_format($averageBuildingPrice["avgPrice"], 2, ',', ' ')
         ];
     } catch (PDOException $e) {
         error_log('Database error: ' . $e->getMessage());

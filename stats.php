@@ -25,16 +25,16 @@ if (isset($_SESSION["user_id"])) {
 
         // Haal de geschatte kosten op voor de standaardlocatie
         $defaultEstimatedCost = User::priceByCity($pdo, $defaultLocation);
-        $defaultEstimatedCost = (float)$defaultEstimatedCost['avgPrice'];
+        $defaultEstimatedCost = number_format($defaultEstimatedCost['avgPrice'], 2, ',', ' ');
 
-        if (isset($_GET["location"]) && isset($_GET["budget"])) {
-            $location = $_GET["location"];
-            $budget = $_GET["budget"];
-            $estimatedCost = User::priceByCity($pdo, $_GET["location"]);
-            $estimatedCost = (float)$estimatedCost['AVG(price)'];
-            $response = "De geschatte kosten voor een pand in $location met een budget van €$budget zijn €$estimatedCost per maand.";
-            var_dump($estimatedCost);
-        }
+        // if (isset($_GET["location"]) && isset($_GET["budget"])) {
+        //     $location = $_GET["location"];
+        //     $budget = $_GET["budget"];
+        //     $estimatedCost = User::priceByCity($pdo, $_GET["location"]);
+        //     $estimatedCost = $estimatedCost['AVG(price)'];
+        //     $response = "De geschatte kosten voor een pand in $location met een budget van €$budget zijn €$estimatedCost per maand.";
+        //     var_dump($estimatedCost);
+        // }
 
         if (!empty($userYears)) {
            
