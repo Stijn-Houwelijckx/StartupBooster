@@ -27,15 +27,6 @@ if (isset($_SESSION["user_id"])) {
         $defaultEstimatedCost = User::priceByCity($pdo, $defaultLocation);
         $defaultEstimatedCost = number_format($defaultEstimatedCost['avgPrice'], 2, ',', ' ');
 
-        // if (isset($_GET["location"]) && isset($_GET["budget"])) {
-        //     $location = $_GET["location"];
-        //     $budget = $_GET["budget"];
-        //     $estimatedCost = User::priceByCity($pdo, $_GET["location"]);
-        //     $estimatedCost = $estimatedCost['AVG(price)'];
-        //     $response = "De geschatte kosten voor een pand in $location met een budget van €$budget zijn €$estimatedCost per maand.";
-        //     var_dump($estimatedCost);
-        // }
-
         if (!empty($userYears)) {
            
             // eerste grafiek
@@ -225,13 +216,6 @@ if (isset($_SESSION["user_id"])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/Favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-
-    <style>
-        #map {
-            height: 400px;
-            width: 100%;
-        }
-    </style>
 </head>
 
 
@@ -267,7 +251,13 @@ if (isset($_SESSION["user_id"])) {
                             <div class="btnsElements">
                                 <button id="prevBtn"><i class="fa fa-angle-left"></i></button>
                                 <div class="elements tegels">
+                                    <?php $count = count($currentYearStats); ?>
                                     <?php foreach ($currentYearStats[0] as $key => $stat): ?>
+                                        <?php 
+                                            if ($key === "price") {
+                                                continue;
+                                            } 
+                                        ?>
                                         <div class="element">
                                             <div class="row">
                                                 <img src="./assets/images/<?php echo $key ?>.svg" alt="icon">
@@ -335,7 +325,7 @@ if (isset($_SESSION["user_id"])) {
                                     </select>
                             </div>
                         <div class="figure">
-                            <select name="sectorStatsFilterY" id="sectorStatsFilterY">
+                            <select name="sectorStatsFilterY">
                                 <option value="revenue" <?php if ($wantedSectorStatY == "revenue") {echo "selected";} ?>>Omzet</option>
                                 <option value="costs" <?php if ($wantedSectorStatY == "costs") {echo "selected";} ?>>Kosten</option>
                                 <option value="profit_loss" <?php if ($wantedSectorStatY == "profit_loss") {echo "selected";} ?>>Winst</option>
@@ -345,7 +335,7 @@ if (isset($_SESSION["user_id"])) {
                             </select>
                             <div class="column">
                                 <canvas id="myChart" style="width:100%"></canvas>
-                                <select name="sectorStatsFilterX" id="sectorStatsFilterX">
+                                <select name="sectorStatsFilterX">
                                     <option value="revenue" <?php if ($wantedSectorStatX == "revenue") {echo "selected";} ?>>Omzet</option>
                                     <option value="costs" <?php if ($wantedSectorStatX == "costs") {echo "selected";} ?>>Kosten</option>
                                     <option value="profit_loss" <?php if ($wantedSectorStatX == "profit_loss") {echo "selected";} ?>>Winst</option>
@@ -393,16 +383,15 @@ if (isset($_SESSION["user_id"])) {
                                 <div class="row">
                                     <div class="column">
                                         <label for="premises_location">Locatie</label>
-                                        <select name="premises_location" id="premises_location" onchange="updateEstimatedCost(this.value)">
+                                        <select name="premises_location" id="premises_location">
                                             <?php foreach ($citys as $city): ?>
                                                 <option value="<?php echo $city['city']; ?>"><?php echo $city['city']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
-                                        <p id="estimated_cost"><?php echo $defaultEstimatedCost; ?></p>
                                     </div>
                                     <div class="column">
                                         <p id="estimated_cost"></p>
-                                        <label for="premises_price">Gemiddeld bedrag</label>
+                                        <p>Gemiddeld bedrag</p>
                                         <p id="default_estimated_cost"><?php echo $defaultEstimatedCost?></p>
                                     </div>
                                 </div>
@@ -421,21 +410,7 @@ if (isset($_SESSION["user_id"])) {
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     
     <script>
-function updateEstimatedCost() {
-    var location = document.getElementById("premises_location").value;
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var estimatedCost = parseFloat(this.responseText);
-            document.getElementById("estimated_cost").innerText = "Geschatte kosten: €" + estimatedCost.toFixed(2);
-            console.log(estimatedCost);
-        }
-    };
-    xhttp.open("GET", "stats.php?location=" + location, true);
-    xhttp.send();
-}
-    
-    const json_sector_UID = <?php echo $json_sector_UID; ?>;
+        const json_sector_UID = <?php echo $json_sector_UID; ?>;
     </script>
     <script>
         function submitYearForm() {
@@ -570,6 +545,7 @@ function updateEstimatedCost() {
     </script>
 
     <script src="javascript/simulator.js"></script>
+    <script src="javascript/fetchAverageBuildingCost.js"></script>
 </body>
 
 </html>

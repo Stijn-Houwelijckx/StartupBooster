@@ -13,8 +13,6 @@ document.querySelectorAll(".steps .delete").forEach(function (deleteBtn) {
 document.querySelectorAll(".step").forEach(function (step) {
   // Show add button on mouse over
   step.addEventListener("mouseenter", function (e) {
-    // console.log("Mouse over step: ", this);
-
     if (changingPosition === false) {
       step.firstElementChild.style.display = "flex";
     }
@@ -30,7 +28,6 @@ document.querySelectorAll(".step").forEach(function (step) {
 document.querySelectorAll(".addTaskBtn").forEach(function (addTaskBtn) {
   addTaskBtn.addEventListener("click", function (e) {
     var taskId = this.dataset.taskid;
-    console.log("Task ID: ", taskId);
   });
 });
 
@@ -44,8 +41,6 @@ let tasks = document.querySelectorAll(".step");
 
 // Event listener for when the change position button is clicked
 changePositionBtn.addEventListener("click", function (e) {
-  console.log("Change position button clicked");
-
   // Add class to button to indicate that it is active
   changePositionBtn.classList.toggle("active");
 

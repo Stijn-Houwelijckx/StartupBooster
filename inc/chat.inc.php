@@ -38,8 +38,6 @@ if (isset($_SESSION["user_id"])) {
 
         // Retreive messages
         $messages = Message::getMessagesByChatId($pdo, $chat["id"]);
-
-        // var_dump($messages);
     } else {
         $messages = null;
     }

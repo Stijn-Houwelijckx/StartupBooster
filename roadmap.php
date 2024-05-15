@@ -154,7 +154,6 @@ $current_page = 'roadmap';
             })
                 .then(response => {
                     if (response.ok) {
-                        console.log('Form submission success.');
                         // Herlaad de pagina nadat het formulier met succes is verzonden
                         location.reload();
                     } else {

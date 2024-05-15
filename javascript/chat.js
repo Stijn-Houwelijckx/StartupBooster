@@ -8,8 +8,6 @@ function openChat() {
   // Scroll to the bottom of the chat window
   const chatWindow = document.getElementById("chatWindow");
   chatWindow.scrollTop = chatWindow.scrollHeight;
-
-  // console.log("Chat ID: ", chatId);
 }
 
 // ================== Event Listeners + AJAX ================== //
@@ -28,9 +26,6 @@ document
       return; // Exit the function if the message is empty
     }
 
-    // console.log("Chat ID: ", chatId);
-    console.log("Message: ", message);
-
     // Send message to server
     let formData = new FormData();
     // formData.append("chatId", chatId);
@@ -43,11 +38,9 @@ document
       .then((response) => response.json())
       .then((result) => {
         if (result.status === "error") {
-          console.log("Error: ", result);
           document.querySelector(".errorMsg").innerHTML = result.message;
           return;
         } else {
-          console.log("Success: ", result);
           document.querySelector(".errorMsg").innerHTML = "";
 
           const chatWindow = document.getElementById("chatWindow");
@@ -70,8 +63,6 @@ function fetchNewChatMessages() {
   fetch(ajaxPathExtention + "ajax/fetchNewChatMessages.php")
     .then((response) => response.json())
     .then((result) => {
-      console.log("Success: ", result);
-
       // Update the chat interface with the new messages
       updateChatInterfact(result);
 
@@ -95,7 +86,6 @@ document.querySelector("#btnEndChat").addEventListener("click", function (e) {
       // Check the result and handle accordingly
       if (result.status === "success") {
         // Update UI or perform any other actions
-        console.log("Chat ended successfully.");
         document.querySelector(".chat").style.display = "none";
       } else {
         // Display error message or handle the error

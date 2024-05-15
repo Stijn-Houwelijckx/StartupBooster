@@ -5,7 +5,6 @@ premisesLocation.addEventListener("change", function () {
   var city = this.value;
   var formData = new FormData();
   formData.append("city", city);
-  console.log("city: " + city);
 
   // Fetch tasks by user
 
@@ -16,10 +15,8 @@ premisesLocation.addEventListener("change", function () {
     .then((response) => response.json())
     .then((result) => {
       if (result.status === "error") {
-        console.log("Error: ", result);
         return;
       } else {
-        console.log("Success: ", result);
         if (result.price == null) {
           averageBuildingCost.innerHTML = "Niet gevonden";
           return;
