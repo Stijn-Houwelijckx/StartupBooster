@@ -1384,6 +1384,12 @@ a.active {
   gap: 16px;
 }
 
+#stats .right .background .questions .opacity {
+  opacity: 0.6;
+  text-align: center;
+  text-decoration: underline;
+}
+
 #stats .right .background .questions .question {
   display: flex;
   flex-direction: row;

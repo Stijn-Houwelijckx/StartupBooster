@@ -67,7 +67,7 @@ if (isset($_SESSION["user_id"])) {
         <h1>Simulaties</h1>
 
         <input id="city-input" type="text" placeholder="Enter city name">
-        <button id="search-button">Search</button>
+        <button id="search-button" class="btn">Search</button>
 
         <div id="map"></div>
         

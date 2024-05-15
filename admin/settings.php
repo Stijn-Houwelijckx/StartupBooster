@@ -246,7 +246,7 @@ if (isset($_SESSION["user_id"])) {
                                     } ?>">
                                 </div>
                             </div>
-                        </div>
+                        </div>   
                         <div class="extraInfo">
                             <h3>Adres</h3>
                             <div class="fields">

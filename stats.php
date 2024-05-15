@@ -395,6 +395,7 @@ if (isset($_SESSION["user_id"])) {
                                     </div>
                                 </div>
                                 <button type="button" class="btn" id="premises_simulate">Simuleren</button>
+                                <a href="simulaties.php" class="opacity">Bekijk op kaart</a>
                             </form>
                         </div>
                     </div>

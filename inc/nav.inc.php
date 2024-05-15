@@ -78,7 +78,7 @@
             <a href="./simulaties.php">
                 <div>
                     <img class="<?php echo ($current_page == 'simulaties') ? 'simulatiesItem active' : 'simulatiesItem'; ?>"
-                        src="assets/images/Simulaties.svg" alt="simulatiesIcon">
+                        src="assets/images/map.svg" alt="simulatiesIcon">
                     <p>Simulaties</p>
                 </div>
             </a>
