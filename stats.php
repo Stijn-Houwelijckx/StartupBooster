@@ -259,7 +259,7 @@ if (isset($_SESSION["user_id"])) {
                                         ?>
                                         <div class="element">
                                             <div class="row">
-                                                <img src="./assets/images/<?php echo $key ?>.svg" alt="icon">
+                                                <img src="./assets/images/icons/<?php echo $key ?>.svg" alt="icon">
                                                 <h3>
                                                     <?php echo $statNamesDutch[$key] ?>
                                                 </h3>

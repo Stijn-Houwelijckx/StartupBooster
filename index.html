@@ -56,71 +56,107 @@
       </div>
     </section>
     <section id="howToUse">
-      <a href="#"><div class="btn active">Hoe te gebruiken</div></a>
+      <div class="btn active"><p>Hoe te gebruiken</p></div>
       <h2>Hoe werkt het?</h2>
       <p>
         Hieronder een introductie van de stappen die u zal moeten doornemen.
       </p>
       <div class="btns">
-        <a href="#"><div class="btn active">1. Maak een account</div></a>
-        <a href="#"><div class="btn">2. Aanvragen</div></a>
-        <a href="#"><div class="btn">3. Beheer uw onderneming</div></a>
+        <div class="btn active" data-step="one">
+          <p>1. Maak een account</p>
+        </div>
+
+        <div class="btn" data-step="two"><p>2. Aanvragen</p></div>
+        <div class="btn" data-step="three">
+          <p>3. Beheer uw onderneming</p>
+        </div>
       </div>
-      <div class="step">
+      <div class="step one">
         <div class="text">
-          <h2>Starten als (student-)zelfstandige?</h2>
+          <h2>Starten als zelfstandige?</h2>
           <p>
             Heb je een briljant idee? En is het de hoogste tijd om dit in de
             realiteit te brengen met je eigen zaak? Dan is StartupBooster jouw
             ideale partner!
           </p>
-          <!-- <a href="#"><div class="btn active">Download de app</div></a> -->
+        </div>
+        <div class="image"></div>
+      </div>
+      <div class="step two">
+        <div class="text">
+          <h2>Statuut zelfstandige aanvragen</h2>
+          <p>
+            We begeleiden je stap voor stap bij het verkrijgen van de officiële
+            erkenning als zelfstandige
+          </p>
+        </div>
+        <div class="image"></div>
+      </div>
+      <div class="step three">
+        <div class="text">
+          <h2>Benchmarken en strategische groeisimulaties uitvoeren</h2>
+          <p>
+            Deze tools helpen u om uw bedrijfsprestaties te vergelijken met
+            branchegenoten en de impact van verschillende groeistrategieën te
+            evalueren, zodat u weloverwogen beslissingen kunt nemen en uw
+            onderneming succesvol kunt laten groeien.
+          </p>
         </div>
         <div class="image"></div>
       </div>
     </section>
     <section id="features">
-      <a href="#"><div class="btn active">Features</div></a>
+      <div class="btn active"><p>Features</p></div>
       <div class="feature one">
         <div class="image"></div>
         <div class="text">
-          <h2>Beheer uw agenda</h2>
+          <h2>Stappenplan zelfstandige worden</h2>
           <p>
-            Met onze ingebouwde agendatool kan u gemakkelijk uw afspraken en
-            taken beheren. Plan moeiteloos vergaderingen, deadlines en andere
-            belangrijke evenementen in, waardoor u altijd georganiseerd blijft
-            en niets over het hoofd ziet.
+            Ons stappenplan biedt een gedetailleerde gids om je te helpen bij
+            het opzetten van je eigen onderneming. Volg deze gestructureerde
+            routekaart om succesvol als zelfstandige aan de slag te gaan.
           </p>
         </div>
       </div>
       <div class="feature two">
         <div class="image"></div>
         <div class="text">
-          <h2>Chat me uw klanten</h2>
+          <h2>Benchmarken binnen sector</h2>
           <p>
-            Onze chatfunctie stelt u in staat om direct te communiceren met uw
-            klanten, waardoor u sneller vragen kunt beantwoorden, problemen kunt
-            oplossen en een betere klantenservice kunt bieden. Bouw sterke
-            relaties op met uw klanten door middel van directe en persoonlijke
-            communicatie.
+            We bieden een uitgebreide vergelijking van prestaties binnen je
+            sector aan, zodat je jouw bedrijf kunt meten aan branchegenoten en
+            verbeterpunten kunt identificeren. Gebruik deze tool om je
+            concurrentiepositie te versterken en je groeistrategieën te
+            optimaliseren.
           </p>
         </div>
       </div>
       <div class="feature three">
         <div class="image"></div>
         <div class="text">
-          <h2>Raadpleeg uw documenten</h2>
+          <h2>Mogelijke subsidies raadplegen</h2>
           <p>
-            Met onze documentbeheerfunctie heeft u altijd toegang tot uw
-            belangrijke documenten. Bewaar en organiseer al uw bestanden op één
-            centrale locatie, waardoor u ze gemakkelijk kunt raadplegen, delen
-            en bewerken wanneer dat nodig is.
+            We helpen je om beschikbare subsidies te vinden die jouw bedrijf
+            kunnen ondersteunen. Ontdek en benut financiële hulpbronnen om je
+            onderneming te laten groeien.
+          </p>
+        </div>
+      </div>
+      <div class="feature four">
+        <div class="image"></div>
+        <div class="text">
+          <h2>Strategische groeisimulaties</h2>
+          <p>
+            We bieden realistische scenario-analyses om de impact van
+            verschillende groeistrategieën op je bedrijf te evalueren. Gebruik
+            deze tool om weloverwogen beslissingen te nemen en je bedrijf
+            succesvol te laten groeien.
           </p>
         </div>
       </div>
     </section>
     <section id="testimonial">
-      <a href="#"><div class="btn">Getuigenissen</div></a>
+      <div class="btn"><p>Getuigenissen</p></div>
       <h2>Wat klanten zeggen over ons platform</h2>
       <div class="reviews">
         <div class="review">
@@ -152,7 +188,7 @@
       </div>
     </section>
     <section id="pricing">
-      <a href="#"><div class="btn active">Onze prijzen</div></a>
+      <div class="btn active"><p>Onze prijzen</p></div>
       <h2>Kies het plan dat bij jou past</h2>
       <p>
         Kies het plan dat voor jou het beste werkt, neem gerust contact met ons
@@ -252,7 +288,12 @@
           <form action="">
             <div>
               <label for="email">Uw e-mailadres</label>
-              <input type="text" placeholder="JohnDoe@gmail.com" />
+              <input
+                type="text"
+                name="email"
+                id="email"
+                placeholder="JohnDoe@gmail.com"
+              />
             </div>
             <a href="#" class="btn">
               <p>Verzenden</p>
@@ -288,7 +329,12 @@
           <form action="">
             <div>
               <label for="email">Uw e-mailadres</label>
-              <input type="text" placeholder="JohnDoe@gmail.com" />
+              <input
+                type="text"
+                name="email"
+                id="email"
+                placeholder="JohnDoe@gmail.com"
+              />
             </div>
             <a href="#" class="btn">
               <p>Verzenden</p>
@@ -341,6 +387,37 @@
       });
       loginItem.addEventListener("click", function (e) {
         mobileMenu.style.display = "none";
+      });
+    });
+
+    let howToUseBtns = document.querySelectorAll("#howToUse .btns .btn");
+    howToUseBtns.forEach((btn) => {
+      // Stel de initiële achtergrondkleur in op wit
+
+      btn.addEventListener("click", () => {
+        btn.style.backgroundColor = "var(--white)";
+        // Stel de achtergrondkleur van alle knoppen in op wit
+        howToUseBtns.forEach((btn) => {
+          btn.style.backgroundColor = "var(--white)";
+          btn.style.color = "var(--blue)";
+        });
+        // Stel de achtergrondkleur van de aangeklikte knop in op blauw
+        btn.style.backgroundColor = "var(--blue)";
+        btn.style.color = "var(--white)";
+      });
+    });
+
+    howToUseBtns.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        // Verberg alle secties
+        document.querySelectorAll("#howToUse .step").forEach((step) => {
+          step.style.display = "none";
+        });
+
+        // Laat alleen de geselecteerde sectie zien
+        let stepNumber = this.getAttribute("data-step");
+        document.querySelector(`#howToUse .step.${stepNumber}`).style.display =
+          "flex";
       });
     });
   </script>

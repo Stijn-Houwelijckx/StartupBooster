@@ -12,35 +12,35 @@
         <a href="./dashboard.php">
             <div>
                 <img class="<?php echo ($current_page == 'dashboard') ? 'dashboardItem active' : 'dashboardItem'; ?>"
-                    src="assets/images/Dashboard.svg" alt="dashboardIcon">
+                    src="assets/images/icons/dashboard.svg" alt="dashboardIcon">
                 <p>Home</p>
             </div>
         </a>
         <a href="./roadmap.php">
             <div>
                 <img class="<?php echo ($current_page == 'roadmap') ? 'roadmapItem active' : 'roadmapItem'; ?>"
-                    src="assets/images/Process.svg" alt="roadmapIcon">
+                    src="assets/images/icons/process.svg" alt="roadmapIcon">
                 <p>Stappenplan</p>
             </div>
         </a>
         <a href="./stats.php">
             <div>
                 <img class="<?php echo ($current_page == 'stats') ? 'statsItem active' : 'statsItem'; ?>"
-                    src="assets/images/Stats.svg" alt="statsIcon">
+                    src="assets/images/icons/stats.svg" alt="statsIcon">
                 <p>Statistieken</p>
             </div>
         </a>
         <a href="./subsidies.php">
             <div>
                 <img class="<?php echo ($current_page == 'subsidies') ? 'subsidiesItem active' : 'subsidiesItem'; ?>"
-                    src="assets/images/subsidiesItem.svg" alt="subsidiesIcon">
+                    src="assets/images/icons/subsidiesItem.svg" alt="subsidiesIcon">
                 <p>Subsidies</p>
             </div>
         </a>
         <a href="./helpdesk.php">
             <div>
                 <img class="<?php echo ($current_page == 'helpdesk') ? 'helpdeskItem active' : 'helpdeskItem'; ?>"
-                    src="assets/images/Helpdesk.svg" alt="helpdeskIcon">
+                    src="assets/images/icons/helpdesk.svg" alt="helpdeskIcon">
                 <p>Helpdesk</p>
             </div>
         </a>
@@ -57,42 +57,42 @@
             <a href="./dashboard.php">
                 <div>
                     <img class="<?php echo ($current_page == 'dashboard') ? 'dashboardItem active' : 'dashboardItem'; ?>"
-                        src="assets/images/Dashboard.svg" alt="dashboardIcon">
+                        src="assets/images/icons/dashboard.svg" alt="dashboardIcon">
                     <p>Home</p>
                 </div>
             </a>
             <a href="./roadmap.php">
                 <div>
                     <img class="<?php echo ($current_page == 'roadmap') ? 'roadmapItem active' : 'roadmapItem'; ?>"
-                        src="assets/images/Process.svg" alt="roadmapIcon">
+                        src="assets/images/icons/process.svg" alt="roadmapIcon">
                     <p>Stappenplan</p>
                 </div>
             </a>
             <a href="./stats.php">
                 <div>
                     <img class="<?php echo ($current_page == 'stats') ? 'statsItem active' : 'statsItem'; ?>"
-                        src="assets/images/Stats.svg" alt="statsIcon">
+                        src="assets/images/icons/stats.svg" alt="statsIcon">
                     <p>Statistieken</p>
                 </div>
             </a>
             <a href="./simulaties.php">
                 <div>
                     <img class="<?php echo ($current_page == 'simulaties') ? 'simulatiesItem active' : 'simulatiesItem'; ?>"
-                        src="assets/images/map.svg" alt="simulatiesIcon">
+                        src="assets/images/icons/map.svg" alt="simulatiesIcon">
                     <p>Simulaties</p>
                 </div>
             </a>
             <a href="./subsidies.php">
                 <div>
                     <img class="<?php echo ($current_page == 'subsidies') ? 'subsidiesItem active' : 'subsidiesItem'; ?>"
-                        src="assets/images/subsidiesItem.svg" alt="subsidiesIcon">
+                        src="assets/images/icons/subsidiesItem.svg" alt="subsidiesIcon">
                     <p>Subsidies</p>
                 </div>
             </a>
             <a href="./helpdesk.php">
                 <div>
                     <img class="<?php echo ($current_page == 'helpdesk') ? 'helpdeskItem active' : 'helpdeskItem'; ?>"
-                        src="assets/images/Helpdesk.svg" alt="helpdeskIcon">
+                        src="assets/images/icons/helpdesk.svg" alt="helpdeskIcon">
                     <p>Helpdesk</p>
                 </div>
             </a>
@@ -101,14 +101,14 @@
             <a href="logout.php">
                 <div>
                     <img class="<?php echo ($current_page == 'logout') ? 'logoutItem active' : 'logoutItem'; ?>"
-                        src="assets/images/logout.svg" alt="logoutIcon">
+                        src="assets/images/icons/logout.svg" alt="logoutIcon">
                     <p>Logout</p>
                 </div>
             </a>
             <a href="./settings.php">
                 <div>
                     <img class="<?php echo ($current_page == 'settings') ? 'settingsItem active' : 'settingsItem'; ?>"
-                        src="assets/images/Settings.svg" alt="settingsIcon">
+                        src="assets/images/icons/settings.svg" alt="settingsIcon">
                     <p>Settings</p>
                 </div>
             </a>

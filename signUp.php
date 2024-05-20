@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
             <h1>Registreren</h1>
             <p>We hebben alleen wat meer informatie nodig om je account aan te maken.</p>
             <div class="partners">
-                <img src="assets/images/Itsme.svg" alt="Itsme">
+                <img src="assets/images/icons/Itsme.svg" alt="Itsme">
             </div>
             <div class="row">
                 <p class="border"></p>

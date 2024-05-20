@@ -91,6 +91,7 @@ nav {
   width: 100%;
   height: 80px;
   background-color: var(--white);
+  box-shadow: 0 10px 10px -10px #000000bf;
 }
 
 nav .menu,
@@ -201,11 +202,11 @@ nav .fa-bars {
 }
 
 #home .imageBorder .image {
-  background-image: url("../assets/images/Dashboard-Home.jpg");
+  background-image: url("../assets/images/mockups/statistieken.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
-  width: 334px;
+  background-size: contain;
+  width: 308px;
   height: 240px;
 }
 
@@ -232,10 +233,11 @@ nav .fa-bars {
 #howToUse .step,
 #features .feature {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 24px;
+  width: 342px;
 }
 
 #howToUse .step .text,
@@ -246,13 +248,29 @@ nav .fa-bars {
 }
 
 #howToUse .step .image {
-  background-image: url("../assets/images/Dashboard-Registreren.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  width: 366px;
+  width: 100%;
   height: 260px;
   border-radius: 8px;
+}
+
+#howToUse .step.one .image {
+  background-image: url("../assets/images/mockups/registreren.svg");
+}
+
+#howToUse .step.two .image {
+  background-image: url("../assets/images/mockups/roadmap.svg");
+}
+
+#howToUse .step.three .image {
+  background-image: url("../assets/images/mockups/statistieken.svg");
+}
+
+#howToUse .step.two,
+#howToUse .step.three {
+  display: none;
 }
 
 #features .feature .image {
@@ -265,15 +283,19 @@ nav .fa-bars {
 }
 
 #features .feature.one .image {
-  background-image: url("../assets/images/Dashboard-Agenda.jpg");
+  background-image: url("../assets/images/mockups/roadmap.png");
 }
 
 #features .feature.two .image {
-  background-image: url("../assets/images/Dashboard-Chat.jpg");
+  background-image: url("../assets/images/mockups/statistieken.png");
 }
 
 #features .feature.three .image {
-  background-image: url("../assets/images/Dashboard-Documents.jpg");
+  background-image: url("../assets/images/mockups/subsidies.png");
+}
+
+#features .feature.four .image {
+  background-image: url("../assets/images/mockups/kaart.png");
 }
 
 /* ---- testimonial ---- */
@@ -561,6 +583,10 @@ footer .border {
     display: flex;
   }
 
+  nav .links {
+    padding-right: 24px;
+  }
+
   nav .logoFrame {
     width: 212.35px;
   }
@@ -569,10 +595,19 @@ footer .border {
   #howToUse .step .image,
   #features .feature .text,
   #features .feature .image {
-    width: 48%;
+    width: 100%;
   }
 
-  #features .feature.two .image {
+  #howToUse .step,
+  #features .feature {
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    width: 100%;
+  }
+
+  #features .feature.two .image,
+  #features .feature.four .image {
     order: 2;
   }
 
@@ -602,6 +637,7 @@ footer .border {
   }
 
   nav .links {
+    padding-right: 0;
     margin-right: 200px;
   }
 
@@ -620,11 +656,5 @@ footer .border {
 
   #pricing .products .product {
     width: 29.2%;
-  }
-
-  #howToUse .step .image,
-  #features .feature .image {
-    width: 480px;
-    height: 340px;
   }
 }
