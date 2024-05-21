@@ -15,11 +15,11 @@ if (isset($_SESSION["user_id"])) {
 
     try {
         $pdo = Db::getInstance();
-        $tasks = Task::getTasks($pdo, $_SESSION["user_id"]);
+        $tasks = Task::getTasks($pdo, $_SESSION["user_id"], $user["statute_id"]);
         
         $finished_steps = Task::getProgress($pdo, $_SESSION["user_id"]);
         
-        $activeTask = Task::getActiveTask($pdo, $_SESSION["user_id"]);
+        $activeTask = Task::getActiveTask($pdo, $_SESSION["user_id"], $user["statute_id"]);
         $activeTaskString = '';
 
         if (is_array($activeTask)) {
@@ -71,7 +71,7 @@ $current_page = 'roadmap';
             </div>
             <div class="tasks">
                 <?php if (!empty($tasks)): ?>
-                    <?php foreach ($tasks as $task): ?>
+                    <?php foreach ($tasks as $index => $task): ?>
                         <?php
                         if ($task["id"] == $activeTaskString) {
                             $taskClasses = "task active";

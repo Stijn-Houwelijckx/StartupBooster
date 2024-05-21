@@ -1,7 +1,12 @@
 <?php
+include_once (__DIR__ . "/classes/User.php");
 include_once (__DIR__ . "/classes/Task.php");
 include_once (__DIR__ . "/classes/Db.php");
 session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_log', 'error.log');
 
 $task_question = isset($_GET['question']) ? $_GET['question'] : '';
 
@@ -12,13 +17,14 @@ if (empty($task_question)) {
 
 if (isset($_SESSION["user_id"])) {
     $pdo = Db::getInstance();
-    $task = Task::getTaskByQuestion($pdo, $task_question);
+    $user = User::getUserById($pdo, $_SESSION["user_id"]);
+    $task = Task::getTaskByQuestion($pdo, $task_question, $user["statute_id"]);
     if (!$task) {
         echo "task niet gevonden";
         exit;
     }
     try {
-        $activeTask = Task::getActiveTask($pdo, $_SESSION["user_id"]);
+        $activeTask = Task::getActiveTask($pdo, $_SESSION["user_id"], $user["statute_id"]);
         $activeTaskString = '';
 
         if (is_array($activeTask)) {
@@ -66,7 +72,7 @@ $current_page = 'task_details';
             </a>
             <h1>
                 Stap
-                <?php echo htmlspecialchars($task['id']); ?>:
+                <?php echo htmlspecialchars($task['position']); ?>:
                 <?php echo htmlspecialchars($task['question']); ?>
             </h1>
         </div>

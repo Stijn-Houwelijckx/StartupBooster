@@ -125,11 +125,13 @@ class Task
         }
     }
 
-    public static function getTasks(PDO $pdo, $user_id)
+    public static function getTasks(PDO $pdo, $user_id, $statute_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id AND tasks.status = 1 ORDER BY tasks.position");
-            $stmt->bindParam(':user_id', $user_id);
+            $stmt = $pdo->prepare("SELECT tasks.id, tasks.label, tasks.question, tasks.answer, tasks.status, user_tasks.is_complete FROM tasks, user_tasks, users WHERE user_tasks.task_id = tasks.id AND user_tasks.user_id = :user_id1 AND users.id = :user_id2 AND tasks.statute_id = :statute_id   AND tasks.status = 1 ORDER BY tasks.position");
+            $stmt->bindParam(':user_id1', $user_id);
+            $stmt->bindParam(':user_id2', $user_id);
+            $stmt->bindParam(':statute_id', $statute_id);
             $stmt->execute();
             $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $tasks ?: [];
@@ -274,11 +276,12 @@ class Task
     }
 
 
-    public static function getActiveTask(PDO $pdo, $user_id)
+    public static function getActiveTask(PDO $pdo, $user_id, $statute_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT task_id FROM user_tasks, tasks WHERE is_complete = 0 AND user_tasks.user_id = :user_id AND user_tasks.task_id = tasks.id ORDER BY tasks.position ASC LIMIT 1");
+            $stmt = $pdo->prepare("SELECT task_id FROM user_tasks, tasks WHERE is_complete = 0 AND user_tasks.user_id = :user_id AND user_tasks.task_id = tasks.id AND tasks.statute_id = :statute_id ORDER BY tasks.position ASC LIMIT 1");
             $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':statute_id', $statute_id);
             $stmt->execute();
             $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
             return $tasks;
@@ -328,11 +331,12 @@ class Task
         }
     }
 
-    public static function getTaskByQuestion(PDO $pdo, $question)
+    public static function getTaskByQuestion(PDO $pdo, $question, $statute_id)
     {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE question = :question");
+            $stmt = $pdo->prepare("SELECT * FROM tasks, users WHERE tasks.statute_id = :statute_id AND question = :question");
             $stmt->bindParam(':question', $question);
+            $stmt->bindParam(':statute_id', $statute_id);
             $stmt->execute();
             $task = $stmt->fetch(PDO::FETCH_ASSOC);
             return $task ? $task : null;
