@@ -357,11 +357,11 @@ class Task
      * @param int $position The new position for the task.
      * @return bool Returns true if the task was successfully updated, false otherwise.
      */
-    public static function updateTasks(PDO $pdo, $task_id, $label, $question, $answer, $position): bool
+    public static function updateTasks(PDO $pdo, $task_id, $label, $question, $answer, $position, $statute_id): bool
     {
         try {
             // Query to update the tasks
-            $query = "UPDATE tasks SET label = :label, question = :question, answer = :answer, position = :position WHERE id = :task_id";
+            $query = "UPDATE tasks SET label = :label, question = :question, answer = :answer, position = :position WHERE id = :task_id AND statute_id = :statute_id";
 
             // Prepare the query
             $stmt = $pdo->prepare($query);
@@ -372,6 +372,7 @@ class Task
             $stmt->bindParam(':answer', $answer, PDO::PARAM_STR);
             $stmt->bindParam(':position', $position, PDO::PARAM_INT);
             $stmt->bindParam(':task_id', $task_id, PDO::PARAM_INT);
+            $stmt->bindParam(':statute_id', $statute_id, PDO::PARAM_INT);
 
             // return true if the query was successful
             return $stmt->execute();
@@ -402,17 +403,18 @@ class Task
      * @param int $position The position of the deleted task.
      * @return bool Returns true if the query was successful, false otherwise.
      */
-    public static function updatePositionOnDelete(PDO $pdo, $position): bool
+    public static function updatePositionOnDelete(PDO $pdo, $position, $statute_id): bool
     {
         try {
             // Query to update the positions of the tasks
-            $query = "UPDATE tasks SET position = position - 1 WHERE position > :position";
+            $query = "UPDATE tasks SET position = position - 1 WHERE position > :position AND statute_id = :statute_id";
 
             // Prepare the query
             $stmt = $pdo->prepare($query);
 
             // Bind the parameters
             $stmt->bindParam(':position', $position, PDO::PARAM_INT);
+            $stmt->bindParam(':statute_id', $statute_id, PDO::PARAM_INT);
 
             // return true if the query was successful
             return $stmt->execute();

@@ -81,8 +81,6 @@ if (isset($_SESSION["user_id"])) {
                         <p class="question">
                             <?php echo htmlspecialchars($activeTask["question"]); ?>
                         </p>
-        
-                            <i class="fa fa-angle-down" data-task="<?php echo $activeTask['id']; ?>"></i>
                     </div>
                     <p class="answer">
                         <?php echo htmlspecialchars($activeTask["answer"]); ?>
