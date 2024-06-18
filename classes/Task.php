@@ -193,11 +193,11 @@ class Task
      * @param PDO $pdo The PDO object representing the database connection.
      * @return int|false The id of the inserted task, or false if an error occurred.
      */
-    public function addTask(PDO $pdo): int|false
+    public function addTask(PDO $pdo, $statute_id): int|false
     {
         try {
             // Query to add a task
-            $query = "INSERT INTO tasks (position, label, question, answer) VALUES (:position, :label, :question, :answer)";
+            $query = "INSERT INTO tasks (statute_id, position, label, question, answer) VALUES (:statute_id, :position, :label, :question, :answer)";
 
             // Prepare the query
             $stmt = $pdo->prepare($query);
@@ -207,6 +207,7 @@ class Task
             $stmt->bindParam(':label', $this->label, PDO::PARAM_STR);
             $stmt->bindParam(':question', $this->question, PDO::PARAM_STR);
             $stmt->bindParam(':answer', $this->answer, PDO::PARAM_STR);
+            $stmt->bindParam(':statute_id', $statute_id, PDO::PARAM_INT);
 
             // Execute the query
             $stmt->execute();

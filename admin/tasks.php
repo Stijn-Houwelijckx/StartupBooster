@@ -14,7 +14,8 @@ ini_set('error_log', 'error.log');
 
 $pdo = Db::getInstance();
 $user = User::getUserById($pdo, $_SESSION["user_id"]);
-$selectedStatute = 1;
+// $selectedStatute = 1;
+// $_SESSION["selectedStatute"] = 1;
 
 if (!isset($_SESSION["user_id"]) && $user["isAdmin"] == "on") {
     header("Location: ../login.php?error=notLoggedIn");
@@ -25,9 +26,14 @@ $pdo = Db::getInstance();
 $user = User::getUserById($pdo, $_SESSION["user_id"]);
 $statutes = Statute::getAll($pdo);
 
+if (!isset($_SESSION["selectedStatute"])) {
+    $_SESSION["selectedStatute"] = $statutes[0]["id"];
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["statute"])) {
-        $selectedStatute = $_POST["statute"];
+        // $selectedStatute = $_POST["statute"];
+        $_SESSION["selectedStatute"] = $_POST["statute"];
     }
 
     if (isset($_POST["delete"])) {
@@ -36,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $taskId = Task::getTaskById($pdo, $id);
                 $position = $taskId["position"];
 
-                Task::updatePositionOnDelete($pdo, $position, $selectedStatute);
+                Task::updatePositionOnDelete($pdo, $position, $_SESSION["selectedStatute"]);
 
                 Task::deleteTask($pdo, $id);
             }
@@ -49,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tasks = $_POST['steps'];
         foreach ($tasks as $task) {
             try {
-                Task::updateTasks($pdo, $task['id'], $task['label'], $task['question'], $task['answer'], $task['position'], $selectedStatute);
+                Task::updateTasks($pdo, $task['id'], $task['label'], $task['question'], $task['answer'], $task['position'], $_SESSION["selectedStatute"]);
             } catch (Exception $e) {
                 error_log('Database error: ' . $e->getMessage());
             }
@@ -84,9 +90,9 @@ $tasks = Task::getAllTasks($pdo);
             <h2>Stappen</h2>
             <form action="" method="post" id="statuteForm">
                 <select name="statute" id="statute" style="width: max-content; margin-left: 24px;">
-                    <option value="0" disabled <?php if ($selectedStatute == null) {echo "selected";} ?>>=== Selecteer statuut ===</option>
+                    <option value="0" disabled <?php if ($_SESSION["selectedStatute"] == null) {echo "selected";} ?>>=== Selecteer statuut ===</option>
                     <?php foreach ($statutes as $statute): ?>
-                        <option value="<?php echo $statute["id"] ?>" <?php if ($selectedStatute == $statute["id"]) {echo "selected";} ?>><?php echo $statute["title"] ?></option>
+                        <option value="<?php echo $statute["id"] ?>" <?php if ($_SESSION["selectedStatute"] == $statute["id"]) {echo "selected";} ?>><?php echo $statute["title"] ?></option>
                     <?php endforeach ?>
                 </select>
             </form>
@@ -99,11 +105,11 @@ $tasks = Task::getAllTasks($pdo);
             <form action="" method="post" id="tasksForm">
                 <div id="dropzone">
                     <?php foreach ($tasks as $index => $task): ?>
-                        <?php if ($task["statute_id"] != $selectedStatute) {
+                        <?php if ($task["statute_id"] != $_SESSION["selectedStatute"]) {
                             continue;
                         } ?>
                         <div class="step" draggable="false">
-                            <a href="addTask.php?position=<?php echo $task["position"] ?>" class="addTaskBtn" data-taskid="<?php echo $task["position"] ?>">
+                            <a href="addTask.php?position=<?php echo $task["position"] ?>&statute=<?php echo $_SESSION["selectedStatute"] ?>" class="addTaskBtn" data-taskid="<?php echo $task["position"] ?>">
                                 <i class="fa fa-plus"></i>
                             </a>
                             <div class="stepContent">

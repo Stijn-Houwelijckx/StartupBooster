@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $task->setLabel($_POST["label"]);
             $task->setQuestion($_POST["question"]);
             $task->setAnswer($_POST["answer"]);
-            $insertedTaskId = $task->addTask($pdo);
+            $insertedTaskId = $task->addTask($pdo, $_SESSION["selectedStatute"]);
 
             // Insert new task to all users
             if ($insertedTaskId) {
