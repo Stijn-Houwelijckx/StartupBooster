@@ -920,7 +920,8 @@ a.active {
   cursor: grabbing;
 }
 
-#roadmap .tasks .task:before {
+#roadmap .tasks .task:before,
+#dashboard .tasks .task:before {
   content: "";
   position: absolute;
   left: -38px;
@@ -933,11 +934,13 @@ a.active {
   background-color: #dadada;
 }
 
-#roadmap .tasks .task.active:before {
+#roadmap .tasks .task.active:before,
+#dashboard .tasks .task.active:before {
   background-color: var(--blue);
 }
 
-#roadmap .tasks .task {
+#roadmap .tasks .task,
+#dashboard .tasks .task {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -947,20 +950,24 @@ a.active {
   border-radius: 16px;
 }
 
-#roadmap .tasks .task.inactive {
+#roadmap .tasks .task.inactive,
+#dashboard .tasks .task.inactive {
   background-color: var(--gray);
 }
 
-#roadmap .tasks .task.active {
+#roadmap .tasks .task.active,
+#dashboard .tasks .task.active {
   background-color: #cfd9e1;
 }
 
-#roadmap .tasks .task.active .label {
+#roadmap .tasks .task.active .label,
+#dashboard .tasks .task.active .label {
   background-color: var(--white);
   color: var(--black);
 }
 
-#roadmap .tasks .task .row {
+#roadmap .tasks .task .row,
+#dashboard .tasks .task .row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -969,47 +976,57 @@ a.active {
   gap: 24px;
 }
 
-#roadmap .tasks .task .row div {
+#roadmap .tasks .task .row div,
+#dashboard .tasks .task .row div {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
 }
 
-#roadmap .tasks .task .label {
+#roadmap .tasks .task .label,
+#dashboard .tasks .task .label {
   background-color: #cfd9e1;
   padding: 8px 16px;
   border-radius: 8px;
 }
 
-#roadmap .tasks .task.inactive .label {
+#roadmap .tasks .task.inactive .label,
+#dashboard .tasks .task.inactive .label {
   background-color: #9d9d9c;
 }
 #roadmap .tasks .task.inactive .question,
-#roadmap .tasks .task.inactive i {
+#dashboard .tasks .task.inactive .question,
+#roadmap .tasks .task.inactive i,
+#dashboard .tasks .task.inactive i {
   color: #666664;
 }
 
-#roadmap .tasks .task .question {
+#roadmap .tasks .task .question,
+#dashboard .tasks .task .question {
   color: var(--blue);
 }
 
-#roadmap .tasks .task .answer {
+#roadmap .tasks .task .answer,
+#dashboard .tasks .task .answer {
   display: none;
 }
 
-#roadmap .tasks .task {
+#roadmap .tasks .task,
+#dashboard .tasks .task {
   position: relative; /* Zorgt ervoor dat het pseudo-element relatief gepositioneerd is */
 }
 
-#roadmap .readmore {
+#roadmap .readmore,
+#dashboard .readmore {
   padding: 8px 16px;
   background-color: var(--blue);
   color: var(--white);
   border-radius: 45px;
 }
 
-#roadmap .tasks .task .row .fa-check-square-o {
+#roadmap .tasks .task .row .fa-check-square-o,
+#dashboard .tasks .task .row .fa-check-square-o {
   color: var(--blue);
 }
 #roadmap .tasks .task .row.display {
@@ -1019,6 +1036,28 @@ a.active {
 #roadmap .tasks .task.active .answer,
 #roadmap .tasks .task.active .row.display {
   display: flex;
+}
+
+#dashboard .tasks {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  max-width: 50%;
+}
+
+#dashboard .roadmap-link-container {
+  margin-left: 16px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+#dashboard .roadmap-link {
+  text-decoration: underline;
 }
 
 #roadmap .progress {
