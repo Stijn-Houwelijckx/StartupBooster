@@ -81,7 +81,7 @@ if (isset($_SESSION["user_id"])) {
 <body>
     <?php include_once ('inc/nav.inc.php'); ?>
     <div id="simulaties">
-        <h1>Simulaties</h1>
+        <h1>Pand prijzen & Simulaties</h1>
 
         <input id="city-input" type="text" placeholder="Enter city name">
         <button id="search-button" class="btn">Search</button>
