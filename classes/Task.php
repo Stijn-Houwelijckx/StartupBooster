@@ -306,23 +306,29 @@ class Task
     }
 
 
-    public static function getProgress(PDO $pdo, $user_id)
+    public static function getProgress(PDO $pdo, $user_id, $statute_id)
     {
         try {
             $query = "SELECT (
-                        SELECT COUNT(id)
-                        FROM user_tasks
-                        WHERE is_complete = 1
-                        AND user_id = :user_id_1
-                    ) AS finished_steps,
-                    (
-                        SELECT COUNT(id)
-                        FROM user_tasks
-                        WHERE user_id = :user_id_2
-                    ) AS total_steps;";
+                SELECT COUNT(user_tasks.id)
+                FROM user_tasks
+                JOIN tasks ON user_tasks.task_id = tasks.id
+                WHERE user_tasks.is_complete = 1
+                AND user_tasks.user_id = :user_id_1
+                AND tasks.statute_id = :statute_id_1
+            ) AS finished_steps,
+            (
+                SELECT COUNT(user_tasks.id)
+                FROM user_tasks
+                JOIN tasks ON user_tasks.task_id = tasks.id
+                WHERE user_tasks.user_id = :user_id_2
+                AND tasks.statute_id = :statute_id_2
+            ) AS total_steps;";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(':user_id_1', $user_id);
             $stmt->bindParam(':user_id_2', $user_id);
+            $stmt->bindParam(':statute_id_1', $statute_id);
+            $stmt->bindParam(':statute_id_2', $statute_id);
             $stmt->execute();
             $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
             return $tasks;
