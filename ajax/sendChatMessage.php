@@ -5,9 +5,9 @@ include_once (__DIR__ . "/../classes/Message.php");
 include_once (__DIR__ . "/../classes/Chat.php");
 include_once (__DIR__ . "/../classes/User.php");
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('error_log', 'error.log');
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('error_log', 'error.log');
 
 session_start();
 
